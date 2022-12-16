@@ -1,6 +1,7 @@
 #include <iostream>
+#include "App.h"
 
 int main() {
-    std::cout<<"hhhhhhh";
-    return 0;
+    App application;
+    application.setWindowName("Jaan");
 }

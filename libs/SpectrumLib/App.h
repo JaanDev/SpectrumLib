@@ -19,4 +19,5 @@ class App {
 
     App();
     App* getInstance();
+    void setWindowName(std::string name);
 };

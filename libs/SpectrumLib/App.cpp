@@ -5,8 +5,12 @@ App::App(){
 }
 
 void App::AppInit(){
-    InitWindow(this->m_vResolution.x, this->m_vResolution.y, this->title.c_str());
+    InitWindow((int)this->m_vResolution.x, (int)this->m_vResolution.y, this->title.c_str());
     SetTargetFPS(this->m_nFps);
+
+    Scene* defaultscene = new(std::nothrow) Scene();
+    this->currentscene = defaultscene;
+
     while(!WindowShouldClose()){
         this->updateFrame();
     }
@@ -15,12 +19,17 @@ void App::AppInit(){
 }
 
 void App::updateFrame(){
-    ClearBackground(this->currentscene->getColor());
     BeginDrawing();
+        ClearBackground(this->currentscene->getColor());
 
     EndDrawing();
 }
 
 void App::CloseApp(){
     CloseWindow();
+}
+
+void App::setWindowName(std::string name){
+    this->title = name;
+    SetWindowTitle(title.c_str());
 }
