@@ -8,11 +8,11 @@ file(GLOB SOURCES
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
+add_subdirectory(libs/raylib)
+target_link_libraries(${PROJECT_NAME} raylib)
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"include"
 	"libs/SpectrumLib"
 )
-add_subdirectory(libs/raylib)
-target_link_libraries(${PROJECT_NAME} raylib)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

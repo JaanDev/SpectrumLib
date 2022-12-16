@@ -1,0 +1,9 @@
+#ifndef __SPECTRUM_H__
+#define __SPECTRUM_H__
+
+#include "defines.h"
+
+#include "Scene.h"
+#include "App.h"
+
+#endif

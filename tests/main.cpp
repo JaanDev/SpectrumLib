@@ -1,5 +1,7 @@
 #include <iostream>
-#include "App.h"
+#include "spectrum.h"
+
+// using namespace spectrum;
 
 int main() {
     App application;

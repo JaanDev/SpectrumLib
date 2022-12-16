@@ -1,11 +1,11 @@
-#pragma once
-#include "raylib.h"
-#include "string"
+#ifndef __SPECTRUM__APP_H__
+#define __SPECTRUM__APP_H__
+
+#include "includes.h"
 #include "Scene.h"
 
 class App {
-    private:
-
+private:
     void AppInit();
     void updateFrame();
     void CloseApp();
@@ -15,9 +15,10 @@ class App {
     std::string title = "Game";
     Scene* currentscene;
 
-    public:
-
+public:
     App();
     App* getInstance();
     void setWindowName(std::string name);
 };
+
+#endif
