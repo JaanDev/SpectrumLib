@@ -10,5 +10,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"include"
 )
+add_subdirectory(libs/raylib)
+target_link_libraries(${PROJECT_NAME} raylib)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
