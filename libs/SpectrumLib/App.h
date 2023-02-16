@@ -1,23 +1,27 @@
-#pragma once
+#include <iostream>
+#include <string>
+#include <functional>
 #include "raylib.h"
-#include "string"
-#include "Scene.h"
+
+using std::string;
 
 class App {
     private:
-
-    void AppInit();
-    void updateFrame();
-    void CloseApp();
-
-    unsigned int m_nFps = 60;
-    Vector2 m_vResolution = {640, 480};
-    std::string title = "Game";
-    Scene* currentscene;
+        std::string title = "Spectrum App";
+        uint16_t width = 900;
+        uint16_t height = 600;
+        std::function<void(App* app)> init;
+        std::function<void(App* app)> update;
+        std::function<void(App* app)> close;
+        uint32_t fps = 60;
+        uint32_t flags = FLAG_WINDOW_RESIZABLE;
 
     public:
-
+        App* create(string title, uint16_t width, uint16_t height);
+        void setTitle(string title);
+        void setResolution(Vector2 resolution);
+        void setInitFunc(std::function<void(App* app)> init);
+        void setGameLoopFunc(std::function<void(App* app)> update);
+        void setCloseFunc(std::function<void(App* app)> close);
     App();
-    App* getInstance();
-    void setWindowName(std::string name);
 };

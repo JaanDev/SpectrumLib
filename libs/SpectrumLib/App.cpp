@@ -1,35 +1,39 @@
 #include "App.h"
 
 App::App(){
-    this->AppInit();
+    InitWindow(width, height, title.c_str());
+    this->setInitFunc([&](App* app){
+        SetTargetFPS(this->fps);
+        SetConfigFlags(this->flags);
+    });
+
+    this->setCloseFunc([&](App* app){
+        CloseWindow();
+    });
 }
 
-void App::AppInit(){
-    InitWindow((int)this->m_vResolution.x, (int)this->m_vResolution.y, this->title.c_str());
-    SetTargetFPS(this->m_nFps);
+void App::setTitle(string title){
+    SetWindowTitle(title.c_str());
+}
 
-    Scene* defaultscene = new(std::nothrow) Scene();
-    this->currentscene = defaultscene;
+void App::setResolution(Vector2 resolution){
+    SetWindowSize(resolution.x, resolution.y);
+}
 
+void App::setInitFunc(std::function<void(App* app)> init){
+    this->init = init;
+    init(this);
+}
+
+void App::setGameLoopFunc(std::function<void(App* app)> update){
+    this->update = update;
     while(!WindowShouldClose()){
-        this->updateFrame();
+        update(this);
     }
 
-    this->CloseApp();
+    this->close(this);
 }
 
-void App::updateFrame(){
-    BeginDrawing();
-        ClearBackground(this->currentscene->getColor());
-
-    EndDrawing();
-}
-
-void App::CloseApp(){
-    CloseWindow();
-}
-
-void App::setWindowName(std::string name){
-    this->title = name;
-    SetWindowTitle(title.c_str());
+void App::setCloseFunc(std::function<void(App* app)> close){
+    this->close = close;
 }
