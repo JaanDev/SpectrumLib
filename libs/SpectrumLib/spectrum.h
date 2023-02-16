@@ -3,7 +3,6 @@
 
 #include "defines.h"
 
-#include "Scene.h"
 #include "App.h"
 
 #endif
