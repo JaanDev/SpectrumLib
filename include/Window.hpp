@@ -5,57 +5,87 @@ NS_SPECTRUM_BEGIN
 
 class Window {
 private:
-    std::string m_title;
-    Vec2 m_size;
     GLFWwindow* m_window;
+    
+    // my inner perfectionist is crying rn
+    std::function<void(Window*)> m_closeCallback;
+    std::function<void(Window*, Vec2)> m_contentScaleCallback;
+    std::function<void(Window*, bool)> m_focusCallback;
+    std::function<void(Window*, bool)> m_iconifyCallback;
+    std::function<void(Window*, bool)> m_maximizeCallback;
+    std::function<void(Window*)> m_refreshCallback;
+    std::function<void(Window*, Vec2)> m_posCallback;
+    std::function<void(Window*, Vec2)> m_sizeCallback;
+
+    static void closeCallback(GLFWwindow* win);
+    static void contentScaleCallback(GLFWwindow* win, float x, float y);
+    static void focusCallback(GLFWwindow* win, int focused);
+    static void iconifyCallback(GLFWwindow* win, int iconified);
+    static void maximizeCallback(GLFWwindow* win, int maximized);
+    static void refreshCallback(GLFWwindow* win);
+    static void posCallback(GLFWwindow* win, int x, int y);
+    static void sizeCallback(GLFWwindow* win, int x, int y);
 
 public:
-    Window(std::string_view title, Vec2 size) : m_title(std::move(title)), m_size(std::move(size)) {
-        static bool initializedGL = false;
+    // inline static std::unordered_map<GLFWwindow*, Window*> g_windows = {}; // for callbacks
 
-        if (!initializedGL) {
-            if (!glfwInit()) {
-                const char* error;
-                int code = glfwGetError(&error);
+    Window(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints);
+    ~Window();
 
-                utils::logE("Failed to initialize glfw ({}; code {})", error, code);
-                exit(1);
-            }
-        }
+    GLFWwindow* getWindow();
 
-        // TODO: More params customization
-        m_window = glfwCreateWindow((int)m_size.x, (int)m_size.y, m_title.c_str(), NULL, NULL);
-        utils::handleGLError("Failed to create a window", nullptr);
+    // the `ratio` is the numenator and the denominator. both values of `ratio` can be GLFW_DONT_CARE (havent checked)
+    void setAspectRatio(const Vec2& ratio);
 
-        glfwMakeContextCurrent(m_window);
+    void setAttribs(const std::vector<WindowAttrib>& attribs);
+    std::vector<WindowAttrib> getAttribs();
 
-        if (!initializedGL) {
-            glewExperimental = true;
-            if (auto code = glewInit(); code != GLEW_OK) {
-                utils::logE("Failed to initialize glew ({}; code {})", (const char*)glewGetErrorString(code), code);
-                exit(1);
-            }
+    void setCloseCallback(std::function<void(Window*)> callback);
 
-            utils::logD("OpenGL version: {}", (const char*)glGetString(GL_VERSION));
-            utils::logD("Renderer:       {}", (const char*)glGetString(GL_RENDERER));
-            utils::logD("Vendor:         {}", (const char*)glGetString(GL_VENDOR));
-            utils::logD("GLSL version:   {}", (const char*)glGetString(GL_VERSION));
+    Vec2 getContentScale();
 
-            initializedGL = true;
-        }
-    }
+    // Vec4 getWindowFrameSize(); // TODO: Create Vec4 type or use 2 Vec2's or anything else
+    
+    void setContentScaleCallback(std::function<void(Window*, Vec2)> callback);
 
-    ~Window() {
-        // TODO: Make better window closing system
-        if (glfwGetCurrentContext() == m_window) {
-            utils::logD("Terminating glfw");
-            glfwTerminate();
-        }
-    }
+    void setWindowFocusCallback(std::function<void(Window*, bool)> callback);
 
-    void setTitle(const std::string& str);
+    // void setWindowIcon(...); // TODO
 
-    static std::shared_ptr<Window> create(std::string_view title, Vec2 size);
+    // its when you iconify the app (???) !!! not on setting the window icon
+    void setWindowIconifyCallback(std::function<void(Window*, bool)> callback);
+
+    void setWindowMaximizeCallback(std::function<void(Window*, bool)> callback);
+
+    void setMonitor(GLFWmonitor* mon, const Vec2& pos, const Vec2& size, int refreshRate);
+    GLFWmonitor* getMonitor();
+
+    // 0 <= opacity <= 1
+    void setOpacity(float opacity);
+    // 0 <= opacity <= 1
+    float getOpacity();
+
+    void setPosition(const Vec2& pos);
+    Vec2 getPosition();
+
+    void setPosCallback(std::function<void(Window*, Vec2)> callback);
+
+    void setRefreshCallback(std::function<void(Window*)> callback);
+
+    void setShouldClose(bool shouldClose);
+    bool shouldClose();
+
+    void setSize(const Vec2& size);
+    Vec2 getSize();
+
+    void setSizeCallback(std::function<void(Window*, Vec2)> callback);
+
+    // any vector member can be GLFW_DONT_CARE (GLFW_DONT_CARE works for the whole vector)
+    void setSizeLimits(const Vec2& min, const Vec2& max);
+
+    void setTitle(const std::string_view title);
+
+    static std::shared_ptr<Window> create(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints);
 };
 
 NS_SPECTRUM_END
