@@ -38,13 +38,17 @@ int main() {
     win->setWindowMaximizeCallback([](Window*, bool maximized) {
         std::cout << "Window maximized: " << std::boolalpha << maximized << std::endl;
     });
+
+    win->setFramebufferSizeCallback([](Window*, Vec2 size) {
+        std::cout << "Framebuffer size: " << size << std::endl;
+    });
     
     while (!win->shouldClose()) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glClearColor(1, 0, 1, 1);
 
-        glfwSwapBuffers(win->getWindow());
+        win->swapBuffers();
         glfwPollEvents();
     }
 

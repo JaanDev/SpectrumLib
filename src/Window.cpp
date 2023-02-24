@@ -175,12 +175,27 @@ void Window::setSizeCallback(std::function<void(Window*, Vec2)> callback) {
     glfwSetWindowSizeCallback(m_window, sizeCallback);
 }
 
+void Window::setFramebufferSizeCallback(std::function<void(Window *, Vec2)> callback) {
+    m_framebufferSizeCallback = callback;
+    glfwSetFramebufferSizeCallback(m_window, framebufferSizeCallback);
+}
+
 void Window::setSizeLimits(const Vec2& min, const Vec2& max) {
     glfwSetWindowSizeLimits(m_window, (int)min.x, (int)min.y, (int)max.x, (int)max.y);
 }
 
 void Window::setTitle(const std::string_view title) {
     glfwSetWindowTitle(m_window, std::string(title).c_str());
+}
+
+void Window::destroyWindow() {
+    glfwDestroyWindow(m_window);
+}
+
+Vec2 Window::getFramebufferSize() {
+    Vec2 ret;
+    glfwGetFramebufferSize(m_window, (int*)&ret.x, (int*)&ret.y);
+    return ret;
 }
 
 void Window::closeCallback(GLFWwindow *win) {
@@ -240,6 +255,43 @@ void Window::posCallback(GLFWwindow *win, int x, int y) {
 void Window::sizeCallback(GLFWwindow *win, int x, int y) {
     auto _win = (Window*)glfwGetWindowUserPointer(win);
     if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2 {(float)x, (float)y});
+}
+
+void Window::framebufferSizeCallback(GLFWwindow *win, int width, int height) {
+    auto _win = (Window*)glfwGetWindowUserPointer(win);
+    if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2 {(float)width, (float)height});
+}
+
+void Window::iconify() {
+    glfwIconifyWindow(m_window);
+}
+
+void Window::restore() {
+    glfwRestoreWindow(m_window);
+}
+
+void Window::maximize() {
+    glfwMaximizeWindow(m_window);
+}
+
+void Window::show() {
+    glfwShowWindow(m_window);
+}
+
+void Window::hide() {
+    glfwHideWindow(m_window);
+}
+
+void Window::focus() {
+    glfwFocusWindow(m_window);
+}
+
+void Window::requestAttention() {
+    glfwRequestWindowAttention(m_window);
+}
+
+void Window::swapBuffers() {
+    glfwSwapBuffers(m_window);
 }
 
 NS_SPECTRUM_END

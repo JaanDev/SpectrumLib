@@ -16,6 +16,7 @@ private:
     std::function<void(Window*)> m_refreshCallback;
     std::function<void(Window*, Vec2)> m_posCallback;
     std::function<void(Window*, Vec2)> m_sizeCallback;
+    std::function<void(Window*, Vec2)> m_framebufferSizeCallback;
 
     static void closeCallback(GLFWwindow* win);
     static void contentScaleCallback(GLFWwindow* win, float x, float y);
@@ -25,6 +26,7 @@ private:
     static void refreshCallback(GLFWwindow* win);
     static void posCallback(GLFWwindow* win, int x, int y);
     static void sizeCallback(GLFWwindow* win, int x, int y);
+    static void framebufferSizeCallback(GLFWwindow* win, int width, int height);
 
 public:
     // inline static std::unordered_map<GLFWwindow*, Window*> g_windows = {}; // for callbacks
@@ -52,7 +54,7 @@ public:
 
     // void setWindowIcon(...); // TODO
 
-    // its when you iconify the app (???) !!! not on setting the window icon
+    // = on minimize
     void setWindowIconifyCallback(std::function<void(Window*, bool)> callback);
 
     void setWindowMaximizeCallback(std::function<void(Window*, bool)> callback);
@@ -80,10 +82,36 @@ public:
 
     void setSizeCallback(std::function<void(Window*, Vec2)> callback);
 
+    void setFramebufferSizeCallback(std::function<void(Window*, Vec2)> callback);
+
     // any vector member can be GLFW_DONT_CARE (GLFW_DONT_CARE works for the whole vector)
     void setSizeLimits(const Vec2& min, const Vec2& max);
 
     void setTitle(const std::string_view title);
+
+    void destroyWindow();
+
+    Vec2 getFramebufferSize();
+
+    // minimize
+    void iconify();
+
+    // restore if was iconified (minimized) or maximized
+    void restore();
+
+    void maximize();
+
+    // makes visible if was hidden
+    void show();
+
+    // makes hidden if was shown
+    void hide();
+
+    void focus();
+
+    void requestAttention();
+
+    void swapBuffers();
 
     static std::shared_ptr<Window> create(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints);
 };
