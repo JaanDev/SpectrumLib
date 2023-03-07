@@ -1,7 +1,11 @@
 #pragma once
+#include "fmt/core.h"
 #include <iostream>
 #include <ostream>
-#include <format>
+// #include <format>
+#include <fmt/core.h>
+#include <fmt/color.h>
+#include <utility>
 #include <vector>
 #include <functional>
 #include <map>
@@ -15,20 +19,26 @@
 NS_SPECTRUM_BEGIN
 
 namespace utils {
-    template <typename... Args>
-    void logE(Args... args) {
-        std::cout << "[Spectrum] \033[1;31mERROR: " << std::format(args...) << "\033[0m" << std::endl; // bold bright red
+    template <typename Fmt, typename... Args>
+    void logE(Fmt fmt, Args... args) {
+        // std::cout << "[Spectrum] \033[1;31mERROR: " << fmt::format(args...) << "\033[0m" << std::endl; // bold bright red
+        // fmt::println(fg(fmt::color::red) | fmt::emphasis::bold, args...);
+        std::cout << "[Spectrum] " << fmt::format(fg(fmt::terminal_color::red) | fmt::emphasis::bold, std::string("Error: ") + fmt, args...) << std::endl;
+        // fmt::println(args...);
+        // std::cout << "[Spectrum] \033[1;31mERROR: " << std::format(args...) << "\033[0m" << std::endl; // bold bright red
     }
 
-    template <typename... Args>
-    void logD(Args... args) {
+    template <typename Fmt, typename... Args>
+    void logD(Fmt fmt, Args... args) {
         // std::cout << "[Spectrum] \033[0;30mDEBUG: " << std::format(args...) << "\033[0m" << std::endl; // gray
-        std::cout << "[Spectrum] DEBUG: " << std::format(args...) << std::endl;
+        // std::cout << "[Spectrum] DEBUG: " << fmt::format(args...) << std::endl;
+        std::cout << "[Spectrum] " << fmt::format(fg(fmt::terminal_color::bright_white), std::string("Debug: ") + fmt, args...) << std::endl;
     }
 
-    template <typename... Args>
-    void logW(Args... args) {
-        std::cout << "[Spectrum] \033[0;33mWARNING: " << std::format(args...) << "\033[0m" << std::endl; // yellow
+    template <typename Fmt, typename... Args>
+    void logW(Fmt fmt, Args... args) {
+        // std::cout << "[Spectrum] \033[0;33mWARNING: " << fmt::format(args...) << "\033[0m" << std::endl; // yellow
+        std::cout << "[Spectrum] " << fmt::format(fg(fmt::terminal_color::bright_yellow), std::string("Warning: ") + fmt, args...) << std::endl;
     }
 
     // leave `message` empty for the default "GLFW Error"

@@ -7,8 +7,10 @@ endmacro()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(CMAKE_CXX20_STANDARD_COMPILE_OPTION "-std:c++latest")
-set(CMAKE_CXX20_EXTENSION_COMPILE_OPTION "-std:c++latest")
+# set(CMAKE_CXX20_STANDARD_COMPILE_OPTION "-std:c++latest")
+# set(CMAKE_CXX20_EXTENSION_COMPILE_OPTION "-std:c++latest")
+# set(CMAKE_CXX20_STANDARD_COMPILE_OPTION "-std=c++latest")
+# set(CMAKE_CXX20_EXTENSION_COMPILE_OPTION "-std=c++latest")
 
 file(GLOB SOURCES
     src/*.cpp
@@ -24,16 +26,23 @@ setoption(GLFW_BUILD_DOCS OFF)
 setoption(GLFW_INSTALL OFF)
 add_subdirectory(external/glfw)
 
-# set(CMAKE_LIBRARY_PATH external/glew)
-# set(CMAKE_PREFIX_PATH external/glew/build/cmake)
-# find_package(GLEW REQUIRED)
-
-# include(external/glew/build/cmake/CMakeLists.txt)
 add_subdirectory(external/glew/build/cmake)
 
+add_subdirectory(external/fmt)
+
+if (UNIX)
+    find_package(OpenGL REQUIRED)
+    set(SPECTRUM_GL_INCLUDES ${OPENGL_INCLUDE_DIRS})
+    set(SPECTRUM_GL_LIBS ${OPENGL_LIBRARIES})
+
+else()
+    set(SPECTRUM_GL_INCLUDES "")
+    set(SPECTRUM_GL_LIBS opengl32)
+endif()
+
 add_library(Spectrum STATIC ${SOURCES})
-target_include_directories(Spectrum PUBLIC external/glew/include include)
-target_link_libraries(Spectrum PUBLIC glfw opengl32 glew)
+target_include_directories(Spectrum PUBLIC external/glew/include include ${SPECTRUM_GL_INCLUDES})
+target_link_libraries(Spectrum PUBLIC glfw ${SPECTRUM_GL_LIBS} glew fmt::fmt)
 
 # add_library(Spectrum_shared SHARED ${SOURCES})
 # target_include_directories(Spectrum_shared PUBLIC include)
