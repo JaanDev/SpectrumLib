@@ -31,7 +31,7 @@ private:
 public:
     // inline static std::unordered_map<GLFWwindow*, Window*> g_windows = {}; // for callbacks
 
-    Window(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints);
+    Window(std::string_view title, const Vec2& size, const std::vector<WindowHint>& hints);
     ~Window();
 
     GLFWwindow* getWindow();

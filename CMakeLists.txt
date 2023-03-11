@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(Spectrum VERSION 1.0.0 DESCRIPTION "A simple library for game developing")
+project(Spectrum VERSION 1.0.0 DESCRIPTION "A simple library for graphics developing")
 
 macro(setoption option value)
     set(${option} ${value} CACHE INTERNAL "" FORCE)
