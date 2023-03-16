@@ -1,14 +1,13 @@
 #pragma once
-#include "fmt/core.h"
 #include <iostream>
 #include <ostream>
-// #include <format>
-#include <fmt/core.h>
-#include <fmt/color.h>
 #include <utility>
 #include <vector>
 #include <functional>
 #include <map>
+
+#include <fmt/core.h>
+#include <fmt/color.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

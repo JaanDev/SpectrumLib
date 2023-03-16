@@ -20,5 +20,9 @@ enum class WindowHints {
     CenterCursor = GLFW_CENTER_CURSOR,
     TransparentFramebuffer = GLFW_TRANSPARENT_FRAMEBUFFER,
     FocusOnShow = GLFW_FOCUS_ON_SHOW,
-    ScaleToMonitor = GLFW_SCALE_TO_MONITOR
+    ScaleToMonitor = GLFW_SCALE_TO_MONITOR,
+    Stereo = GLFW_STEREO,
+    DoubleBuffer = GLFW_DOUBLEBUFFER,
+    ClientAPI = GLFW_CLIENT_API,
+    ContextCreationAPI = GLFW_CONTEXT_CREATION_API
 };

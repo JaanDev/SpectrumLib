@@ -1,5 +1,6 @@
 #pragma once
 #include "Includes.hpp"
+#include "Canvas.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -27,6 +28,8 @@ private:
     static void posCallback(GLFWwindow* win, int x, int y);
     static void sizeCallback(GLFWwindow* win, int x, int y);
     static void framebufferSizeCallback(GLFWwindow* win, int width, int height);
+
+    std::shared_ptr<Canvas> m_canvas;
 
 public:
     // inline static std::unordered_map<GLFWwindow*, Window*> g_windows = {}; // for callbacks
@@ -114,6 +117,8 @@ public:
     void swapBuffers();
 
     static std::shared_ptr<Window> create(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints);
+
+    std::shared_ptr<Canvas> getCanvas();
 };
 
 NS_SPECTRUM_END

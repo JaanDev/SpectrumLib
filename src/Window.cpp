@@ -6,6 +6,10 @@ std::shared_ptr<Window> Window::create(std::string_view title, Vec2 size, const 
     return std::make_shared<Window>(title, size, hints);
 }
 
+std::shared_ptr<Canvas> Window::getCanvas() {
+    return m_canvas;
+}
+
 Window::Window(std::string_view title, const Vec2& size, const std::vector<WindowHint>& hints) :
         m_framebufferSizeCallback(nullptr),
         m_closeCallback(nullptr),
@@ -16,6 +20,7 @@ Window::Window(std::string_view title, const Vec2& size, const std::vector<Windo
         m_refreshCallback(nullptr),
         m_sizeCallback(nullptr),
         m_contentScaleCallback(nullptr) {
+            
     static bool initializedGL = false;
     if (!initializedGL) {
         if (!glfwInit()) {
@@ -58,6 +63,8 @@ Window::Window(std::string_view title, const Vec2& size, const std::vector<Windo
 
         initializedGL = true;
     }
+
+    m_canvas = Canvas::create(m_window);
 
     // g_windows.insert(std::make_pair(m_window, this));
 }

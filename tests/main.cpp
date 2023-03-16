@@ -1,10 +1,12 @@
 #include "Spectrum.hpp"
 
+// #include <chrono>
+
 using namespace spectrum;
+using std::cout, std::endl;
 
 int main() {
-    auto win = Window::create("Hello Spectrum!", { 800, 600 }, {{WindowHints::TransparentFramebuffer, true}});
-    // win->setOpacity(0.6f);
+    auto win = Window::create("Hello Spectrum!", { 800, 600 }, {});
 
     std::cout << "Window created" << std::endl;
 
@@ -47,11 +49,17 @@ int main() {
     // win->setFramebufferSizeCallback([](Window*, Vec2 size) {
     //     std::cout << "Framebuffer size: " << size << std::endl;
     // });
+
+    glfwSwapInterval(0); // vsync = off
+
+    auto canvas = win->getCanvas();
     
     while (!win->shouldClose()) {
         glClear(GL_COLOR_BUFFER_BIT);
+        
+        // glClearColor(0, 0, 0, 1);
 
-        glClearColor(.1, .1, .4, 0.2);
+        canvas->fill({15, 15, 15, 255});
 
         win->swapBuffers();
         glfwPollEvents();
