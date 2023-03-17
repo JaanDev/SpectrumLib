@@ -2,7 +2,7 @@
 
 NS_SPECTRUM_BEGIN
 
-std::shared_ptr<Window> Window::create(std::string_view title, Vec2 size, const std::vector<WindowHint>& hints) {
+std::shared_ptr<Window> Window::create(std::string_view title, Vec2i size, const std::vector<WindowHint>& hints) {
     return std::make_shared<Window>(title, size, hints);
 }
 
@@ -10,7 +10,7 @@ std::shared_ptr<Canvas> Window::getCanvas() {
     return m_canvas;
 }
 
-Window::Window(std::string_view title, const Vec2& size, const std::vector<WindowHint>& hints) :
+Window::Window(std::string_view title, const Vec2i& size, const std::vector<WindowHint>& hints) :
         m_framebufferSizeCallback(nullptr),
         m_closeCallback(nullptr),
         m_focusCallback(nullptr),
@@ -32,11 +32,11 @@ Window::Window(std::string_view title, const Vec2& size, const std::vector<Windo
     }
 
     for (const auto& [hint, value] : hints) {
-        glfwWindowHint((int)hint, (int)value);
+        glfwWindowHint(static_cast<int>(hint), static_cast<int>(value));
     }
 
     // TODO: More params customization
-    m_window = glfwCreateWindow((int)size.x, (int)size.y, std::string(title).c_str(), NULL, NULL);
+    m_window = glfwCreateWindow(size.x, size.y, std::string(title).c_str(), NULL, NULL);
     if (!m_window) {
         const char* error;
         int code = glfwGetError(&error);
@@ -81,13 +81,13 @@ GLFWwindow* Window::getWindow() {
     return m_window;
 }
 
-void Window::setAspectRatio(const Vec2& ratio) {
-    glfwSetWindowAspectRatio(m_window, (int)ratio.x, (int)ratio.y);
+void Window::setAspectRatio(const Vec2i& ratio) {
+    glfwSetWindowAspectRatio(m_window, ratio.x, ratio.y);
 }
 
 void Window::setAttribs(const std::vector<WindowAttrib>& attribs) {
     for (const auto& [attrib, value] : attribs) {
-        glfwSetWindowAttrib(m_window, (int)attrib, (int)value);
+        glfwSetWindowAttrib(m_window, static_cast<int>(attrib), static_cast<int>(value));
     }
 }
 
@@ -95,19 +95,19 @@ std::vector<WindowAttrib> Window::getAttribs() {
     std::vector<WindowAttrib> ret;
 
     for (const auto attrib : { WindowAttribs::AutoIconify, WindowAttribs::Decorated, WindowAttribs::Floating, WindowAttribs::FocusOnShow, WindowAttribs::Resizable }) {
-        ret.push_back(std::make_pair(attrib, glfwGetWindowAttrib(m_window, (int)attrib)));
+        ret.push_back(std::make_pair(attrib, glfwGetWindowAttrib(m_window, static_cast<int>(attrib))));
     }
     
     return ret;
 }
 
-Vec2 Window::getContentScale() {
-    Vec2 ret;
+Vec2f Window::getContentScale() {
+    Vec2f ret;
     glfwGetWindowContentScale(m_window, &ret.x, &ret.y);
     return ret;
 }
 
-void Window::setContentScaleCallback(std::function<void(Window*, Vec2)> callback) {
+void Window::setContentScaleCallback(std::function<void(Window*, Vec2f)> callback) {
     m_contentScaleCallback = callback;
     glfwSetWindowContentScaleCallback(m_window, contentScaleCallback);
 }
@@ -132,8 +132,8 @@ void Window::setWindowMaximizeCallback(std::function<void(Window*, bool)> callba
     glfwSetWindowMaximizeCallback(m_window, maximizeCallback);
 }
 
-void Window::setMonitor(GLFWmonitor* mon, const Vec2& pos, const Vec2& size, int refreshRate) {
-    glfwSetWindowMonitor(m_window, mon, (int)pos.x, (int)pos.y, (int)size.x, (int)size.y, refreshRate);
+void Window::setMonitor(GLFWmonitor* mon, const Vec2i& pos, const Vec2i& size, int refreshRate) {
+    glfwSetWindowMonitor(m_window, mon, pos.x, pos.y, size.x, size.y, refreshRate);
 }
 
 GLFWmonitor* Window::getMonitor() {
@@ -148,17 +148,17 @@ float Window::getOpacity() {
     return glfwGetWindowOpacity(m_window);
 }
 
-void Window::setPosition(const Vec2& pos) {
-    glfwSetWindowPos(m_window, (int)pos.x, (int)pos.y);
+void Window::setPosition(const Vec2i& pos) {
+    glfwSetWindowPos(m_window, pos.x, pos.y);
 }
 
-Vec2 Window::getPosition() {
-    Vec2 ret;
-    glfwGetWindowPos(m_window, (int*)&ret.x, (int*)&ret.y);
+Vec2i Window::getPosition() {
+    Vec2i ret;
+    glfwGetWindowPos(m_window, &ret.x, &ret.y);
     return ret;
 }
 
-void Window::setPosCallback(std::function<void(Window*, Vec2)> callback) {
+void Window::setPosCallback(std::function<void(Window*, Vec2i)> callback) {
     m_posCallback = callback;
     glfwSetWindowPosCallback(m_window, posCallback);
 }
@@ -176,28 +176,28 @@ bool Window::shouldClose() {
     return glfwWindowShouldClose(m_window);
 }
 
-void Window::setSize(const Vec2& size) {
-    glfwSetWindowSize(m_window, (int)size.x, (int)size.y);
+void Window::setSize(const Vec2i& size) {
+    glfwSetWindowSize(m_window, size.x, size.y);
 }
 
-Vec2 Window::getSize() {
-    Vec2 ret;
-    glfwGetWindowSize(m_window, (int*)&ret.x, (int*)&ret.y);
+Vec2i Window::getSize() {
+    Vec2i ret;
+    glfwGetWindowSize(m_window, &ret.x, &ret.y);
     return ret;
 }
 
-void Window::setSizeCallback(std::function<void(Window*, Vec2)> callback) {
+void Window::setSizeCallback(std::function<void(Window*, Vec2i)> callback) {
     m_sizeCallback = callback;
     glfwSetWindowSizeCallback(m_window, sizeCallback);
 }
 
-void Window::setFramebufferSizeCallback(std::function<void(Window *, Vec2)> callback) {
+void Window::setFramebufferSizeCallback(std::function<void(Window *, Vec2i)> callback) {
     m_framebufferSizeCallback = callback;
     glfwSetFramebufferSizeCallback(m_window, framebufferSizeCallback);
 }
 
-void Window::setSizeLimits(const Vec2& min, const Vec2& max) {
-    glfwSetWindowSizeLimits(m_window, (int)min.x, (int)min.y, (int)max.x, (int)max.y);
+void Window::setSizeLimits(const Vec2i& min, const Vec2i& max) {
+    glfwSetWindowSizeLimits(m_window, min.x, min.y, max.x, max.y);
 }
 
 void Window::setTitle(const std::string_view title) {
@@ -208,9 +208,9 @@ void Window::destroyWindow() {
     glfwDestroyWindow(m_window);
 }
 
-Vec2 Window::getFramebufferSize() {
-    Vec2 ret;
-    glfwGetFramebufferSize(m_window, (int*)&ret.x, (int*)&ret.y);
+Vec2i Window::getFramebufferSize() {
+    Vec2i ret;
+    glfwGetFramebufferSize(m_window, &ret.x, &ret.y);
     return ret;
 }
 
@@ -265,17 +265,17 @@ void Window::refreshCallback(GLFWwindow *win) {
 
 void Window::posCallback(GLFWwindow *win, int x, int y) {
     auto _win = (Window*)glfwGetWindowUserPointer(win);
-    if (_win && _win->m_posCallback) _win->m_posCallback(_win, Vec2 {(float)x, (float)y});
+    if (_win && _win->m_posCallback) _win->m_posCallback(_win, Vec2i {x, y});
 }
 
 void Window::sizeCallback(GLFWwindow *win, int x, int y) {
     auto _win = (Window*)glfwGetWindowUserPointer(win);
-    if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2 {(float)x, (float)y});
+    if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2i {x, y});
 }
 
 void Window::framebufferSizeCallback(GLFWwindow *win, int width, int height) {
     auto _win = (Window*)glfwGetWindowUserPointer(win);
-    if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2 {(float)width, (float)height});
+    if (_win && _win->m_sizeCallback) _win->m_sizeCallback(_win, Vec2i {width, height});
 }
 
 void Window::iconify() {

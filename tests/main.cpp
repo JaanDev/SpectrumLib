@@ -61,6 +61,8 @@ int main() {
 
         canvas->fill({15, 15, 15, 255});
 
+        canvas->line({100, 100}, {300, 400}, {255, 255, 255, 255});
+
         win->swapBuffers();
         glfwPollEvents();
     }

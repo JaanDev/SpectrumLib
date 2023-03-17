@@ -47,6 +47,12 @@ namespace utils {
             logW("{}: {} with code {}", message, desc, code);
         }
     }
+
+    // Vec2f normalize(const Vec2f& point) {
+    //     // const Vec2f winSize;
+    //     // glfwGetWindowSize(glfwGetCurrentContext(), (int*)&winSize.x, (int*)&winSize.y);
+    //     // return { point.x / winSize.x * 2 - 1, point.y / winSize.y * 2 - 1 };
+    // }
 }
 
 NS_SPECTRUM_END
