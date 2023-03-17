@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(Spectrum VERSION 1.0.0 DESCRIPTION "A simple library for graphics developing")
 
+set(CMAKE_POSITION_INDEPENDENT_CODE True)
+
 macro(setoption option value)
     set(${option} ${value} CACHE INTERNAL "" FORCE)
 endmacro()

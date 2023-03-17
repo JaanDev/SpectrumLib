@@ -57,9 +57,15 @@ namespace utils {
 
 NS_SPECTRUM_END
 
-#include "Vector.hpp"
-#include "GLUtils.hpp"
-#include "Enums.hpp"
 
+#include "Enums.hpp"
 using WindowAttrib = std::pair<WindowAttribs, bool>;
 using WindowHint = std::pair<WindowHints, bool>;
+#include "Vector.hpp"
+
+
+
+#include "Canvas.hpp"
+#include "Window.hpp"
+
+#include "GLUtils.hpp"

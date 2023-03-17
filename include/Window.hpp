@@ -4,6 +4,8 @@
 
 NS_SPECTRUM_BEGIN
 
+class Canvas;
+
 class Window {
 private:
     GLFWwindow* m_window;

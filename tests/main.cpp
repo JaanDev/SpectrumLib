@@ -1,7 +1,5 @@
 #include "Spectrum.hpp"
 
-// #include <chrono>
-
 using namespace spectrum;
 using std::cout, std::endl;
 
@@ -50,19 +48,19 @@ int main() {
     //     std::cout << "Framebuffer size: " << size << std::endl;
     // });
 
-    glfwSwapInterval(0); // vsync = off
+    // glfwSwapInterval(0); // vsync = off
 
     auto canvas = win->getCanvas();
     
     while (!win->shouldClose()) {
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        // glClearColor(0, 0, 0, 1);
+        glutils::prepareRender(win);
 
-        canvas->fill({15, 15, 15, 255});
+        // auto t = glfwGetTime();
+        // auto val = (sin(t) / 1.f / 2.f) + 0.5f;
+        // glClearColor(val, val, val, 1.f);
 
-        canvas->line({100, 100}, {300, 400}, {255, 255, 255, 255});
-
+        canvas->line({100, 200}, {300, 400}, {255, 255, 255, 255});
+       
         win->swapBuffers();
         glfwPollEvents();
     }
