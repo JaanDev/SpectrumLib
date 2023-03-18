@@ -15,7 +15,7 @@ public:
     void fill(const Col4& col);
     
     // draw a line
-    void line(const Vec2i& start, const Vec2i& end, const Col4& col, const float width);
+    void line(const Vec2i& start, const Vec2i& end, const Col4& col, const float width = 1.0f);
 };
 
 NS_SPECTRUM_END
