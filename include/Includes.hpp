@@ -15,6 +15,13 @@
 #define NS_SPECTRUM_BEGIN namespace spectrum {
 #define NS_SPECTRUM_END }
 
+#ifndef MAX
+    #define MAX(x,y) (x > y ? x : y)
+#endif
+#ifndef MIN
+    #define MIN(x,y) (x < y ? x : y)
+#endif
+
 NS_SPECTRUM_BEGIN
 
 namespace utils {

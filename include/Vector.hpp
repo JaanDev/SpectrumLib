@@ -10,20 +10,20 @@ struct Vec2 {
 
     constexpr auto  operator<=>(const Vec2& other) const = default;
     
-    constexpr Vec2  operator+(const Vec2& other) { return { this->x + other.x, this->y + other.y }; }
-    constexpr Vec2  operator-(const Vec2& other) { return { this->x - other.x, this->y - other.y }; }
-    constexpr Vec2& operator+=(const Vec2& other) { *this = *this + other; return *this; }
-    constexpr Vec2& operator-=(const Vec2& other) { *this = *this - other; return *this; }
+    constexpr Vec2  operator+(const Vec2& other) const { return { this->x + other.x, this->y + other.y }; }
+    constexpr Vec2  operator-(const Vec2& other) const { return { this->x - other.x, this->y - other.y }; }
+    constexpr Vec2& operator+=(const Vec2& other) const { *this = *this + other; return *this; }
+    constexpr Vec2& operator-=(const Vec2& other) const { *this = *this - other; return *this; }
 
-    constexpr Vec2  operator*(const Vec2& other) { return { this->x * other.x, this->y * other.y }; }
-    constexpr Vec2  operator/(const Vec2& other) { return { this->x / other.x, this->y / other.y }; }
-    constexpr Vec2& operator*=(const Vec2& other) { *this = *this * other; return *this; }
-    constexpr Vec2& operator/=(const Vec2& other) { *this = *this / other; return *this; }
+    constexpr Vec2  operator*(const Vec2& other) const { return { this->x * other.x, this->y * other.y }; }
+    constexpr Vec2  operator/(const Vec2& other) const { return { this->x / other.x, this->y / other.y }; }
+    constexpr Vec2& operator*=(const Vec2& other) const { *this = *this * other; return *this; }
+    constexpr Vec2& operator/=(const Vec2& other) const { *this = *this / other; return *this; }
 
-    constexpr Vec2  operator*(const T other) { return { this->x * other, this->y * other }; }
-    constexpr Vec2  operator/(const T other) { return { this->x / other, this->y / other }; }
-    constexpr Vec2& operator*=(const T other) { *this = *this * other; return *this; }
-    constexpr Vec2& operator/=(const T other) { *this = *this / other; return *this; }
+    constexpr Vec2  operator*(const T other) const { return { this->x * other, this->y * other }; }
+    constexpr Vec2  operator/(const T other) const { return { this->x / other, this->y / other }; }
+    constexpr Vec2& operator*=(const T other) const { *this = *this * other; return *this; }
+    constexpr Vec2& operator/=(const T other) const { *this = *this / other; return *this; }
 };
 
 template <typename T>
@@ -68,20 +68,20 @@ struct Vec3 {
 
     constexpr auto  operator<=>(const Vec3& other) const = default;
     
-    constexpr Vec3  operator+(const Vec3& other) { return { this->x + other.x, this->y + other.y, this->z + other.z }; }
-    constexpr Vec3  operator-(const Vec3& other) { return { this->x - other.x, this->y - other.y, this->z - other.z }; }
-    constexpr Vec3& operator+=(const Vec3& other) { *this = *this + other; return *this; }
-    constexpr Vec3& operator-=(const Vec3& other) { *this = *this - other; return *this; }
+    constexpr Vec3  operator+(const Vec3& other) const { return { this->x + other.x, this->y + other.y, this->z + other.z }; }
+    constexpr Vec3  operator-(const Vec3& other) const { return { this->x - other.x, this->y - other.y, this->z - other.z }; }
+    constexpr Vec3& operator+=(const Vec3& other) const { *this = *this + other; return *this; }
+    constexpr Vec3& operator-=(const Vec3& other) const { *this = *this - other; return *this; }
 
-    constexpr Vec3  operator*(const Vec3& other) { return { this->x * other.x, this->y * other.y, this->y * other.y }; }
-    constexpr Vec3  operator/(const Vec3& other) { return { this->x / other.x, this->y / other.y, this->y / other.y }; }
-    constexpr Vec3& operator*=(const Vec3& other) { *this = *this * other; return *this; }
-    constexpr Vec3& operator/=(const Vec3& other) { *this = *this / other; return *this; }
+    constexpr Vec3  operator*(const Vec3& other) const { return { this->x * other.x, this->y * other.y, this->y * other.y }; }
+    constexpr Vec3  operator/(const Vec3& other) const { return { this->x / other.x, this->y / other.y, this->y / other.y }; }
+    constexpr Vec3& operator*=(const Vec3& other) const { *this = *this * other; return *this; }
+    constexpr Vec3& operator/=(const Vec3& other) const { *this = *this / other; return *this; }
 
-    constexpr Vec3  operator*(const T other) { return { this->x * other, this->y * other, this->z * other }; }
-    constexpr Vec3  operator/(const T other) { return { this->x / other, this->y / other, this->z / other }; }
-    constexpr Vec3& operator*=(const T other) { *this = *this * other; return *this; }
-    constexpr Vec3& operator/=(const T other) { *this = *this / other; return *this; }
+    constexpr Vec3  operator*(const T other) const { return { this->x * other, this->y * other, this->z * other }; }
+    constexpr Vec3  operator/(const T other) const { return { this->x / other, this->y / other, this->z / other }; }
+    constexpr Vec3& operator*=(const T other) const { *this = *this * other; return *this; }
+    constexpr Vec3& operator/=(const T other) const { *this = *this / other; return *this; }
 };
 
 template <typename T>
@@ -99,20 +99,20 @@ struct Vec4 {
 
     constexpr auto  operator<=>(const Vec4& other) const = default;
     
-    constexpr Vec4  operator+(const Vec4& other) { return { this->x + other.x, this->y + other.y, this->z + other.z, this->w + other.w }; }
-    constexpr Vec4  operator-(const Vec4& other) { return { this->x - other.x, this->y - other.y, this->z - other.z, this->w - other.w }; }
-    constexpr Vec4& operator+=(const Vec4& other) { *this = *this + other; return *this; }
-    constexpr Vec4& operator-=(const Vec4& other) { *this = *this - other; return *this; }
+    constexpr Vec4  operator+(const Vec4& other) const { return { this->x + other.x, this->y + other.y, this->z + other.z, this->w + other.w }; }
+    constexpr Vec4  operator-(const Vec4& other) const { return { this->x - other.x, this->y - other.y, this->z - other.z, this->w - other.w }; }
+    constexpr Vec4& operator+=(const Vec4& other) const { *this = *this + other; return *this; }
+    constexpr Vec4& operator-=(const Vec4& other) const { *this = *this - other; return *this; }
 
-    constexpr Vec4  operator*(const Vec4& other) { return { this->x * other.x, this->y * other.y, this->y * other.y, this->w * other.w }; }
-    constexpr Vec4  operator/(const Vec4& other) { return { this->x / other.x, this->y / other.y, this->y / other.y, this->w / other.w }; }
-    constexpr Vec4& operator*=(const Vec4& other) { *this = *this * other; return *this; }
-    constexpr Vec4& operator/=(const Vec4& other) { *this = *this / other; return *this; }
+    constexpr Vec4  operator*(const Vec4& other) const { return { this->x * other.x, this->y * other.y, this->y * other.y, this->w * other.w }; }
+    constexpr Vec4  operator/(const Vec4& other) const { return { this->x / other.x, this->y / other.y, this->y / other.y, this->w / other.w }; }
+    constexpr Vec4& operator*=(const Vec4& other) const { *this = *this * other; return *this; }
+    constexpr Vec4& operator/=(const Vec4& other) const { *this = *this / other; return *this; }
 
-    constexpr Vec4  operator*(const T other) { return { this->x * other, this->y * other, this->z * other, this->w * other }; }
-    constexpr Vec4  operator/(const T other) { return { this->x / other, this->y / other, this->z / other, this->w / other }; }
-    constexpr Vec4& operator*=(const T other) { *this = *this * other; return *this; }
-    constexpr Vec4& operator/=(const T other) { *this = *this / other; return *this; }
+    constexpr Vec4  operator*(const T other) const { return { this->x * other, this->y * other, this->z * other, this->w * other }; }
+    constexpr Vec4  operator/(const T other) const { return { this->x / other, this->y / other, this->z / other, this->w / other }; }
+    constexpr Vec4& operator*=(const T other) const { *this = *this * other; return *this; }
+    constexpr Vec4& operator/=(const T other) const { *this = *this / other; return *this; }
 };
 
 template <typename T>
