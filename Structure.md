@@ -1,6 +1,36 @@
 # Структура
 Структура либы (классы и тд)
 
+## WindowFlags
+```cpp
+enum WindowFlags {
+    // no flags
+    None = 0,
+    // whether the windowed mode window will be resizable by the user
+    Resizable = 1 << 0,
+    // whether the windowed mode window will be initially visible
+    Visible = 1 << 1,
+    // whether the windowed mode window will have window decorations such as a border, a close widget, etc.
+    Decorated = 1 << 2,
+    // whether the windowed mode window will be given input focus when created
+    Focused = 1 << 3,
+    // whether the full screen window will automatically iconify and restore the previous video mode on input focus loss
+    AutoIconify = 1 << 4,
+    // whether the windowed mode window will be floating above other regular windows, also called topmost or always-on-top.
+    Floating = 1 << 5,
+    // whether the windowed mode window will be maximized when created
+    Maximized = 1 << 6,
+    // whether the cursor should be centered over newly created full screen windows
+    CenterCursor = 1 << 7,
+    // whether the window framebuffer will be transparent. If enabled and supported by the system, the window framebuffer alpha channel will be used to combine the framebuffer with the background. This does not affect window decorations.
+    TransparentFramebuffer = 1 << 8,
+    // whether the window will be given input focus when glfwShowWindow is called
+    FocusOnShow = 1 << 9,
+    // whether the window content area should be resized based on the monitor content scale of any monitor it is placed on
+    ScaleToMonitor = 1 << 10
+};
+```
+
 ## AppManager
 Основной менеджер для игры (как CCDirector)
 
@@ -8,23 +38,40 @@
 ```cpp
 // получение инстанса класса (как sharedState в кокосе)
 std::shared_ptr<AppManager> instance();
-void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen);
+void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 // то что будет юзер вызывать для первого запуска игры
 void run();
 // игровой цикл
 void update();
 void pause();
 void resume();
-void setFPS(float fps);
-void setVsync(bool vsync);
 // получение времени с момента запуска в секундах
 float getTime();
 // скейл координат
 void setContentScale(float scale);
+inline float getContentScale() const;
 inline const Vec2f& getWinSize() const;
 inline const Vec2i& getWinSizeInPixels() const;
-// управление всем что связано с окном вот тут
-std::shared_ptr<Window> getWindow();
+```
+
+## WindowManager
+Управление всем, что связано с окном
+
+### Методы
+```cpp
+static std::shared_ptr<WindowManager> instance();
+
+void setFullscreen(bool fullscreen);
+inline bool getFullscreen() const;
+
+void setVsync(bool vsync);
+inline bool getVsync() const;
+
+// frameTime = 1.0 / fps;
+void setTargetFrameTime(float frameTime);
+inline float getTargetFrameTime() const;
+
+// нужно что то еще
 ```
 
 ## Node
@@ -90,7 +137,17 @@ std::shared_ptr<Node> m_parent;
 
 ### Методы
 ```cpp
+// from file
+Texture(const std::string& path);
+// from memory
+Texture(uint8_t* data, unsigned int dataLen);
 ```
 
 ## Sprite : Node
-Спрайт который содержит картинку и который можно добавить на экран
+Спрайт который содержит текстуру и который можно добавить на экран
+
+Методы
+```cpp
+// оверрайдаем draw чтобы отричовать текстуру
+virtual void draw() override;
+```
