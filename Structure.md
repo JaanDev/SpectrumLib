@@ -37,7 +37,7 @@ enum WindowFlags {
 ### Методы
 ```cpp
 // получение инстанса класса (как sharedState в кокосе)
-std::shared_ptr<AppManager> instance();
+static AppManager* instance();
 
 // то что будет юзер вызывать для первого запуска игры
 void run();
@@ -70,7 +70,7 @@ bool m_isRunning;
 
 ### Методы
 ```cpp
-static std::shared_ptr<WindowManager> instance();
+static WindowManager* instance();
 
 void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 
@@ -135,20 +135,23 @@ void setBoundingBox(const Vec2f& size);
 inline const Vec2f& getAnchorPoint() const;
 void setAnchorPoint(const Vec2f& anchor);
 
+void setTag(const char* tag);
+inline const char* getTag() const;
+
 // обновление нода (каждый кадр)
 virtual void update(float dt) = 0;
 virtual void draw() = 0;
 
 inline std::vector<std::shared_ptr<Node>> getChildren() const;
-void addChild(std::shared_ptr<Node>);
-void addChild(std::shared_ptr<Node>, int zOrder);
+void addChild(std::shared_ptr<Node> child);
+void addChild(std::shared_ptr<Node> child, int zOrder);
 // то же что и getChildren()[index]->removeFromParent(), для удобства
 void removeChild(int index);
 void removeAllChildren();
 // удалить нод из родительского
 void removeFromParent();
 // получить родительский нод
-inline std::shared_ptr<Node> getParent() const;
+inline Node* getParent() const;
 ```
 
 ### Мемберы
@@ -161,8 +164,9 @@ float m_scaleY;
 float m_rotation;
 float m_opacity;
 int m_zOrder;
+const char* m_tag;
 std::vector<std::shared_ptr<Node>> m_children;
-std::shared_ptr<Node> m_parent;
+Node* m_parent;
 ```
 
 ## Texture
@@ -203,16 +207,40 @@ Texture m_texture; // может сделать sharedptr хз
 
 ### Методы
 ```cpp
-static std::shared_ptr<FontManager> instance();
+static FontManager* instance();
 
-void loadTTF(const std::string& path);
+void loadTTF(const std::string& path, const std::string& id);
+void loadBitmapFont(const std::string& path, const std::string& id);
+
+Font* getFont(const std::string& id) const;
 ```
+
+### Мемберы
+```cpp
+std::unordered_map<std::string, std::shared_ptr<Font>> m_fonts;
+```
+
+## Font
+```cpp
+struct Glyph {
+    Rect textureRect;
+    unsigned int unicode;
+};
+```
+
+### Методы
+```cpp
+Font(const Texture& atlasTexture, хз)
+```
+
+### Мемберы
+
 
 ## Label : Node
 Текст
 
 ### Методы
 ```cpp
-// fontID
+// fontID это то что указывали при загрузке в FontManager
 Label(const std::string& text, const std::string& fontID);
 ```

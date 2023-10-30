@@ -1,6 +1,8 @@
 #include <Spectrum.hpp>
 #include <logger.hpp>
 
+#include <vector>
+
 int main() {    
     spl::Window win("Hello Spectrum!", {800, 600});
 
