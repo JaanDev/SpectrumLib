@@ -1,6 +1,12 @@
 # Структура
 Структура либы (классы и тд)
 
+- [ ] actions
+- [ ] mouse handling (click/scroll/move)
+- [ ] input handling
+- [ ] shaders
+- [ ] sound (https://github.com/raysan5/raudio ?)
+
 ## WindowFlags
 ```cpp
 enum WindowFlags {
@@ -148,7 +154,7 @@ inline const char* getTag() const;
 virtual void update(float dt) = 0;
 virtual void draw() = 0;
 
-inline std::vector<std::shared_ptr<Node>> getChildren() const;
+inline const std::vector<std::shared_ptr<Node>>& getChildren() const;
 void addChild(std::shared_ptr<Node> child);
 void addChild(std::shared_ptr<Node> child, int zOrder);
 // то же что и getChildren()[index]->removeFromParent(), для удобства
