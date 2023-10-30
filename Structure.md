@@ -135,6 +135,9 @@ void setRGBCoefficient(const Col4b& color);
 inline int getZOrder() const;
 void setZOrder(int zOrder);
 
+inline unsigned int getObjectLimit() const;
+void setObjectLimit(unsigned int objectlimit);
+
 inline const Vec2f& getBoundingBox() const;
 void setBoundingBox(const Vec2f& size);
 
@@ -170,6 +173,7 @@ float m_scaleX;
 float m_scaleY;
 float m_rotation;
 float m_opacity;
+unsigned int objectLimit;
 int m_zOrder;
 bool m_visible;
 const char* m_tag;
