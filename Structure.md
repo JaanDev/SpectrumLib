@@ -123,8 +123,14 @@ void setScale(float scale);
 inline float getRotation() const;
 void setRotation(float degrees);
 
+inline bool getVisible() const;
+bool setVisible(bool visible);
+
 inline float getOpacity() const;
 void setOpacity(float opacity);
+
+inline Col4b getRGBCoefficient() const;
+void setRGBCoefficient(const Col4b& color);
 
 inline int getZOrder() const;
 void setZOrder(int zOrder);
@@ -156,11 +162,13 @@ inline std::shared_ptr<Node> getParent() const;
 Vec2f m_pos; // относительно родителя
 Vec2f m_boundingBox;
 Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
+Col3b m_rgbCoef; // {255, 255, 255} по умолчанию
 float m_scaleX;
 float m_scaleY;
 float m_rotation;
 float m_opacity;
 int m_zOrder;
+bool m_visible;
 std::vector<std::shared_ptr<Node>> m_children;
 std::shared_ptr<Node> m_parent;
 ```
@@ -189,6 +197,9 @@ GLuint m_textureID;
 Sprite(const std::string& path);
 Sprite(const Texture& texture);
 
+inline Color4b getBackgroundColor() const;
+void setBackgroundColor(const Color4b& color);
+
 // оверрайдаем draw чтобы отрисовать текстуру
 virtual void draw() override;
 ```
@@ -196,6 +207,7 @@ virtual void draw() override;
 ### Мемберы
 ```cpp
 Texture m_texture; // может сделать sharedptr хз
+Col4b m_backgroundColor; // {0, 0, 0, 0} по умолчанию
 ```
 
 ## FontManager
