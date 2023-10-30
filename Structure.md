@@ -38,20 +38,23 @@ enum WindowFlags {
 ```cpp
 // получение инстанса класса (как sharedState в кокосе)
 std::shared_ptr<AppManager> instance();
-void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
+
 // то что будет юзер вызывать для первого запуска игры
 void run();
 // игровой цикл
 void update();
 void pause();
 void resume();
+
 // получение времени с момента запуска в секундах
 float getTime();
+
 // скейл координат
 void setContentScale(float scale);
 inline float getContentScale() const;
+
 inline const Vec2f& getWinSize() const;
-inline const Vec2i& getWinSizeInPixels() const;
+const Vec2i& getWinSizeInPixels() const;
 ```
 
 ## WindowManager
@@ -60,6 +63,8 @@ inline const Vec2i& getWinSizeInPixels() const;
 ### Методы
 ```cpp
 static std::shared_ptr<WindowManager> instance();
+
+void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 
 void setFullscreen(bool fullscreen);
 inline bool getFullscreen() const;
@@ -71,7 +76,20 @@ inline bool getVsync() const;
 void setTargetFrameTime(float frameTime);
 inline float getTargetFrameTime() const;
 
+inline const Vec2i& getWinSizeInPixels() const;
+
+inline GLFWwindow* getGLFWWindow() const;
+
 // нужно что то еще
+```
+
+### Мемберы
+```cpp
+Vec2i m_winSize; // in pixels
+float m_targetFrameTime;
+GLFWwindow* m_windowHandle;
+bool m_isFullscreen;
+bool m_isVsync;
 ```
 
 ## Node
@@ -143,11 +161,24 @@ Texture(const std::string& path);
 Texture(uint8_t* data, unsigned int dataLen);
 ```
 
+### Мемберы
+```cpp
+GLuint m_textureID;
+```
+
 ## Sprite : Node
 Спрайт который содержит текстуру и который можно добавить на экран
 
-Методы
+### Методы
 ```cpp
-// оверрайдаем draw чтобы отричовать текстуру
+Sprite(const std::string& path);
+Sprite(const Texture& texture);
+
+// оверрайдаем draw чтобы отрисовать текстуру
 virtual void draw() override;
+```
+
+### Мемберы
+```cpp
+Texture m_texture;
 ```
