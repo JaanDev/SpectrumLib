@@ -8,7 +8,9 @@
 
 NS_SPECTRUM_BEGIN
 
-void initialize();
-void shutdown();
+namespace utils {
+    void initialize();
+    void shutdown();
+} // namespace utils
 
 NS_SPECTRUM_END

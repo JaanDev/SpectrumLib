@@ -5,7 +5,7 @@
 NS_SPECTRUM_BEGIN
 
 Window::Window(const std::string& title, const Sizei& size) : m_window(nullptr) {
-    initialize();
+    utils::initialize();
 
     m_window = glfwCreateWindow(size.w, size.h, title.c_str(), nullptr, nullptr);
     if (!m_window) {
@@ -15,7 +15,7 @@ Window::Window(const std::string& title, const Sizei& size) : m_window(nullptr) 
 
     glfwMakeContextCurrent(m_window);
 
-    auto glVer = gladLoadGL(glfwGetProcAddress);
+    gladLoadGL(glfwGetProcAddress);
     logD("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
     logD("GLSL Version:   {}", (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
     logD("GLAD Version:   {}", GLAD_GENERATOR_VERSION);
@@ -26,7 +26,7 @@ Window::Window(const std::string& title, const Sizei& size) : m_window(nullptr) 
 Window::~Window() {
     glfwDestroyWindow(m_window);
 
-    shutdown();
+    utils::shutdown();
 }
 
 NS_SPECTRUM_END
