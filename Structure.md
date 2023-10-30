@@ -66,6 +66,8 @@ static std::shared_ptr<WindowManager> instance();
 
 void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 
+void setWindowIcon(const std::string& iconPath);
+
 void setFullscreen(bool fullscreen);
 inline bool getFullscreen() const;
 
