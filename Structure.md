@@ -53,13 +53,13 @@ float getTime();
 void setContentScale(float scale);
 inline float getContentScale() const;
 
-inline const Vec2f& getWinSize() const;
-const Vec2i& getWinSizeInPixels() const;
+inline const Sizef& getWinSize() const;
+const Sizei& getWinSizeInPixels() const;
 ```
 
 ### Мемберы
 ```cpp
-Vec2f m_winSize; // in points
+Sizef m_winSize; // in points
 float m_contentScale;
 std::chrono::блаблабла m_startTime;
 bool m_isRunning;
@@ -72,7 +72,7 @@ bool m_isRunning;
 ```cpp
 static WindowManager* instance();
 
-void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
+void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 
 void setWindowIcon(const std::string& iconPath);
 
@@ -89,8 +89,8 @@ inline bool getVsync() const;
 void setTargetFrameTime(float frameTime);
 inline float getTargetFrameTime() const;
 
-inline const Vec2i& getWinSizeInPixels() const;
-void setWinSizeInPixels(const Vec2i& size);
+inline const Sizei& getWinSizeInPixels() const;
+void setWinSizeInPixels(const Sizei& size);
 
 inline GLFWwindow* getGLFWWindow() const;
 
@@ -99,7 +99,7 @@ inline GLFWwindow* getGLFWWindow() const;
 
 ### Мемберы
 ```cpp
-Vec2i m_winSize; // in pixels
+Sizei m_winSize; // in pixels
 float m_targetFrameTime;
 GLFWwindow* m_windowHandle;
 bool m_isFullscreen;
@@ -135,8 +135,8 @@ void setZOrder(int zOrder);
 inline unsigned int getObjectLimit() const;
 void setObjectLimit(unsigned int objectlimit);
 
-inline const Vec2f& getBoundingBox() const;
-void setBoundingBox(const Vec2f& size);
+inline const Sizef& getBoundingBox() const;
+void setBoundingBox(const Sizef& size);
 
 inline const Vec2f& getAnchorPoint() const;
 void setAnchorPoint(const Vec2f& anchor);
@@ -163,7 +163,7 @@ inline Node* getParent() const;
 ### Мемберы
 ```cpp
 Vec2f m_pos; // относительно родителя
-Vec2f m_boundingBox;
+Sizef m_boundingBox;
 Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
 float m_scaleX;
 float m_scaleY;
@@ -177,8 +177,36 @@ Node* m_parent;
 bool m_visible;
 ```
 
+## TextureManager
+
+### Методы
+```cpp
+static TextureManager* instance();
+
+// adds texture if not added previously
+const Texture& getTexture(const std::string& name);
+void addTexture(const std::string& name);
+
+void removeTexture(const std::string& name);
+void removeAllTextures();
+```
+
+### Мемберы
+```cpp
+std::unordered_map<std::string, Texture> m_textures;
+```
+
 ## Texture
 Текстура которую можно загрузить (не спрайт! она не добавляется на экран!)
+
+```cpp
+struct TexParams {
+    GLuint minFilter; // minification filter
+    GLuint magFilter; // magnification filter
+    GLuint wrapS;
+    GLuint wrapT;
+};
+```
 
 ### Методы
 ```cpp
@@ -186,11 +214,18 @@ bool m_visible;
 Texture(const std::string& path);
 // from memory
 Texture(uint8_t* data, unsigned int dataLen);
+
+// in points
+Sizef getSize();
+inline const Sizei& getSizeInPixels() const;
+
+void setTexParams(const TexParams& params);
 ```
 
 ### Мемберы
 ```cpp
 GLuint m_textureID;
+Sizei m_size; // in pixels
 ```
 
 ## Sprite : Node
