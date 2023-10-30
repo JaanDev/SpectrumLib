@@ -14,7 +14,6 @@
 - [ ] scheduler
 - [ ] particles
 - [ ] animated sprites
-- [ ] 
 
 ## WindowFlags
 ```cpp
