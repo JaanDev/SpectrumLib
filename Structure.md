@@ -184,7 +184,7 @@ bool m_visible;
 static TextureManager* instance();
 
 // adds texture if not added previously
-const Texture& getTexture(const std::string& name);
+std::shared_ptr<Texture> getTexture(const std::string& name);
 void addTexture(const std::string& name);
 
 void removeTexture(const std::string& name);
@@ -193,7 +193,7 @@ void removeAllTextures();
 
 ### Мемберы
 ```cpp
-std::unordered_map<std::string, Texture> m_textures;
+std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 ```
 
 ## Texture
@@ -234,7 +234,7 @@ Sizei m_size; // in pixels
 ### Методы
 ```cpp
 Sprite(const std::string& path);
-Sprite(const Texture& texture);
+Sprite(std::shared_ptr<Texture> texture);
 
 inline Col3u getColor() const;
 void setColor(const Col3u& color);
@@ -245,7 +245,7 @@ virtual void draw() override;
 
 ### Мемберы
 ```cpp
-Texture m_texture; // может сделать sharedptr хз
+std::shared_ptr<Texture> m_texture;
 Col3u m_color; // {0, 0, 0} по умолчанию
 ```
 
@@ -278,7 +278,7 @@ struct Glyph {
 struct Font {
     float lineHeight;
     float base;
-    Texture fontAtlas;
+    std::shared_ptr<Texture> fontAtlas;
     std::unordered_map<unsigned int, Glyph> glyphs;
 };
 ```
