@@ -136,6 +136,7 @@ inline float getScaleY() const;
 void setScaleX(float scale);
 void setScaleY(float scale);
 void setScale(float scale);
+void setScale(const Vec2f& scale);
 
 inline float getRotation() const;
 void setRotation(float degrees);
@@ -182,8 +183,7 @@ inline Node* getParent() const;
 Vec2f m_pos; // относительно родителя
 Sizef m_boundingBox;
 Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
-float m_scaleX;
-float m_scaleY;
+Vec2f m_scale;
 float m_rotation;
 float m_opacity;
 unsigned int objectLimit;
