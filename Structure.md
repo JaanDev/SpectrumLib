@@ -18,7 +18,7 @@
 
 ## WindowFlags
 ```cpp
-enum WindowFlags {
+enum class WindowFlags {
     // no flags
     None = 0,
     // whether the windowed mode window will be resizable by the user
@@ -306,13 +306,13 @@ struct Font {
 ## Label : Node
 
 ```cpp
-enum class TextAlignmentH {
+enum class TextAlignmentH : uint8_t {
     Left,
     Center,
     Right
 };
 
-enum class TextAlignmentV {
+enum class TextAlignmentV : uint8_t {
     Top,
     Center,
     Bottom
@@ -342,4 +342,6 @@ void setVerticalAlignment(TextAlignmentV alignment);
 ```cpp
 std::string m_text;
 std::string m_fontID;
+TextAlignmentH m_textAlignmentH;
+TextAlignmentV m_textAlignmsntV;
 ```
