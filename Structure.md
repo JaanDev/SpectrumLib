@@ -8,8 +8,11 @@
 ```cpp
 // получение инстанса класса (как sharedState в кокосе)
 std::shared_ptr<AppManager> instance();
+void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen);
 // то что будет юзер вызывать для первого запуска игры
 void run();
+// игровой цикл
+void update();
 void pause();
 void resume();
 void setFPS(float fps);
@@ -42,6 +45,13 @@ void setRotation(float degrees);
 inline float getOpacity() const;
 void setOpacity(float opacity);
 
+inline int getZOrder() const;
+void setZOrder(int zOrder);
+
+// обновление нода
+virtual void update(float dt) = 0;
+virtual void draw() = 0;
+
 inline std::vector<std::shared_ptr<Node>> getChildren() const;
 void addChild(std::shared_ptr<Node>);
 void addChild(std::shared_ptr<Node>, int zOrder);
@@ -60,6 +70,17 @@ float m_scaleX;
 float m_scaleY;
 float m_rotation;
 float m_opacity;
+int m_zOrder;
 std::vector<std::shared_ptr<Node>> m_children;
 std::shared_ptr<Node> m_parent;
 ```
+
+## Texture
+Текстура которую можно загрузить (не спрайт! она не добавляется на экран!)
+
+### Методы
+```cpp
+```
+
+## Sprite : Node
+Спрайт который содержит картинку и который можно добавить на экран
