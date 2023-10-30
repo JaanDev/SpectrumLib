@@ -6,6 +6,15 @@
 - [ ] input handling
 - [ ] shaders
 - [ ] sound (https://github.com/raysan5/raudio ?)
+- [ ] shapenode (рисование)
+- [ ] rendertexture
+- [ ] changing scenes
+- [ ] scenes transitions
+- [ ] joystick support?
+- [ ] scheduler
+- [ ] particles
+- [ ] animated sprites
+- [ ] 
 
 ## WindowFlags
 ```cpp
