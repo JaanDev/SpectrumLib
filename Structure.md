@@ -215,7 +215,6 @@ Col3u m_color; // {0, 0, 0} по умолчанию
 ```
 
 ## FontManager
-Менеджер шрифтов
 
 ### Методы
 ```cpp
@@ -249,31 +248,42 @@ Font(const Texture& atlasTexture, хз)
 
 
 ## Label : Node
-Текст
+
+```cpp
+enum class TextAlignmentH {
+    Left,
+    Center,
+    Right
+};
+
+enum class TextAlignmentV {
+    Top,
+    Center,
+    Bottom
+};
+```
 
 ### Методы
 ```cpp
 // fontID это то что указывали при загрузке в FontManager
 Label(const std::string& text, const std::string& fontID);
+Label(const std::string& text, std::shared_ptr<Font> font);
+
+void setText(const std::string& text);
+inline const std::string& getText() const;
 
 inline std::string getFontID() const;
 void setFontID(const std::string& fontID);
 
-inline bool isBold() const;
-void setBold(bool bold);
+inline TextAlignmentH getHorizontalAlignment() const;
+void setHorizontalAlignment(TextAlignmentH alignment);
 
-inline bool isItalic() const;
-void setItalic(bool italic);
+inline TextAlignmentV getVerticalAlignment() const;
+void setVerticalAlignment(TextAlignmentV alignment);
+```
 
-inline bool isUnderline() const;
-void setUnderline(bool underline);
-
-inline bool isStriketrough() const;
-void setStriketrough(bool striketrough);
-
-inline TextAlignment getHorizontalAlignment() const;
-void setHorizontalAlignment(TextAlignment alignment);
-
-inline TextAlignment getVerticalAlignment() const;
-void setVerticalAlignment(TextAlignment alignment);
+### Мемберы
+```cpp
+std::string m_text;
+std::string m_fontID;
 ```
