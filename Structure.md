@@ -57,6 +57,14 @@ inline const Vec2f& getWinSize() const;
 const Vec2i& getWinSizeInPixels() const;
 ```
 
+### Мемберы
+```cpp
+Vec2f m_winSize; // in points
+float m_contentScale;
+std::chrono::блаблабла m_startTime;
+bool m_isRunning;
+```
+
 ## WindowManager
 Управление всем, что связано с окном
 
@@ -67,6 +75,9 @@ static std::shared_ptr<WindowManager> instance();
 void createWindow(const Vec2i& sizeInPixels, const Vec2f& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
 
 void setWindowIcon(const std::string& iconPath);
+
+// bool() => возвращает true если окно закрывать, false если не закрывать
+void setOnCloseCallback(std::function<bool()>);
 
 void setFullscreen(bool fullscreen);
 inline bool getFullscreen() const;
@@ -79,6 +90,7 @@ void setTargetFrameTime(float frameTime);
 inline float getTargetFrameTime() const;
 
 inline const Vec2i& getWinSizeInPixels() const;
+void setWinSizeInPixels(const Vec2i& size);
 
 inline GLFWwindow* getGLFWWindow() const;
 
@@ -123,7 +135,7 @@ void setBoundingBox(const Vec2f& size);
 inline const Vec2f& getAnchorPoint() const;
 void setAnchorPoint(const Vec2f& anchor);
 
-// обновление нода
+// обновление нода (каждый кадр)
 virtual void update(float dt) = 0;
 virtual void draw() = 0;
 
@@ -132,6 +144,7 @@ void addChild(std::shared_ptr<Node>);
 void addChild(std::shared_ptr<Node>, int zOrder);
 // то же что и getChildren()[index]->removeFromParent(), для удобства
 void removeChild(int index);
+void removeAllChildren();
 // удалить нод из родительского
 void removeFromParent();
 // получить родительский нод
@@ -169,7 +182,7 @@ GLuint m_textureID;
 ```
 
 ## Sprite : Node
-Спрайт который содержит текстуру и который можно добавить на экран
+Спрайт который содержит текстуру, можно добавить на экран
 
 ### Методы
 ```cpp
@@ -182,5 +195,24 @@ virtual void draw() override;
 
 ### Мемберы
 ```cpp
-Texture m_texture;
+Texture m_texture; // может сделать sharedptr хз
+```
+
+## FontManager
+Менеджер шрифтов
+
+### Методы
+```cpp
+static std::shared_ptr<FontManager> instance();
+
+void loadTTF(const std::string& path);
+```
+
+## Label : Node
+Текст
+
+### Методы
+```cpp
+// fontID
+Label(const std::string& text, const std::string& fontID);
 ```
