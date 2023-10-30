@@ -223,25 +223,29 @@ static FontManager* instance();
 void loadTTF(const std::string& path, const std::string& id);
 void loadBitmapFont(const std::string& path, const std::string& id);
 
-Font* getFont(const std::string& id) const;
+const Font& getFont(const std::string& id) const;
 ```
 
 ### Мемберы
 ```cpp
-std::unordered_map<std::string, std::shared_ptr<Font>> m_fonts;
+std::unordered_map<std::string, Font> m_fonts;
 ```
 
 ## Font
 ```cpp
 struct Glyph {
     Rect textureRect;
-    unsigned int unicode;
+    int xOffset; // на сколько смещается буква вправо относительно позиции курсора
+    int yOffset; // на сколько смещается буква вниз относительно позиции курсора
+    int xAdvance; // на сколько смещать курсор вправо после отрисовки буквы
 };
-```
 
-### Методы
-```cpp
-Font(const Texture& atlasTexture, хз)
+struct Font {
+    float lineHeight;
+    float base;
+    Texture fontAtlas;
+    std::unordered_map<unsigned int, Glyph> glyphs;
+};
 ```
 
 ### Мемберы
@@ -267,7 +271,7 @@ enum class TextAlignmentV {
 ```cpp
 // fontID это то что указывали при загрузке в FontManager
 Label(const std::string& text, const std::string& fontID);
-Label(const std::string& text, std::shared_ptr<Font> font);
+Label(const std::string& text, const Font& font);
 
 void setText(const std::string& text);
 inline const std::string& getText() const;

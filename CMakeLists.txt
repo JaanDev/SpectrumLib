@@ -12,7 +12,8 @@ file(GLOB SOURCES
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include
