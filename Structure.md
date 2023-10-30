@@ -255,4 +255,25 @@ Font(const Texture& atlasTexture, хз)
 ```cpp
 // fontID это то что указывали при загрузке в FontManager
 Label(const std::string& text, const std::string& fontID);
+
+inline std::string getFontID() const;
+void setFontID(const std::string& fontID);
+
+inline bool isBold() const;
+void setBold(bool bold);
+
+inline bool isItalic() const;
+void setItalic(bool italic);
+
+inline bool isUnderline() const;
+void setUnderline(bool underline);
+
+inline bool isStriketrough() const;
+void setStriketrough(bool striketrough);
+
+inline TextAlignment getHorizontalAlignment() const;
+void setHorizontalAlignment(TextAlignment alignment);
+
+inline TextAlignment getVerticalAlignment() const;
+void setVerticalAlignment(TextAlignment alignment);
 ```
