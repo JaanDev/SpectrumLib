@@ -60,6 +60,8 @@ void run();
 void update();
 void pause();
 void resume();
+// конец приложения
+void end();
 
 // получение времени с момента запуска в секундах
 float getTime();
