@@ -17,6 +17,8 @@ void pause();
 void resume();
 void setFPS(float fps);
 void setVsync(bool vsync);
+// получение времени с момента запуска в секундах
+float getTime();
 // скейл координат
 void setContentScale(float scale);
 inline const Vec2f& getWinSize() const;
@@ -48,6 +50,12 @@ void setOpacity(float opacity);
 inline int getZOrder() const;
 void setZOrder(int zOrder);
 
+inline const Vec2f& getBoundingBox() const;
+void setBoundingBox(const Vec2f& size);
+
+inline const Vec2f& getAnchorPoint() const;
+void setAnchorPoint(const Vec2f& anchor);
+
 // обновление нода
 virtual void update(float dt) = 0;
 virtual void draw() = 0;
@@ -66,6 +74,8 @@ inline std::shared_ptr<Node> getParent() const;
 ### Мемберы
 ```cpp
 Vec2f m_pos; // относительно родителя
+Vec2f m_boundingBox;
+Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
 float m_scaleX;
 float m_scaleY;
 float m_rotation;
