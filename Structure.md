@@ -131,8 +131,6 @@ inline GLFWwindow* getGLFWWindow() const;
 Vec2f getMousePos();
 Vec2i getMousePosInPixels();
 float getMouseWheelValue();
-
-void open(const std::string& url);
 ```
 
 ### Мемберы
