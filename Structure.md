@@ -2,8 +2,8 @@
 Структура либы (классы и тд)
 
 - [ ] actions
-- [ ] mouse handling (click/scroll/move)
-- [ ] input handling
+- [x] mouse handling (click/scroll/move)
+- [x] input handling
 - [ ] shaders
 - [ ] sound (https://github.com/raysan5/raudio ?)
 - [ ] shapenode (рисование)
@@ -78,6 +78,8 @@ inline bool getCursorVisible() const;
 
 void setCursorLocked(bool locked);
 inline bool getCursorLocked() const;
+
+void openURL(const std::string& url);
 ```
 
 ### Мемберы
@@ -412,6 +414,10 @@ void unscheduleAll();
 
 // internal
 void update(float dt);
+
+void setAFKCallback(std::function<void()> callback);
+inline float getAFKInterval() const;
+void setAFKInterval(float interval);
 ```
 
 ### Мемберы
@@ -419,4 +425,6 @@ void update(float dt);
 float m_timeScale;
 unsigned int m_nextTimerID; // 0 by default, += 1 after each created timer
 std::vector<Timer> m_timers;
+float m_AFKInterval;
+std::function<void()> m_AFKCallback;
 ```
