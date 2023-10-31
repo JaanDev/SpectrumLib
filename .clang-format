@@ -11,6 +11,7 @@ AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
+# AllowShortFunctionsOnASingleLine: None
 AllowShortFunctionsOnASingleLine: Inline
 AlwaysBreakTemplateDeclarations: Yes
 PointerAlignment: Left

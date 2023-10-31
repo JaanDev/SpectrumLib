@@ -14,7 +14,7 @@
 - [x] scheduler
 - [ ] particles
 - [ ] animated sprites
-- [ ] filemanager (file? filesystem?)
+- [x] filemanager
 
 ## WindowFlags
 ```cpp
@@ -111,7 +111,7 @@ void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const st
 void setWindowIcon(const std::string& iconPath);
 
 // bool() => возвращает true если окно закрывать, false если не закрывать
-void setOnCloseCallback(std::function<bool()>);
+void setOnCloseCallback(std::function<bool()> callback);
 
 void setFullscreen(bool fullscreen);
 inline bool getFullscreen() const;
@@ -130,6 +130,8 @@ inline GLFWwindow* getGLFWWindow() const;
 
 Vec2f getMousePos();
 Vec2i getMousePosInPixels();
+
+void setFilesDroppedCallback(std::function<void(std::vector<std::string>)> callback);
 ```
 
 ### Мемберы
@@ -137,6 +139,8 @@ Vec2i getMousePosInPixels();
 Sizei m_winSize; // in pixels
 float m_targetFrameTime;
 GLFWwindow* m_windowHandle;
+std::function<bool()> m_closeCallback;
+std::function<void(std::vector<std::string>)> m_filesDroppedCallback;
 bool m_isFullscreen;
 bool m_isVsync;
 ```
@@ -434,4 +438,40 @@ unsigned int m_nextTimerID; // 0 by default, += 1 after each created timer
 std::vector<Timer> m_timers;
 float m_AFKInterval;
 std::function<void()> m_AFKCallback;
+```
+
+## namespace utils
+```cpp
+uint32_t ColToInt(const Col3u& col);
+uint32_t ColToInt(const Col3f& col);
+uint32_t ColToInt(const Col4u& col);
+uint32_t ColToInt(const Col4f& col);
+
+Col3u IntToCol3u(uint32_t col);
+Col3f IntToCol3f(uint32_t col);
+Col4u IntToCol4u(uint32_t col);
+Col4f IntToCol4f(uint32_t col);
+```
+
+## FileManager
+
+### Методы
+```cpp
+static FileManager* instance();
+
+std::filesystem::path fullPathForFile(const std::string& name);
+void addSearchPath(const std::filesystem::path& path);
+const std::vector<std::filesystem::path>& getSearchPaths() const;
+
+// Возвращает путь к корню диска, на котором запущено приложение
+std::filesystem::path getRootPath();
+std::filesystem::path getAppDirectory();
+std::filesystem::path getAppPath();
+std::filesystem::path getTempPath();
+std::filesystem::path getAppFilename();
+```
+
+### Мемберы
+```cpp
+std::vector<std::filesystem::path> m_searchPaths;
 ```
