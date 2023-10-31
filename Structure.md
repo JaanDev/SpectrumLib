@@ -132,6 +132,11 @@ Vec2f getMousePos();
 Vec2i getMousePosInPixels();
 
 void setFilesDroppedCallback(std::function<void(std::vector<std::string>)> callback);
+
+// all 3 are for this frame
+Vec2f getMouseWheelDelta();
+Vec2f getMouseDelta();
+Vec2i getMouseDeltaInPixels();
 ```
 
 ### Мемберы
