@@ -345,3 +345,37 @@ std::string m_fontID;
 TextAlignmentH m_textAlignmentH;
 TextAlignmentV m_textAlignmsntV;
 ```
+
+## Scheduler
+
+```cpp
+struct Timer {
+    float interval;
+    int timesLeft;
+    std::function<void()> callback;
+    unsigned int id; // for internal usage
+};
+```
+
+### Методы
+```cpp
+static Scheduler* instance();
+
+inline float getTimeScale() const;
+void setTimeScale(float ts);
+
+// returns the timer id which can be used to usnchedule it
+unsigned int schedule(const Timer& timer);
+void unschedule(unsigned int id);
+void unscheduleAll();
+
+// internal
+void update();
+```
+
+### Мемберы
+```cpp
+float m_timeScale;
+unsigned int m_nextTimerID; // 0 by default, += 1 after each created timer
+std::vector<Timer> m_timers;
+```
