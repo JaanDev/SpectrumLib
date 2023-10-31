@@ -11,7 +11,7 @@
 - [ ] changing scenes
 - [ ] scenes transitions
 - [ ] joystick support?
-- [ ] scheduler
+- [x] scheduler
 - [ ] particles
 - [ ] animated sprites
 - [ ] filemanager (file? filesystem?)
@@ -70,8 +70,14 @@ float getTime();
 void setContentScale(float scale);
 inline float getContentScale() const;
 
+// in points
 inline const Sizef& getWinSize() const;
-const Sizei& getWinSizeInPixels() const;
+
+void setCursorVisible(bool visible);
+inline bool getCursorVisible() const;
+
+void setCursorLocked(bool locked);
+inline bool getCursorLocked() const;
 ```
 
 ### Мемберы
@@ -80,6 +86,8 @@ Sizef m_winSize; // in points
 float m_contentScale;
 std::chrono::блаблабла m_startTime;
 bool m_isRunning;
+bool m_isCursorVisible;
+bool m_isCursorLocked;
 ```
 
 ## WindowManager
@@ -111,7 +119,8 @@ void setWinSizeInPixels(const Sizei& size);
 
 inline GLFWwindow* getGLFWWindow() const;
 
-// нужно что то еще
+Vec2f getMousePos();
+Vec2i getMousePosInPixels();
 ```
 
 ### Мемберы
@@ -125,6 +134,31 @@ bool m_isVsync;
 
 ## Node
 Всё, что можно поместить на экран
+
+```cpp
+enum class KeyEventType {
+    KeyDown,
+    KeyUp
+};
+
+enum class MouseEventType {
+    MouseHold,
+    MouseRelease,
+    MouseMove,
+    MouseEnterArea,
+    MouseLeaveArea
+};
+
+enum class ModKeys {
+    None = 0,
+    Shift = 1 << 0,
+    Control = 1 << 1,
+    Alt = 1 << 2,
+    Super = 1 << 3,
+    CapsLock = 1 << 4, // if the GLFW_LOCK_KEY_MODS input mode is set.
+    NumLock = 1 << 5 // if the GLFW_LOCK_KEY_MODS input mode is set.
+};
+```
 
 ### Методы
 ```cpp
@@ -165,6 +199,11 @@ inline const char* getTag() const;
 // обновление нода (каждый кадр)
 virtual void update(float dt) = 0;
 virtual void draw() = 0;
+
+virtual void onKeyEvent(KeyEventType evtType, Key key, ModKeys modKeys) = 0;
+virtual void onTextEvent(unsigned int codepoint) = 0;
+virtual void onMouseEvent(MouseEventType evtType, const Vec2i& mousePos) = 0;
+virtual void onMouseScroll(Vec2f delta) = 0;
 
 inline const std::vector<std::shared_ptr<Node>>& getChildren() const;
 void addChild(std::shared_ptr<Node> child);
@@ -353,7 +392,8 @@ struct Timer {
     float interval;
     int timesLeft;
     std::function<void()> callback;
-    unsigned int id; // for internal usage
+    unsigned int id;
+    float timeLeft;
 };
 ```
 
@@ -364,13 +404,14 @@ static Scheduler* instance();
 inline float getTimeScale() const;
 void setTimeScale(float ts);
 
-// returns the timer id which can be used to usnchedule it
-unsigned int schedule(const Timer& timer);
+// returns the timer id which can be used to unschedule it
+// timesLeft = -1 => infinite repeat
+unsigned int schedule(float interval, int timesLeft, std::function<void()> callback);
 void unschedule(unsigned int id);
 void unscheduleAll();
 
 // internal
-void update();
+void update(float dt);
 ```
 
 ### Мемберы
