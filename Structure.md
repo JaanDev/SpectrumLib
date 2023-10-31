@@ -80,6 +80,13 @@ void setCursorLocked(bool locked);
 inline bool getCursorLocked() const;
 
 void openURL(const std::string& url);
+
+// получить реальный фпс (хз как реализовать пока что)
+float getRealFPS();
+
+std::string getClipboardText();
+// (без замены существующего)
+void setClipboardText(const std::string& text);
 ```
 
 ### Мемберы
