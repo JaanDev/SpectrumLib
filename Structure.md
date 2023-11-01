@@ -15,6 +15,7 @@
 - [ ] particles
 - [ ] animated sprites
 - [x] filemanager
+- [ ] ccspritebatchnode
 
 ## WindowFlags
 ```cpp
