@@ -6,7 +6,7 @@
 - [x] input handling
 - [x] shaders
 - [x] sound (https://github.com/raysan5/raudio ?)
-- [ ] shapenode (рисование)
+- [x] shapenode (рисование)
 - [ ] rendertexture
 - [x] changing scenes
 - [x] scenes transitions
