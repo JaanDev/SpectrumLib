@@ -263,7 +263,7 @@ Vec2f m_endPos;
 
 ### Методы
 ```cpp
-ActionMoveTo(EasingType easing, float duration, float startScale, float endScale);
+ActionScaleTo(EasingType easing, float duration, float startScale, float endScale);
 
 virtual void update(float dt) override {
     Action::update(dt);
@@ -283,7 +283,7 @@ float m_endScale;
 
 ### Методы
 ```cpp
-ActionMoveTo(EasingType easing, float duration, float startRot, float endRot);
+ActionRotateTo(EasingType easing, float duration, float startRot, float endRot);
 
 virtual void update(float dt) override {
     Action::update(dt);
@@ -303,7 +303,7 @@ float m_endRot;
 
 ### Методы
 ```cpp
-ActionMoveTo(EasingType easing, float duration, const Col4u& startCol, const Col4u& endCol);
+ActionTintTo(EasingType easing, float duration, const Col4u& startCol, const Col4u& endCol);
 
 virtual void update(float dt) override {
     Action::update(dt);
