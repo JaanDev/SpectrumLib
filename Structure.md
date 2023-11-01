@@ -663,3 +663,62 @@ std::vector<Sample> m_loadedSamples;
 float m_generalVolume;
 float m_generalBalance;
 ```
+
+## ShapeNode : Node
+
+```cpp
+enum class ShapeType : uint8_t {
+    Ellipse,
+    Polygon,
+    Line
+};
+
+enum class FillType : uint8_t {
+    SolidColor,
+    Gradient,
+    Texture
+};
+```
+
+### Методы
+```cpp
+virtual void draw() override;
+
+void setShape(ShapeType shape);
+void setFill(FillType fill);
+
+void setLineColor(Col4u color);
+void setLineWidth(float width);
+
+void setGradientStartCol(Col4u color);
+void setGradientEndCol(Col4u color);
+// all is from 0 to 1
+void setGradientPositions(Vec2f start, Vec2f end);
+
+void setTexture(std::shared_ptr<Texture> texture);
+
+void setPolygonPoints(std::vector<Vec2f> points);
+
+// for circle x = y
+void setEllipseRadius(float x, float y);
+```
+
+### Мемберы
+```cpp
+ShapeType m_shapeType;
+FillType m_fillType;
+
+Vec2f m_ellipseRadius;
+
+std::shared_ptr<Texture> m_texture;
+
+float m_lineWidth;
+Col4u m_lineCol;
+
+Col4u m_gradientStartCol;
+Col4u m_gradientEndCol;
+Vec2f m_gradientStartPos;
+Vec2f m_gradientEndPos;
+
+std::vector<Vec2f> m_polygonPoints;
+```
