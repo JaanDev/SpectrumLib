@@ -4,8 +4,8 @@
 - [ ] actions
 - [x] mouse handling (click/scroll/move)
 - [x] input handling
-- [ ] shaders
-- [ ] sound (https://github.com/raysan5/raudio ?)
+- [x] shaders
+- [x] sound (https://github.com/raysan5/raudio ?)
 - [ ] shapenode (рисование)
 - [ ] rendertexture
 - [x] changing scenes
@@ -496,6 +496,14 @@ std::filesystem::path getAppFilename();
 std::vector<std::filesystem::path> m_searchPaths;
 ```
 
+## Shader
+### Методы
+```cpp
+bool loadFromFile(std::filesystem::path path);
+bool loadFromString(std::string_view shader);
+
+void setShaderParameter(const char* param, int value);
+int getShaderParameter(const char* param);
 ## Scene : Node
 
 ### Мемберы
@@ -547,4 +555,94 @@ std::vector<Node*> m_mouseEvents;
 std::vector<Node*> m_mouseScrollEvents;
 std::vector<Node*> m_keyEvents;
 std::vector<Node*> m_textEvents;
+```
+
+## Audio
+### Методы
+```cpp
+void playSample(const std::string& sample, uint32_t repeats);
+void playSample(const std::string& sample, uint8_t channel, uint32_t repeats);
+void playSampleFile(std::filesystem::path sample, uint8_t channel, uint32_t repeats);
+
+void preloadSampleFile(std::filesystem::path sample);
+void unloadSampleFile(const std::string& sample);
+
+void pauseSample(const std::string& sample);
+void pauseChannel(uint8_t channel);
+void pauseAllSounds();
+
+void resumeSample(const std::string& sample);
+void resumeChannel(uint8_t channel);
+void resumeAllSounds();
+
+void stopSample(const std::string& sample);
+void stopChannel(uint8_t channel);
+void stopAllSounds();
+
+void setGeneralVolume(uint8_t volume);
+void setSampleVolume(const std::string& sample, uint8_t volume);
+void setChannelVolume(uint8_t channel, uint8_t volume);
+
+uint8_t getGeneralVolume();
+uint8_t getSampleVolume(const std::string& sample);
+uint8_t getChannelVolume(uint8_t channel);
+
+
+void setGeneralBalance(uint8_t balance);
+void setSampleBalance(const std::string& sample, uint8_t balance);
+void setChannelBalance(uint8_t channel, uint8_t balance);
+
+uint8_t getGeneralBalance();
+uint8_t getSampleBalance(const std::string& sample);
+uint8_t getChannelBalance(uint8_t channel);
+
+void setSamplePosition(const std::string& sample, uint32_t seconds);
+void setChannelPosition(uint8_t channel, uint32_t seconds);
+
+uint32_t getSamplePosition(const std::string& sample);
+uint32_t getChannelPosition(uint8_t channel);
+
+uint32_t getSampleLength(const std::string& sample);
+uint32_t getChannelLength(uint8_t channel);
+
+void setSampleFrequency(const std::string& sample, uint32_t freq);
+void setChannelFrequency(uint8_t channel, uint32_t freq);
+
+uint32_t getSampleFrequency(const std::string& sample);
+uint32_t getChannelFrequency(uint8_t channel);
+
+void lockChannel(uint8_t channel);
+void unlockChannel(uint8_t channel);
+
+virtual void onSamplePlay(const std::string& sample);
+virtual void onChannelPlay(uint8_t channel);
+
+virtual void onSamplePause(const std::string& sample);
+virtual void onChannelPause(uint8_t channel);
+```
+
+### Мемберы
+```cpp
+struct Sample {
+    const char* sampleKey;
+    uint8_t volume;
+    uint8_t balance;
+    uint32_t freq;
+    uint32_t position;
+    uint32_t length;
+    uint32_t repeats
+};
+
+struct Channel {
+    const char* sampleKey;
+    uint8_t volume;
+    uint8_t balance;
+    uint32_t freq;
+    uint32_t position;
+    uint32_t length;
+    uint32_t repeats
+};
+
+std::vector<Channel> channels(48);
+std::vector<Sample> currentSamples;
 ```
