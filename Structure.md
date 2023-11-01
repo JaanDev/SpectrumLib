@@ -248,7 +248,7 @@ ActionMoveTo(EasingType easing, float duration, const Vec2f& startPos, const Vec
 virtual void update(float dt) override {
     Action::update(dt);
 
-    m_node->setPosition(utils::lerpValue(m_startPos, m_endPos, m_progress));
+    m_node->setPos(utils::lerpValue(m_startPos, m_endPos, m_progress));
 }
 ```
 
