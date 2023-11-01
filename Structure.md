@@ -9,7 +9,7 @@
 - [ ] shapenode (рисование)
 - [ ] rendertexture
 - [x] changing scenes
-- [ ] scenes transitions
+- [x] scenes transitions
 - [ ] joystick support?
 - [x] scheduler
 - [ ] particles
@@ -502,6 +502,22 @@ std::vector<std::filesystem::path> m_searchPaths;
 ```cpp
 // sets boundingbox to all win size
 Scene();
+```
+
+## SceneTransition : Scene
+
+```cpp
+enum class TransitionType {
+    Fade
+    // потом другие добавим
+};
+```
+
+### Методы
+```cpp
+SceneTransition(std::shared_ptr<Scene> scene, float duration, TransitionType type);
+
+virtual void update(float dt) override;
 ```
 
 ## InputDispatcher
