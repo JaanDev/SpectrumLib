@@ -1,5 +1,17 @@
 #include <Spectrum.hpp>
 
+#include <functional>
+
+template <typename T>
+class ActionLerp {
+  public:
+    ActionLerp(int easing, float duration, T startVal, T endVal, std::function<void(T)> callback);
+
+  private:
+    T m_startVal;
+    T m_endVal;
+};
+
 int main() {
     spl::Window win("Hello Spectrum!", {800, 600});
 
@@ -13,6 +25,6 @@ int main() {
 
         glfwSwapBuffers(win.getWindow());
     }
-    
+
     return 0;
 }

@@ -1,7 +1,7 @@
 # Структура
 Структура либы (классы и тд)
 
-- [ ] actions
+- [x] actions
 - [x] mouse handling (click/scroll/move)
 - [x] input handling
 - [x] shaders
@@ -164,6 +164,219 @@ bool m_isFullscreen;
 bool m_isVsync;
 ```
 
+## Action
+`friend class ActionManager;`
+
+```cpp
+// https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
+enum class EasingType {
+    Linear,
+    EaseInQuad,
+    EaseOutQuad,
+    EaseInOutQuad,
+    EaseInCubic,
+    EaseOutCubic,
+    EaseInOutCubic,
+    EaseInQuart,
+    EaseOutQuart,
+    EaseInOutQuart,
+    EaseInQuint,
+    EaseOutQuint,
+    EaseInOutQuint,
+    EaseInSine,
+    EaseOutSine,
+    EaseInOutSine,
+    EaseInExpo,
+    EaseOutExpo,
+    EaseInOutExpo,
+    EaseInCirc,
+    EaseOutCirc,
+    EaseInOutCirc,
+    EaseInBack,
+    EaseOutBack,
+    EaseInOutBack,
+    EaseInElastic,
+    EaseOutElastic,
+    EaseInOutElastic,
+    EaseInBounce,
+    EaseOutBounce,
+    EaseInOutBounce
+};
+```
+
+### Методы
+```cpp
+Action(EasingType easing, float duration);
+
+virtual void update(float dt) {
+    if (m_isFinished)
+        return;
+
+    m_runTime += dt;
+    if (m_runTime >= m_duration) {
+        m_isFinished = true;
+        m_progress = 1.0f;
+        break;
+    }
+
+    m_progress = utils::calcEasing(m_easingType, m_runTime / m_duration);
+}
+
+inline bool isFinished() const;
+inline EasingType getEasingType() const;
+inline Node* getNode() const;
+inline float getProgress() const;
+```
+
+### Мемберы
+```cpp
+float m_duration; // total action time
+float m_runTime; // the time the action has been running
+float m_progress; // 0 to 1
+Node* m_node;
+EasingType m_easingType;
+bool m_isFinished;
+```
+
+## ActionMoveTo : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionMoveTo(EasingType easing, float duration, const Vec2f& startPos, const Vec2f& endPos);
+
+virtual void update(float dt) override {
+    Action::update(dt);
+
+    m_node->setPosition(utils::lerpValue(m_startPos, m_endPos, m_progress));
+}
+```
+
+### Мемберы
+```cpp
+Vec2f m_startPos;
+Vec2f m_endPos;
+```
+
+## ActionScaleTo : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionMoveTo(EasingType easing, float duration, float startScale, float endScale);
+
+virtual void update(float dt) override {
+    Action::update(dt);
+
+    m_node->setScale(utils::lerpValue(m_startScale, m_endScale, m_progress));
+}
+```
+
+### Мемберы
+```cpp
+float m_startScale;
+float m_endScale;
+```
+
+## ActionRotateTo : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionMoveTo(EasingType easing, float duration, float startRot, float endRot);
+
+virtual void update(float dt) override {
+    Action::update(dt);
+
+    m_node->setRotation(utils::lerpValue(m_startRot, m_endRot, m_progress));
+}
+```
+
+### Мемберы
+```cpp
+float m_startRot;
+float m_endRot;
+```
+
+## ActionTintTo : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionMoveTo(EasingType easing, float duration, const Col4u& startCol, const Col4u& endCol);
+
+virtual void update(float dt) override {
+    Action::update(dt);
+
+    auto spr = dynamic_cast<Sprite*>(m_node);
+
+    if (spr)
+        spr->setColor(utils::lerpValue(m_startCol, m_endCol, m_progress));
+}
+```
+
+## template \<typename T> ActionLerp\<T> : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionLerp(EasingType easing, float duration, const T& startVal, const T& endVal, std::function<void(T)> callback);
+
+virtual void update(float dt) override {
+    Action::update(dt);
+
+    m_callback(utils::lerpValue(m_startVal, m_endVal, m_progress));
+}
+```
+
+### Мемберы
+```cpp
+T m_startVal;
+T m_endVal;
+std::function<void(T)> m_callback;
+```
+
+## ActionSequence : Action
+`friend class ActionManager;`
+
+### Методы
+```cpp
+ActionSequence(std::vector<std::shared_ptr<Action>> actions);
+
+virtual void update(float dt) override {
+    if (m_currentAction >= m_actions.size())
+        break;
+
+    auto curAction = m_action[m_currentAction];
+    curAction->update(dt);
+    if (curAction->isFinished())
+        m_currentAction++;
+}
+```
+
+### Мемберы
+```cpp
+std::vector<std::shared_ptr<Action>> m_actions;
+int m_currentAction;
+```
+
+## ActionManager
+
+### Методы
+```cpp
+static ActionManager* instance();
+
+void update(float dt);
+
+void addAction(std::shared_ptr<Action> action, Node* node);
+void removeAction(std::shared_ptr<Action> action);
+```
+
+### Мемберы
+```cpp
+std::vector<std::shared_ptr<Action>> m_actions;
+```
+
 ## Node
 Всё, что можно поместить на экран
 
@@ -228,6 +441,8 @@ void setAnchorPoint(const Vec2f& anchor);
 
 void setTag(const char* tag);
 inline const char* getTag() const;
+
+void runAction(std::shared_ptr<Action> action);
 
 // обновление нода (каждый кадр)
 virtual void update(float dt) = 0;
@@ -475,6 +690,13 @@ Col3u IntToCol3u(uint32_t col);
 Col3f IntToCol3f(uint32_t col);
 Col4u IntToCol4u(uint32_t col);
 Col4f IntToCol4f(uint32_t col);
+
+float calcEasing(EasingType easingType, float x);
+
+template <typename T>
+T lerpValue(T start, T end, float t) {
+    return start + (end - start) * t;
+}
 ```
 
 ## FileManager

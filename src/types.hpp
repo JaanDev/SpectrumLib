@@ -55,6 +55,20 @@ struct Col3 {
     T r;
     T g;
     T b;
+
+    Col3<T> operator+(const Col3<T>& other) { return {r + other.r, g + other.g, b + other.b}; }
+    Col3<T> operator-(const Col3<T>& other) { return {r - other.r, g - other.g, b - other.b}; }
+    Col3<T> operator*(const Col3<T>& other) { return {r * other.r, g * other.g, b * other.b}; }
+    Col3<T> operator/(const Col3<T>& other) { return {r / other.r, g / other.g, b / other.b}; }
+    Col3<T> operator*(T other) { return {r * other, g * other, b * other}; }
+    Col3<T> operator/(T other) { return {r / other, g / other, b / other}; }
+
+    void operator+=(const Col3<T>& other) { *this = *this + other; }
+    void operator-=(const Col3<T>& other) { *this = *this - other; }
+    void operator*=(const Col3<T>& other) { *this = *this * other; }
+    void operator/=(const Col3<T>& other) { *this = *this / other; }
+    void operator*=(T other) { *this = *this * other; }
+    void operator/=(T other) { *this = *this / other; }
 };
 
 template <typename T>
@@ -63,6 +77,20 @@ struct Col4 {
     T g;
     T b;
     T a;
+
+    Col4<T> operator+(const Col4<T>& other) { return {r + other.r, g + other.g, b + other.b, a + other.a}; }
+    Col4<T> operator-(const Col4<T>& other) { return {r - other.r, g - other.g, b - other.b, a - other.a}; }
+    Col4<T> operator*(const Col4<T>& other) { return {r * other.r, g * other.g, b * other.b, a * other.a}; }
+    Col4<T> operator/(const Col4<T>& other) { return {r / other.r, g / other.g, b / other.b, a / other.a}; }
+    Col4<T> operator*(T other) { return {r * other, g * other, b * other, a * other}; }
+    Col4<T> operator/(T other) { return {r / other, g / other, b / other, a / other}; }
+
+    void operator+=(const Col4<T>& other) { *this = *this + other; }
+    void operator-=(const Col4<T>& other) { *this = *this - other; }
+    void operator*=(const Col4<T>& other) { *this = *this * other; }
+    void operator/=(const Col4<T>& other) { *this = *this / other; }
+    void operator*=(T other) { *this = *this * other; }
+    void operator/=(T other) { *this = *this / other; }
 };
 
 using Sizef = Size<float>;
