@@ -248,6 +248,9 @@ void removeAllChildren();
 void removeFromParent();
 // получить родительский нод
 inline Node* getParent() const;
+
+inline std::shared_ptr<Shader> getShader() const;
+void setShader(std::shared_ptr<Shader> shader);
 ```
 
 ### Мемберы
@@ -263,6 +266,7 @@ int m_zOrder;
 const char* m_tag;
 std::vector<std::shared_ptr<Node>> m_children;
 Node* m_parent;
+std::shared_ptr<Shader> m_shader;
 bool m_visible;
 ```
 
@@ -497,13 +501,24 @@ std::vector<std::filesystem::path> m_searchPaths;
 ```
 
 ## Shader
+
 ### Методы
 ```cpp
-bool loadFromFile(std::filesystem::path path);
-bool loadFromString(std::string_view shader);
+bool loadFromFile(const std::string& vertexPath, const std::string& fragmentPath);
+bool loadFromString(std::string_view vertexShader, std::string_view fragmentShader);
 
-void setShaderParameter(const char* param, int value);
-int getShaderParameter(const char* param);
+void link();
+
+void use();
+
+inline GLuint getShaderProgram() const;
+```
+
+### Мемберы
+```cpp
+GLuint m_vertexShader;
+GLuint m_fragShader;
+GLuint m_shaderProgram;
 ```
 
 ## Scene : Node
@@ -589,9 +604,9 @@ static AudioManager* instance();
 
 void playSample(const std::string& sample, uint32_t repeats);
 void playSample(const std::string& sample, uint8_t channel, uint32_t repeats);
-void playSampleFile(std::filesystem::path sample, uint8_t channel, uint32_t repeats);
+void playSampleFile(const std::string& samplePath, uint8_t channel, uint32_t repeats);
 
-void preloadSampleFile(std::filesystem::path sample);
+void preloadSampleFile(const std::string& samplePath);
 void unloadSampleFile(const std::string& sample);
 
 void pauseSample(const std::string& sample);
