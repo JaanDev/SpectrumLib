@@ -1,9 +1,5 @@
 #include <Spectrum.hpp>
 
-#include <vector>
-#include <unordered_map>
-#include <functional>
-
 int main() {    
     spl::Window win("Hello Spectrum!", {800, 600});
 
