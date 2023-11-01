@@ -1,12 +1,6 @@
 #include <Spectrum.hpp>
 
-#include <vector>
-
-struct Channel {};
-
 int main() {
-    std::vector<Channel> channels(48);
-    
     spl::Window win("Hello Spectrum!", {800, 600});
 
     while (!win.shouldClose()) {

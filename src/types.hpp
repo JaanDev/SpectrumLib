@@ -1,4 +1,7 @@
 #pragma once
+#include "utils.hpp"
+
+NS_SPECTRUM_BEGIN
 
 template <typename T>
 struct Vec2 {
@@ -76,3 +79,5 @@ using Col3u = Col3<unsigned char>;
 
 using Col4f = Col4<float>;
 using Col4u = Col4<unsigned char>;
+
+NS_SPECTRUM_END

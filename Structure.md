@@ -666,6 +666,30 @@ float m_generalBalance;
 
 ## ShapeNode : Node
 
+### Методы
+```cpp
+virtual void draw() override;
+
+void setDrawCallback(std::function<void()> callback);
+
+void setColor(const Col4u& col);
+
+void drawCircle(const Vec2f& pos, float radius);
+void drawEllipse(const Vec2f& pos, float radiusX, float radiusY);
+void drawRect(const Rectf& rect);
+void drawLine(const Vec2f& start, const Vec2f& end, float width);
+void drawLines(const std::vector<Vec2f>& points, float width);
+void drawPolygon(const std::vector<Vec2f>& points);
+```
+
+### Мемберы
+```cpp
+Col4u m_col;
+std::function<void()> m_drawCallback;
+```
+
+## ShapeNodeEx : Node
+
 ```cpp
 enum class ShapeType : uint8_t {
     Ellipse,
