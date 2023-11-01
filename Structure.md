@@ -8,7 +8,7 @@
 - [x] sound (https://github.com/raysan5/raudio ?)
 - [ ] shapenode (рисование)
 - [ ] rendertexture
-- [ ] changing scenes
+- [x] changing scenes
 - [ ] scenes transitions
 - [ ] joystick support?
 - [x] scheduler
@@ -42,12 +42,14 @@ enum class WindowFlags {
     // whether the window will be given input focus when glfwShowWindow is called
     FocusOnShow = 1 << 9,
     // whether the window content area should be resized based on the monitor content scale of any monitor it is placed on
-    ScaleToMonitor = 1 << 10
+    ScaleToMonitor = 1 << 10,
+    Default = Visible | Decorated | Focused | Resizable | AutoIconify | CenterCursor | FocusOnShow
 };
 ```
 
 ## AppManager
-Основной менеджер для игры (как CCDirector)
+Основной менеджер для игры (как CCDirector)  
+`friend class WindowManager;`
 
 ### Методы
 ```cpp
@@ -81,19 +83,31 @@ inline bool getCursorLocked() const;
 
 void openURL(const std::string& url);
 
+std::shared_ptr<Scene> getCurrentScene();
+void pushScene(std::shared_ptr<Scene> scene);
+void replaceScene(std::shared_ptr<Scene> scene);
+// -1 => go 1 scene back, 1 => go 1 scene forward etc
+void goToScene(int step);
+
 // получить реальный фпс (хз как реализовать пока что)
 float getRealFPS();
 
 std::string getClipboardText();
-// (без замены существующего)
+// (без замены существующего, копирует новый)
 void setClipboardText(const std::string& text);
+
+Vec2f pointsToPixels(const Vec2f& pointPos);
+Vec2f pixelsToPoints(const Vec2f& pixelPos);
 ```
 
 ### Мемберы
 ```cpp
 Sizef m_winSize; // in points
+Vec2f m_pointsToPixels; // points to pixels ratio
 float m_contentScale;
 std::chrono::блаблабла m_startTime;
+std::vector<std::shared_ptr<Scene>> m_scenes;
+int m_currentScene;
 bool m_isRunning;
 bool m_isCursorVisible;
 bool m_isCursorLocked;
@@ -106,7 +120,7 @@ bool m_isCursorLocked;
 ```cpp
 static WindowManager* instance();
 
-void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::None);
+void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::Default);
 
 void setWindowIcon(const std::string& iconPath);
 
@@ -207,6 +221,7 @@ void setObjectLimit(unsigned int objectlimit);
 
 inline const Sizef& getBoundingBox() const;
 void setBoundingBox(const Sizef& size);
+Sizef getScaledBoundingBox();
 
 inline const Vec2f& getAnchorPoint() const;
 void setAnchorPoint(const Vec2f& anchor);
@@ -489,10 +504,41 @@ bool loadFromString(std::string_view shader);
 
 void setShaderParameter(const char* param, int value);
 int getShaderParameter(const char* param);
+## Scene : Node
+
+### Мемберы
+```cpp
+// sets boundingbox to all win size
+Scene();
+```
+
+## InputDispatcher
+`friend class WindowManager;`
+
+### Методы
+```cpp
+static InputDispatcher* instance();
+
+void registerMouseEvents(Node* node);
+void registerMouseScrollEvents(Node* node);
+void registerKeyEvents(Node* node);
+void registerTextEvents(Node* node);
+
+void unregisterMouseEvents(Node* node);
+void unregisterMouseScrollEvents(Node* node);
+void unregisterKeyEvents(Node* node);
+void unregisterTextEvents(Node* node);
+
+private:
+// всякие функции для WindowManager которые принимают данные и отправляют их в вектора нодов
 ```
 
 ### Мемберы
 ```cpp
+std::vector<Node*> m_mouseEvents;
+std::vector<Node*> m_mouseScrollEvents;
+std::vector<Node*> m_keyEvents;
+std::vector<Node*> m_textEvents;
 ```
 
 ## Audio
