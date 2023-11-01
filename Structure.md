@@ -6,7 +6,7 @@
 - [x] input handling
 - [x] shaders
 - [x] sound (https://github.com/raysan5/raudio ?)
-- [ ] shapenode (рисование)
+- [x] shapenode (рисование)
 - [ ] rendertexture
 - [x] changing scenes
 - [ ] scenes transitions
@@ -630,3 +630,20 @@ struct Channel {
 std::vector<Channel> channels(48);
 std::vector<Sample> currentSamples;
 ```
+
+## ShapeNode : Node
+### Методы
+```cpp
+void setShape(Shape shape);
+void setFill(Fill fill);
+
+void setLineColor(Col4f color);
+void setLineThick(float thick);
+
+void setPrimaryFillColor(Col4f color);
+void setSecondaryFillColor(Col4f color);
+void setGradientDirection(Direction direction);
+
+void setImage(Image img);
+void loadPolygonPoints(std::vector<Point> points);
+```c
