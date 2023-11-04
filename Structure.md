@@ -22,6 +22,7 @@
 - [ ] particles
 - [ ] ccspritebatchnode
 - [ ] rendertexture
+- [ ] skew
 
 ## WindowFlags
 ```cpp
