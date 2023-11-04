@@ -808,6 +808,23 @@ std::filesystem::path getAppFilename();
 std::vector<std::filesystem::path> m_searchPaths;
 ```
 
+## ShaderManager
+
+### Методы
+```cpp
+static ShaderManager* instance();
+
+std::shared_ptr<Shader> getShader(const std::string& id);
+void addShader(std::shared_ptr<Shader> shader, const std::string& id);
+void removeShader(const std::string& id);
+void removeAllShaders();
+```
+
+### Мемберы
+```cpp
+std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaders;
+```
+
 ## Shader
 
 ### Методы
@@ -820,6 +837,7 @@ void link();
 void use();
 
 inline GLuint getShaderProgram() const;
+inline bool isLinked() const;
 ```
 
 ### Мемберы
@@ -827,6 +845,7 @@ inline GLuint getShaderProgram() const;
 GLuint m_vertexShader;
 GLuint m_fragShader;
 GLuint m_shaderProgram;
+bool m_isLinked;
 ```
 
 ## Scene : Node
