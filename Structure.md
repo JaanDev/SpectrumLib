@@ -1,21 +1,27 @@
 # Структура
 Структура либы (классы и тд)
 
+## TODO
+
+### v1.0
 - [x] actions
 - [x] mouse handling (click/scroll/move)
 - [x] input handling
 - [x] shaders
 - [x] sound (https://github.com/raysan5/raudio ?)
 - [x] shapenode (рисование)
-- [ ] rendertexture
 - [x] changing scenes
 - [x] scenes transitions
-- [ ] joystick support?
 - [x] scheduler
-- [ ] particles
-- [ ] animated sprites
 - [x] filemanager
+- [x] animated sprites
+- [ ] spritesheets
+
+### v1.1
+- [ ] joystick support?
+- [ ] particles
 - [ ] ccspritebatchnode
+- [ ] rendertexture
 
 ## WindowFlags
 ```cpp
@@ -464,9 +470,6 @@ void removeAllChildren();
 void removeFromParent();
 // получить родительский нод
 inline Node* getParent() const;
-
-inline std::shared_ptr<Shader> getShader() const;
-void setShader(std::shared_ptr<Shader> shader);
 ```
 
 ### Мемберы
@@ -482,7 +485,6 @@ int m_zOrder;
 const char* m_tag;
 std::vector<std::shared_ptr<Node>> m_children;
 Node* m_parent;
-std::shared_ptr<Shader> m_shader;
 bool m_visible;
 ```
 
@@ -494,7 +496,7 @@ static TextureManager* instance();
 
 // adds texture if not added previously
 std::shared_ptr<Texture> getTexture(const std::string& name);
-void addTexture(const std::string& name);
+std::shared_ptr<Texture> addTexture(const std::string& name);
 
 void removeTexture(const std::string& name);
 void removeAllTextures();
@@ -540,6 +542,13 @@ Sizei m_size; // in pixels
 ## Sprite : Node
 Спрайт который содержит текстуру, можно добавить на экран
 
+```cpp
+struct BlendFunc {
+    GLenum src;
+    GLenum dst;
+};
+```
+
 ### Методы
 ```cpp
 Sprite(const std::string& path);
@@ -548,14 +557,86 @@ Sprite(std::shared_ptr<Texture> texture);
 inline Col3u getColor() const;
 void setColor(const Col3u& color);
 
+void setBlendFunc(const BlendFunc& func);
+inline const BlendFunc& getBlendFunc() const;
+
 // оверрайдаем draw чтобы отрисовать текстуру
 virtual void draw() override;
+
+inline std::shared_ptr<Shader> getShader() const;
+void setShader(std::shared_ptr<Shader> shader);
 ```
 
 ### Мемберы
 ```cpp
 std::shared_ptr<Texture> m_texture;
 Col3u m_color; // {0, 0, 0} по умолчанию
+std::shared_ptr<Shader> m_shader;
+BlendFunc m_blendFunc;
+```
+
+## Animation
+
+### Методы
+```cpp
+Animation(float fps, std::vector<Texture*> textures);
+
+void update(float dt);
+Texture* getTexture();
+
+void pause();
+void play();
+```
+
+### Мемберы
+
+```cpp
+float m_timeDelay;
+std::vector<Texture*> m_textures;
+float m_timeRun;
+bool m_isPlaying;
+```
+
+## AnimationManager
+
+### Методы
+
+```cpp
+static AnimationManager* instance();
+
+void addAnim(const std::string& formatStr, float fps, const std::string& id);
+void addAnim(std::shared_ptr<Animation> anim);
+void removeAnim(const std::string& id);
+
+std::shared_ptr<Animation> getAnim(const std::string& id);
+```
+
+### Мемберы
+
+```cpp
+std::unordered_map<std::string, std::shared_ptr<Animation>> m_anims;
+```
+
+## AnimSprite : Sprite
+
+### Методы
+```cpp
+AnimSprite();
+
+void runAnim(const std::string& id);
+void runAnim(std::shared_ptr<Animation> anim);
+// stop any anims, draw a plain texture
+void setTexture(std::shared_ptr<Texture> tex);
+
+virtual void update(float dt) override;
+virtual void draw() override;
+```
+
+### Мемберы
+
+```cpp
+std::shared_ptr<Animation> m_curAnim;
+bool m_hasAnim;
 ```
 
 ## FontManager
@@ -768,6 +849,12 @@ SceneTransition(std::shared_ptr<Scene> scene, float duration, TransitionType typ
 virtual void update(float dt) override;
 ```
 
+### Мемберы
+```cpp
+float m_duration;
+TransitionType m_type;
+```
+
 ## InputDispatcher
 `friend class WindowManager;`
 
@@ -807,7 +894,7 @@ struct Sample {
     uint32_t freq;
     uint32_t position;
     uint32_t length;
-    uint32_t repeats
+    uint32_t repeats;
 };
 
 struct Channel {
@@ -817,7 +904,7 @@ struct Channel {
     uint32_t freq;
     uint32_t position;
     uint32_t length;
-    uint32_t repeats
+    uint32_t repeats;
 };
 ```
 
