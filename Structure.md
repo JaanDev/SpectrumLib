@@ -15,7 +15,7 @@
 - [x] scheduler
 - [x] filemanager
 - [x] animated sprites
-- [ ] spritesheets
+- [x] spritesheets
 
 ### v1.1
 - [ ] joystick support?
@@ -496,7 +496,10 @@ static TextureManager* instance();
 
 // adds texture if not added previously
 std::shared_ptr<Texture> getTexture(const std::string& name);
-std::shared_ptr<Texture> addTexture(const std::string& name);
+std::shared_ptr<Texture> addTexture(const std::string& path);
+
+// loads all textures to m_textures;
+void loadSpriteSheet(const std::string& path);
 
 void removeTexture(const std::string& name);
 void removeAllTextures();
