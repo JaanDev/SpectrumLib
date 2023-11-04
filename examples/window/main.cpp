@@ -1,30 +1,10 @@
 #include <Spectrum.hpp>
 
-#include <functional>
-
-template <typename T>
-class ActionLerp {
-  public:
-    ActionLerp(int easing, float duration, T startVal, T endVal, std::function<void(T)> callback);
-
-  private:
-    T m_startVal;
-    T m_endVal;
-};
-
 int main() {
-    spl::Window win("Hello Spectrum!", {800, 600});
-
-    while (!win.shouldClose()) {
-        glfwPollEvents();
-
-        auto val = sin(glfwGetTime() * 1.5) / 2.0 + 0.5;
-
-        glClearColor(val, .5, .5, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(win.getWindow());
-    }
+    spl::WindowManager::instance()->createWindow({800, 600}, {300, 200}, "Hello Spectrum!", false, spl::WindowFlags::Default);
+    auto appMgr = spl::AppManager::instance();
+    // appMgr->pushScene(std::make_shared<MyScene>());
+    appMgr->run();
 
     return 0;
 }
