@@ -12,6 +12,8 @@ ActionManager::ActionManager() : m_actions({}) {}
 void ActionManager::update(float dt) {
     for (auto action : m_actions) {
         action->update(dt);
+        if (action->isFinished())
+            removeAction(action);
     }
 }
 

@@ -5,7 +5,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionSequence : public Action {
   public:
-    ActionSequence(std::vector<std::shared_ptr<Action>> actions);
+    ActionSequence(std::vector<std::shared_ptr<Action>> actions, int repeat);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;

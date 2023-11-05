@@ -7,8 +7,8 @@ NS_SPECTRUM_BEGIN
 template <typename T>
 class ActionLerp : public Action {
   public:
-    ActionLerp(EasingType easing, float duration, const T& startVal, const T& endVal, std::function<void(T)> callback)
-        : Action(easing, duration), m_startVal(startVal), m_endVal(endVal), m_callback(callback) {}
+    ActionLerp(EasingType easing, float duration, int repeat, const T& startVal, const T& endVal, std::function<void(T)> callback)
+        : Action(easing, duration, repeat), m_startVal(startVal), m_endVal(endVal), m_callback(callback) {}
 
     virtual void update(float dt) override {
         Action::update(dt);

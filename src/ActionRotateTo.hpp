@@ -5,7 +5,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionRotateTo : public Action {
   public:
-    ActionRotateTo(EasingType easing, float duration, float startRot, float endRot);
+    ActionRotateTo(EasingType easing, float duration, int repeat, float startRot, float endRot);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;

@@ -5,7 +5,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionScaleTo : public Action {
   public:
-    ActionScaleTo(EasingType easing, float duration, float startScale, float endScale);
+    ActionScaleTo(EasingType easing, float duration, int repeat, float startScale, float endScale);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;

@@ -5,7 +5,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionMoveTo : public Action {
   public:
-    ActionMoveTo(EasingType easing, float duration, const Vec2f& startPos, const Vec2f& endPos);
+    ActionMoveTo(EasingType easing, float duration, int repeat, const Vec2f& startPos, const Vec2f& endPos);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;
