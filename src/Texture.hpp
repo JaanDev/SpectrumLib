@@ -16,7 +16,7 @@ class Texture {
   public:
     // from file
     Texture(const std::string& path);
-    // from memory
+    // from memory, dont forget to free `data` after loading the tex
     Texture(uint8_t* data, unsigned int dataLen);
 
     // in points

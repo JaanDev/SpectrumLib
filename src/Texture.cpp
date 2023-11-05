@@ -34,14 +34,14 @@ Texture::Texture(uint8_t* data, unsigned int dataLen) : m_format(0), m_size({0, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int bpp;
-    auto data = stbi_load_from_memory(data, dataLen, &m_size.w, &m_size.h, &bpp, 0);
-    if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_size.w, m_size.h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    auto imgData = stbi_load_from_memory(data, dataLen, &m_size.w, &m_size.h, &bpp, 0);
+    if (imgData) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_size.w, m_size.h, 0, GL_RGB, GL_UNSIGNED_BYTE, imgData);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         logE("Failed to load a texture from memory");
     }
-    stbi_image_free(data);
+    stbi_image_free(imgData);
 }
 
 Sizef Texture::getSize() {
