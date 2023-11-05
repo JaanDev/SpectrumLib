@@ -10,6 +10,7 @@ NS_SPECTRUM_BEGIN
 class TextureManager {
   public:
     static TextureManager* instance();
+    TextureManager();
 
     // adds texture if not added previously
     std::shared_ptr<Texture> getTexture(const std::string& name);

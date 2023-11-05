@@ -9,6 +9,8 @@ TextureManager* TextureManager::instance() {
     return instance.get();
 }
 
+TextureManager::TextureManager() : m_textures({}) {}
+
 std::shared_ptr<Texture> TextureManager::getTexture(const std::string& name) {
     return m_textures.count(name) > 0 ? m_textures[name] : nullptr;
 }

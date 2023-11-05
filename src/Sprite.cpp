@@ -1,5 +1,7 @@
 #include "Sprite.hpp"
 
+#include "TextureManager.hpp"
+
 NS_SPECTRUM_BEGIN
 
 Sprite::Sprite(const std::string& path) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}) {

@@ -16,3 +16,6 @@
 #include "Texture.hpp"
 #include "TextureManager.hpp"
 #include "Sprite.hpp"
+#include "Animation.hpp"
+#include "AnimationManager.hpp"
+#include "AnimSprite.hpp"

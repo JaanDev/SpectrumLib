@@ -19,6 +19,9 @@ class Sprite : public Node {
     Sprite(const std::string& path);
     Sprite(std::shared_ptr<Texture> texture);
 
+    void setTexture(std::shared_ptr<Texture> tex);
+    inline std::shared_ptr<Texture> getTexture() const { return m_texture; }
+
     inline Col3u getColor() const { return m_color; }
     inline void setColor(const Col3u& color) { m_color = color; }
 

@@ -8,6 +8,10 @@ WindowManager* WindowManager::instance() {
     return instance.get();
 }
 
+WindowManager::WindowManager()
+    : m_winSize({0, 0}), m_targetFrameTime(1.f / 60.f), m_windowHandle(nullptr), m_closeCallback(nullptr),
+      m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false) {}
+
 void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
                                  WindowFlags windowFlags) {}
 
@@ -52,9 +56,5 @@ Vec2f WindowManager::getMouseDelta() {
 Vec2i WindowManager::getMouseDeltaInPixels() {
     return Vec2i();
 }
-
-WindowManager::WindowManager()
-    : m_winSize({0, 0}), m_targetFrameTime(1.f / 60.f), m_windowHandle(nullptr), m_closeCallback(nullptr),
-      m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false) {}
 
 NS_SPECTRUM_END
