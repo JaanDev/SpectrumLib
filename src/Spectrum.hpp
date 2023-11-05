@@ -13,3 +13,4 @@
 #include "ActionLerp.hpp"
 #include "ActionManager.hpp"
 #include "Node.hpp"
+#include "Texture.hpp"

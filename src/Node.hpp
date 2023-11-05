@@ -69,7 +69,7 @@ class Node {
     // получить родительский нод
     inline Node* getParent() const { return m_parent; }
 
-  private:
+  protected:
     Vec2f m_pos; // относительно родителя
     Sizef m_boundingBox;
     Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию

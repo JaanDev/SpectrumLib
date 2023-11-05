@@ -61,4 +61,12 @@ Vec2f AppManager::pixelsToPoints(const Vec2f& pixelPos) {
     return Vec2f();
 }
 
+Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
+    return Sizef();
+}
+
+Sizef AppManager::sizeToPixels(const Sizef& size) {
+    return Sizef();
+}
+
 NS_SPECTRUM_END

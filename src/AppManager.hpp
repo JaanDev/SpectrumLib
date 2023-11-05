@@ -50,6 +50,9 @@ class AppManager {
     Vec2f pointsToPixels(const Vec2f& pointPos);
     Vec2f pixelsToPoints(const Vec2f& pixelPos);
 
+    Sizef sizeToPixels(const Sizef& size);
+    Sizef pixelsToSize(const Sizef& pixelSize);
+
   private:
     Sizef m_winSize;        // in points
     Vec2f m_pointsToPixels; // points to pixels ratio

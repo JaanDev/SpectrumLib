@@ -9,6 +9,7 @@ add_subdirectory(external/fmt)
 file(GLOB SOURCES
     src/*.cpp
     external/glad/src/gl.c
+    external/stb/*.c
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
@@ -18,5 +19,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include
 )
+target_include_directories(${PROJECT_NAME} PRIVATE
+    external/stb
+)
+target_compile_definitions(${PROJECT_NAME} PRIVATE STB_IMAGE_IMPLEMENTATION)
 
 add_subdirectory(examples/window)
