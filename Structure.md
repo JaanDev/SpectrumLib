@@ -829,6 +829,8 @@ std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaders;
 
 ### Методы
 ```cpp
+~Shader(); // glDeleteShader
+
 bool loadFromFile(const std::string& vertexPath, const std::string& fragmentPath);
 bool loadFromString(std::string_view vertexShader, std::string_view fragmentShader);
 

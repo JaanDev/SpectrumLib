@@ -13,7 +13,7 @@ void ActionMoveTo::update(float dt) {
 
 void ActionMoveTo::setNode(Node* node) {
     Action::setNode(node);
-    
+
     m_node->setPos(utils::lerpValue(m_startPos, m_endPos, m_progress));
 }
 

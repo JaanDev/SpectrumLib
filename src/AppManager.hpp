@@ -36,6 +36,9 @@ class AppManager {
 
     void openURL(const std::string& url);
 
+    inline float getTimeScale() const;
+    void setTimeScale(float ts);
+
     std::shared_ptr<Scene> getCurrentScene();
     void pushScene(std::shared_ptr<Scene> scene);
     void replaceScene(std::shared_ptr<Scene> scene);
@@ -54,6 +57,7 @@ class AppManager {
     Sizef pixelsToSize(const Sizef& pixelSize);
 
   private:
+    float m_timeScale;
     Sizef m_winSize;        // in points
     Vec2f m_pointsToPixels; // points to pixels ratio
     float m_contentScale;

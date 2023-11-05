@@ -9,7 +9,7 @@ AppManager* AppManager::instance() {
 
 AppManager::AppManager()
     : m_winSize({0, 0}), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0), m_isRunning(false),
-      m_isCursorVisible(true), m_isCursorLocked(false) {}
+      m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f) {}
 
 void AppManager::run() {}
 

@@ -30,7 +30,7 @@ class Action {
     Node* m_node;
     EasingType m_easingType;
     int m_totalTimes; // repeat
-    int m_timesLeft; // repeat
+    int m_timesLeft;  // repeat
     bool m_isFinished;
 };
 

@@ -17,9 +17,6 @@ class Scheduler {
   public:
     static Scheduler* instance();
 
-    inline float getTimeScale() const;
-    void setTimeScale(float ts);
-
     // returns the timer id which can be used to unschedule it
     // timesLeft = -1 => infinite repeat
     unsigned int schedule(float interval, int timesLeft, std::function<void()> callback);
@@ -34,7 +31,6 @@ class Scheduler {
     void setAFKInterval(float interval);
 
   private:
-    float m_timeScale;
     unsigned int m_nextTimerID; // 0 by default, += 1 after each created timer
     std::vector<Timer> m_timers;
     float m_AFKInterval;
