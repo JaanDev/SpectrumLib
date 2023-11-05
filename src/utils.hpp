@@ -11,14 +11,22 @@
 NS_SPECTRUM_BEGIN
 
 namespace utils {
-    uint32_t ColToInt(const Col3u& col);
-    uint32_t ColToInt(const Col3f& col);
-    uint32_t ColToInt(const Col4u& col);
-    uint32_t ColToInt(const Col4f& col);
+    // Col3u to RGBA
+    uint32_t Col3uToInt(const Col3u& col);
+    // Col3f to RGBA
+    uint32_t Col3fToInt(const Col3f& col);
+    // Col4u to RGBA
+    uint32_t Col4uToInt(const Col4u& col);
+    // Col4f to RGBA
+    uint32_t Col4fToInt(const Col4f& col);
 
+    // RGBA to Col3u
     Col3u IntToCol3u(uint32_t col);
+    // RGBA to Col3f
     Col3f IntToCol3f(uint32_t col);
+    // RGBA to Col4u
     Col4u IntToCol4u(uint32_t col);
+    // RGBA to Col4f
     Col4f IntToCol4f(uint32_t col);
 
     float calcEasing(EasingType easingType, float x);

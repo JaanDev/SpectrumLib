@@ -11,4 +11,5 @@
 #include "ActionTintTo.hpp"
 #include "ActionSequence.hpp"
 #include "ActionLerp.hpp"
+#include "ActionManager.hpp"
 #include "Node.hpp"

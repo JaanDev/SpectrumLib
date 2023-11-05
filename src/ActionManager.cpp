@@ -21,7 +21,8 @@ void ActionManager::addAction(std::shared_ptr<Action> action, Node* node) {
 }
 
 void ActionManager::removeAction(std::shared_ptr<Action> action) {
-    std::erase(m_actions, action);
+    if (auto it = std::find(m_actions.begin(), m_actions.end(), action); it != m_actions.end())
+        m_actions.erase(it);
 }
 
 NS_SPECTRUM_END
