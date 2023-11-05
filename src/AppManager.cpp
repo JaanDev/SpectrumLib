@@ -3,7 +3,7 @@
 NS_SPECTRUM_BEGIN
 
 AppManager* AppManager::instance() {
-    static auto instance = std::make_shared<AppManager>();
+    static auto instance = std::make_unique<AppManager>();
     return instance.get();
 }
 

@@ -5,7 +5,7 @@
 NS_SPECTRUM_BEGIN
 
 TextureManager* TextureManager::instance() {
-    static auto instance = std::make_shared<TextureManager>();
+    static auto instance = std::make_unique<TextureManager>();
     return instance.get();
 }
 

@@ -4,7 +4,7 @@
 NS_SPECTRUM_BEGIN
 
 WindowManager* WindowManager::instance() {
-    static auto instance = std::make_shared<WindowManager>();
+    static auto instance = std::make_unique<WindowManager>();
     return instance.get();
 }
 

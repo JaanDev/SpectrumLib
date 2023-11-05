@@ -203,4 +203,16 @@ enum class WindowFlags {
     Default = Visible | Decorated | Focused | Resizable | AutoIconify | CenterCursor | FocusOnShow
 };
 
+enum class TextAlignmentH : uint8_t {
+    Left,
+    Center,
+    Right
+};
+
+enum class TextAlignmentV : uint8_t {
+    Top,
+    Center,
+    Bottom
+};
+
 NS_SPECTRUM_END

@@ -19,3 +19,5 @@
 #include "Animation.hpp"
 #include "AnimationManager.hpp"
 #include "AnimSprite.hpp"
+#include "FontManager.hpp"
+#include "Label.hpp"

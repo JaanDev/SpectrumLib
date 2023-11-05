@@ -3,7 +3,7 @@
 NS_SPECTRUM_BEGIN
 
 ActionManager* ActionManager::instance() {
-    static auto instance = std::make_shared<ActionManager>();
+    static auto instance = std::make_unique<ActionManager>();
     return instance.get();
 }
 

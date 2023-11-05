@@ -3,7 +3,7 @@
 NS_SPECTRUM_BEGIN
 
 AnimationManager* AnimationManager::instance() {
-    static auto instance = std::make_shared<AnimationManager>();
+    static auto instance = std::make_unique<AnimationManager>();
     return instance.get();
 }
 
