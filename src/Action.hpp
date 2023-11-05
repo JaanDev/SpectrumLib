@@ -15,7 +15,7 @@ class Action {
     inline bool isFinished() const { return m_isFinished; }
     inline EasingType getEasingType() const { return m_easingType; }
     inline Node* getNode() const { return m_node; }
-    inline void setNode(Node* node) { m_node = node; }
+    virtual void setNode(Node* node) { m_node = node; }
     inline float getProgress() const { return m_runTime / m_duration; }
     inline float getEasedProgress() const { return m_progress; }
 

@@ -9,4 +9,6 @@
 #include "ActionScaleTo.hpp"
 #include "ActionRotateTo.hpp"
 #include "ActionTintTo.hpp"
+#include "ActionSequence.hpp"
+#include "ActionLerp.hpp"
 #include "Node.hpp"

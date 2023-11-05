@@ -11,4 +11,9 @@ void ActionScaleTo::update(float dt) {
     m_node->setScale(utils::lerpValue(m_startScale, m_endScale, m_progress));
 }
 
+void ActionScaleTo::setNode(Node* node) {
+    Action::setNode(node);
+    m_node->setScale(utils::lerpValue(m_startScale, m_endScale, m_progress));
+}
+
 NS_SPECTRUM_END

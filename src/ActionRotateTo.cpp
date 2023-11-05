@@ -11,4 +11,9 @@ void ActionRotateTo::update(float dt) {
     m_node->setRotation(utils::lerpValue(m_startRot, m_endRot, m_progress));
 }
 
+void ActionRotateTo::setNode(Node* node) {
+    Action::setNode(node);
+    m_node->setRotation(utils::lerpValue(m_startRot, m_endRot, m_progress));
+}
+
 NS_SPECTRUM_END

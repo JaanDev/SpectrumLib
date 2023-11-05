@@ -8,6 +8,7 @@ class ActionScaleTo : public Action {
     ActionScaleTo(EasingType easing, float duration, float startScale, float endScale);
 
     virtual void update(float dt) override;
+    virtual void setNode(Node* node) override;
 
   private:
     float m_startScale;

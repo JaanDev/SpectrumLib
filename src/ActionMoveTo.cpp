@@ -11,4 +11,10 @@ void ActionMoveTo::update(float dt) {
     m_node->setPos(utils::lerpValue(m_startPos, m_endPos, m_progress));
 }
 
+void ActionMoveTo::setNode(Node* node) {
+    Action::setNode(node);
+    
+    m_node->setPos(utils::lerpValue(m_startPos, m_endPos, m_progress));
+}
+
 NS_SPECTRUM_END

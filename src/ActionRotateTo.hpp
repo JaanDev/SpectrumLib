@@ -8,6 +8,7 @@ class ActionRotateTo : public Action {
     ActionRotateTo(EasingType easing, float duration, float startRot, float endRot);
 
     virtual void update(float dt) override;
+    virtual void setNode(Node* node) override;
 
   private:
     float m_startRot;

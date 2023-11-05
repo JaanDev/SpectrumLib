@@ -14,4 +14,12 @@ void ActionTintTo::update(float dt) {
         spr->setColor(utils::lerpValue(m_startCol, m_endCol, m_progress));
 }
 
+void ActionTintTo::setNode(Node* node) {
+    auto spr = dynamic_cast<Sprite*>(node);
+    if (spr) {
+        Action::setNode(node);
+        spr->setColor(utils::lerpValue(m_startCol, m_endCol, m_progress));
+    }
+}
+
 NS_SPECTRUM_END

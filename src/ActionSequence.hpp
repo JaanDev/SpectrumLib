@@ -3,16 +3,16 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionMoveTo : public Action {
+class ActionSequence : public Action {
   public:
-    ActionMoveTo(EasingType easing, float duration, const Vec2f& startPos, const Vec2f& endPos);
+    ActionSequence(std::vector<std::shared_ptr<Action>> actions);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;
 
   private:
-    Vec2f m_startPos;
-    Vec2f m_endPos;
+    std::vector<std::shared_ptr<Action>> m_actions;
+    int m_currentAction;
 };
 
 NS_SPECTRUM_END
