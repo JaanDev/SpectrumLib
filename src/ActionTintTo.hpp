@@ -5,7 +5,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionTintTo : public Action {
   public:
-    ActionTintTo(EasingType easing, float duration, const Col3u& startCol, const Col3u& endCol);
+    ActionTintTo(EasingType easing, float duration, int repeat, const Col3u& startCol, const Col3u& endCol);
 
     virtual void update(float dt) override;
     virtual void setNode(Node* node) override;
