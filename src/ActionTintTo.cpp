@@ -1,5 +1,7 @@
 #include "ActionTintTo.hpp"
 
+#include "Sprite.hpp"
+
 NS_SPECTRUM_BEGIN
 
 ActionTintTo::ActionTintTo(EasingType easing, float duration, const Col3u& startCol, const Col3u& endCol)

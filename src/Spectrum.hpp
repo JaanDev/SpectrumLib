@@ -15,3 +15,4 @@
 #include "Node.hpp"
 #include "Texture.hpp"
 #include "TextureManager.hpp"
+#include "Sprite.hpp"
