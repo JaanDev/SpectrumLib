@@ -23,6 +23,7 @@
 - [ ] ccspritebatchnode
 - [ ] rendertexture
 - [ ] skew
+- [ ] чтото похожее на getWritablePath
 
 ## WindowFlags
 ```cpp
