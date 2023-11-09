@@ -1,6 +1,5 @@
 #pragma once
 #include "utils.hpp"
-#include "types.hpp"
 #include "Sprite.hpp"
 #include "Animation.hpp"
 

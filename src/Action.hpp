@@ -1,6 +1,5 @@
 #pragma once
 #include "utils.hpp"
-#include "types.hpp"
 #include "Node.hpp"
 
 NS_SPECTRUM_BEGIN

@@ -2,7 +2,6 @@
 #include <memory>
 #include <unordered_map>
 #include "utils.hpp"
-#include "types.hpp"
 #include "Texture.hpp"
 
 NS_SPECTRUM_BEGIN

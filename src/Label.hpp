@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "utils.hpp"
-#include "types.hpp"
 #include "Node.hpp"
 #include "FontManager.hpp"
 

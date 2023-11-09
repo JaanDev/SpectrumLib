@@ -2,7 +2,6 @@
 #include <memory>
 #include <vector>
 #include "utils.hpp"
-#include "types.hpp"
 #include "Action.hpp"
 
 NS_SPECTRUM_BEGIN

@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
 #include "utils.hpp"
-#include "types.hpp"
 
 NS_SPECTRUM_BEGIN
 

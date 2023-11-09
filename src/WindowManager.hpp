@@ -2,7 +2,6 @@
 #include <functional>
 #include <string>
 #include "utils.hpp"
-#include "types.hpp"
 
 NS_SPECTRUM_BEGIN
 

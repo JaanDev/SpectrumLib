@@ -3,7 +3,6 @@
 #include <string>
 #include <memory>
 #include "utils.hpp"
-#include "types.hpp"
 #include "Animation.hpp"
 
 NS_SPECTRUM_BEGIN

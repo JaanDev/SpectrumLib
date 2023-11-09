@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "utils.hpp"
-#include "types.hpp"
 
 NS_SPECTRUM_BEGIN
 
