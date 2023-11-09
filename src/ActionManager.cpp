@@ -10,10 +10,18 @@ ActionManager* ActionManager::instance() {
 ActionManager::ActionManager() : m_actions({}) {}
 
 void ActionManager::update(float dt) {
-    for (auto action : m_actions) {
+    for (auto it = m_actions.begin(); it != m_actions.end();) {
+        bool go = true;
+
+        auto action = *it;
         action->update(dt);
-        if (action->isFinished())
-            removeAction(action);
+        if (action->isFinished()) {
+            m_actions.erase(it);
+            go = false;
+        }
+
+        if (go)
+            it++;
     }
 }
 
