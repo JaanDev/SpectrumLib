@@ -50,7 +50,7 @@ class Node {
 
     // обновление нода (каждый кадр)
     virtual void update(float dt) = 0;
-    virtual void draw() = 0;
+    virtual void draw();
 
     virtual void onKeyEvent(KeyEventType evtType, int key, ModKeys modKeys) = 0;
     virtual void onTextEvent(unsigned int codepoint) = 0;
@@ -68,7 +68,11 @@ class Node {
     // получить родительский нод
     inline Node* getParent() const { return m_parent; }
 
+    void setShouldSortChildren(bool val);
+
   protected:
+    void sortChildren();
+
     Vec2f m_pos; // относительно родителя
     Sizef m_boundingBox;
     Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
@@ -81,6 +85,7 @@ class Node {
     std::vector<std::shared_ptr<Node>> m_children;
     Node* m_parent;
     bool m_visible;
+    bool m_shouldSortChildren;
 };
 
 NS_SPECTRUM_END
