@@ -2,11 +2,9 @@
 #include "utils.hpp"
 #include "Node.hpp"
 #include "Texture.hpp"
-// #include "Shader.hpp"
+#include "Shader.hpp"
 
 NS_SPECTRUM_BEGIN
-
-class Shader;
 
 struct BlendFunc {
     GLenum src;
