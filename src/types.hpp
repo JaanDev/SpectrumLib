@@ -4,6 +4,9 @@
 NS_SPECTRUM_BEGIN
 
 template <typename T>
+struct Size;
+
+template <typename T>
 struct Vec2 {
     T x;
     T y;
@@ -23,6 +26,10 @@ struct Vec2 {
     void operator/=(T other) { *this = *this / other; }
 
     float distance(const Vec2<T>& other) { return sqrtf(powf(other.x - x, 2) + powf(other.y - y)); }
+
+    operator Size<T>() const {
+        return {w, h};
+    }
 };
 
 template <typename T>
@@ -36,6 +43,10 @@ struct Size {
     void operator/=(T other) { *this = *this / other; }
 
     T getArea() { return w * h; }
+
+    operator Vec2<T>() const {
+        return {w, h};
+    }
 };
 
 template <typename T>
