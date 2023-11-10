@@ -12,6 +12,7 @@
 #include "AnimationManager.hpp"
 #include "AnimSprite.hpp"
 #include "AppManager.hpp"
+#include "AudioManager.hpp"
 #include "FileManager.hpp"
 #include "FontManager.hpp"
 #include "InputDispatcher.hpp"
