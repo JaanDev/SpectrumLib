@@ -17,6 +17,7 @@
 #include "Label.hpp"
 #include "Node.hpp"
 #include "Scheduler.hpp"
+#include "Shader.hpp"
 #include "Sprite.hpp"
 #include "Texture.hpp"
 #include "TextureManager.hpp"

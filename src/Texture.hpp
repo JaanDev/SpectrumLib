@@ -18,6 +18,8 @@ class Texture {
     // from memory, dont forget to free `data` after loading the tex
     Texture(uint8_t* data, unsigned int dataLen);
 
+    ~Texture();
+
     // in points
     Sizef getSize();
     inline const Sizei& getSizeInPixels() const { return m_size; }
@@ -26,8 +28,12 @@ class Texture {
 
     void setTexParams(const TexParams& params);
 
+    void bind();
+
+    void cleanup();
+
   private:
-    int m_format;
+    int m_format; // TODO: make use of this
     Sizei m_size; // in pixels
     GLuint m_textureID;
 };

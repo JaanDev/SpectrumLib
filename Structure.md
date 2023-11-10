@@ -24,6 +24,7 @@
 - [ ] rendertexture
 - [ ] skew
 - [ ] чтото похожее на getWritablePath
+- [ ] dds текстуры и другие
 
 ## WindowFlags
 ```cpp
