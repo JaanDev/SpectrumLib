@@ -226,4 +226,18 @@ enum class TextAlignmentV : uint8_t {
     Bottom
 };
 
+enum class ShapeType : uint8_t {
+    None,
+    Ellipse,
+    Polygon,
+    Line
+};
+
+enum class FillType : uint8_t {
+    None,
+    SolidColor,
+    Gradient,
+    Texture
+};
+
 NS_SPECTRUM_END

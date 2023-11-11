@@ -23,6 +23,8 @@
 #include "Scheduler.hpp"
 #include "Shader.hpp"
 #include "ShaderManager.hpp"
+#include "ShapeNode.hpp"
+#include "ShapeNodeEx.hpp"
 #include "Sprite.hpp"
 #include "Texture.hpp"
 #include "TextureManager.hpp"
