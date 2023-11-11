@@ -25,7 +25,7 @@ struct Vec2 {
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 
-    float distance(const Vec2<T>& other) { return sqrtf(powf(other.x - x, 2) + powf(other.y - y)); }
+    float distance(const Vec2<T>& other) { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
 
     operator Size<T>() const { return {x, y}; }
 };
