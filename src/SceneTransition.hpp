@@ -10,7 +10,7 @@ class SceneTransition : public Scene {
 
     virtual void update(float dt) override;
 
-  protected:  
+  protected:
     float m_duration;
     float m_runTime; // the time it was running
     std::shared_ptr<Scene> m_startScene;

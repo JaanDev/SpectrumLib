@@ -8,7 +8,7 @@ NS_SPECTRUM_BEGIN
 class ShapeNodeEx : public Node {
   public:
     ShapeNodeEx();
-  
+
     virtual void draw() override;
 
     void setShape(ShapeType shape);

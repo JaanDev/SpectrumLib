@@ -27,9 +27,7 @@ struct Vec2 {
 
     float distance(const Vec2<T>& other) { return sqrtf(powf(other.x - x, 2) + powf(other.y - y)); }
 
-    operator Size<T>() const {
-        return {w, h};
-    }
+    operator Size<T>() const { return {x, y}; }
 };
 
 template <typename T>
@@ -44,9 +42,7 @@ struct Size {
 
     T getArea() { return w * h; }
 
-    operator Vec2<T>() const {
-        return {w, h};
-    }
+    operator Vec2<T>() const { return {w, h}; }
 };
 
 template <typename T>
