@@ -42,8 +42,9 @@ namespace utils {
     }
 
     float calcEasing(EasingType easingType, float x) {
+        // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
         logW("Calculating easing TODO");
-        return x;
+        return x; // linear for now
     }
 } // namespace utils
 

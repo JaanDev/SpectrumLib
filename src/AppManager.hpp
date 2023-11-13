@@ -14,7 +14,6 @@ class AppManager {
     AppManager();
 
     void run();
-    void update();
     void pause();
     void resume();
     void end();

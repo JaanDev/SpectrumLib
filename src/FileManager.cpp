@@ -9,6 +9,10 @@ FileManager* FileManager::instance() {
     return instance.get();
 }
 
+FileManager::FileManager() {
+    m_searchPaths.push_back(std::filesystem::current_path()); // add current path
+}
+
 std::filesystem::path FileManager::fullPathForFile(const std::string& name) {
     for (const auto& searchPath : m_searchPaths) {
         for (auto file : std::filesystem::directory_iterator(searchPath)) {

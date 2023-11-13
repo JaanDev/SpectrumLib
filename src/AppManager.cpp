@@ -13,8 +13,6 @@ AppManager::AppManager()
 
 void AppManager::run() {}
 
-void AppManager::update() {}
-
 void AppManager::pause() {}
 
 void AppManager::resume() {}

@@ -210,6 +210,16 @@ enum class WindowFlags {
     Default = Visible | Decorated | Focused | Resizable | AutoIconify | CenterCursor | FocusOnShow
 };
 
+inline WindowFlags operator&(WindowFlags a, WindowFlags b) {
+    return static_cast<WindowFlags>(static_cast<unsigned int>(a) & static_cast<unsigned int>(b));
+}
+inline WindowFlags operator|(WindowFlags a, WindowFlags b) {
+    return static_cast<WindowFlags>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+}
+inline WindowFlags operator^(WindowFlags a, WindowFlags b) {
+    return static_cast<WindowFlags>(static_cast<unsigned int>(a) ^ static_cast<unsigned int>(b));
+}
+
 enum class TextAlignmentH : uint8_t {
     Left,
     Center,
