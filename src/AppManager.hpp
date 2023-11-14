@@ -3,12 +3,14 @@
 #include <string>
 #include <vector>
 #include "utils.hpp"
+#include "WindowManager.hpp"
+#include "Scene.hpp"
 
 NS_SPECTRUM_BEGIN
 
-class Scene;
-
 class AppManager {
+    friend class WindowManager;
+
   public:
     static AppManager* instance();
     AppManager();
@@ -19,9 +21,14 @@ class AppManager {
     void end();
 
     double getTime();
+    inline float getDeltaTime() const { return m_deltaTime; }
 
     void setContentScale(float scale);
     inline float getContentScale() const { return m_contentScale; }
+
+    // frameTime = 1.0 / fps;
+    inline void setTargetFrameTime(float frameTime) { m_targetFrameTime = frameTime; }
+    inline float getTargetFrameTime() const { return m_targetFrameTime; }
 
     // in points
     inline const Sizef& getWinSize() const { return m_winSize; }
@@ -43,7 +50,7 @@ class AppManager {
     // -1 => go 1 scene back, 1 => go 1 scene forward etc
     void goToScene(int step);
 
-    float getRealFPS();
+    inline int getRealFPS() const { return m_fps; }
 
     std::string getClipboardText();
     void setClipboardText(const std::string& text);
@@ -55,7 +62,10 @@ class AppManager {
     Sizef pixelsToSize(const Sizef& pixelSize);
 
   private:
+    double m_targetFrameTime;
     float m_timeScale;
+    int m_fps;
+    float m_deltaTime;
     Sizef m_winSize;        // in points
     Vec2f m_pointsToPixels; // points to pixels ratio
     float m_contentScale;

@@ -49,13 +49,13 @@ class Node {
     void runAction(std::shared_ptr<Action> action);
 
     // обновление нода (каждый кадр)
-    virtual void update(float dt) = 0;
+    virtual void update(float dt) {};
     virtual void draw();
 
-    virtual void onKeyEvent(KeyEventType evtType, int key, ModKeys modKeys) = 0;
-    virtual void onTextEvent(unsigned int codepoint) = 0;
-    virtual void onMouseEvent(MouseEventType evtType, const Vec2i& mousePos) = 0;
-    virtual void onMouseScroll(Vec2f delta) = 0;
+    virtual void onKeyEvent(KeyEventType evtType, int key, ModKeys modKeys) {};
+    virtual void onTextEvent(unsigned int codepoint) {};
+    virtual void onMouseEvent(MouseEventType evtType, const Vec2i& mousePos) {};
+    virtual void onMouseScroll(Vec2f delta) {};
 
     inline const std::vector<std::shared_ptr<Node>>& getChildren() const { return m_children; }
     void addChild(std::shared_ptr<Node> child);

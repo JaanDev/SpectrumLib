@@ -1,6 +1,7 @@
 #include "Scheduler.hpp"
 
 #include <memory>
+#include "logger.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -40,8 +41,10 @@ void Scheduler::update(float dt) {
         m_AFKTime = 0.f;
     }
 
-    if (!m_isAFK && m_AFKTime >= m_AFKInterval) {
-        m_AFKCallback();
+    if (!m_isAFK && m_AFKInterval != 0.f && m_AFKTime >= m_AFKInterval) {
+        logD("AFK enabled");
+        if (m_AFKCallback)
+            m_AFKCallback();
         m_isAFK = true;
     }
 

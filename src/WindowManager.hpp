@@ -25,10 +25,6 @@ class WindowManager {
     void setVsync(bool vsync);
     inline bool getVsync() const { return m_isVsync; }
 
-    // frameTime = 1.0 / fps;
-    inline void setTargetFrameTime(float frameTime) { m_targetFrameTime = frameTime; }
-    inline float getTargetFrameTime() const { return m_targetFrameTime; }
-
     inline const Sizei& getWinSizeInPixels() const { return m_winSize; }
     void setWinSizeInPixels(const Sizei& size);
 
@@ -53,7 +49,6 @@ class WindowManager {
 
   private:
     Sizei m_winSize; // in pixels
-    float m_targetFrameTime;
     GLFWwindow* m_windowHandle;
     std::function<bool()> m_closeCallback;
     std::function<void(std::vector<std::string>)> m_filesDroppedCallback;

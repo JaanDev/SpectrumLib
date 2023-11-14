@@ -1,5 +1,14 @@
 #include "AppManager.hpp"
 
+#include <thread>
+#include <chrono>
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+#include "logger.hpp"
+#include "ActionManager.hpp"
+#include "Scheduler.hpp"
+
 NS_SPECTRUM_BEGIN
 
 AppManager* AppManager::instance() {
@@ -8,16 +17,117 @@ AppManager* AppManager::instance() {
 }
 
 AppManager::AppManager()
-    : m_winSize({0, 0}), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0), m_isRunning(false),
-      m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f) {}
+    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0),
+      m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f) {}
 
-void AppManager::run() {}
+void AppManager::run() {
+    static bool hasRun = false;
+    if (hasRun) {
+        logW("AppManager::run has already been called");
+        return;
+    }
+    hasRun = true;
 
-void AppManager::pause() {}
+    m_isRunning = true;
 
-void AppManager::resume() {}
+    auto win = WindowManager::instance()->getGLFWWindow();
 
-void AppManager::end() {}
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto getTime = [startTime]() {
+        return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+    };
+
+    auto lastFrameTime = 0.f;
+    int fps = 0;
+    float fpsTime = 0.f;
+
+    while (!glfwWindowShouldClose(win)) {
+        auto frameStartTime = getTime();
+        // logD("framestarttime {}", frameStartTime);
+        m_deltaTime = (frameStartTime - lastFrameTime) * m_timeScale;
+        // logD("dt {}", m_deltaTime);
+
+        fpsTime += (frameStartTime - lastFrameTime);
+        if (fpsTime >= 1.0f) {
+            logD("{} FPS", fps);
+            m_fps = fps;
+            fps = 0;
+            fpsTime = 0.f;
+        }
+
+        glfwPollEvents();
+
+        if (!m_isRunning) {
+            glfwSwapBuffers(win);
+            lastFrameTime = getTime();
+            continue;
+        }
+
+        // 1. process all the stuff
+
+        ActionManager::instance()->update(m_deltaTime);
+        Scheduler::instance()->update(m_deltaTime);
+
+        // 2. draw all the stuff
+
+        // auto col = (sinf(frameStartTime * 1.5f) + 1.f) / 2.f;
+        // glClearColor(col, 0.f, 0.f, 1.f);
+
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (m_currentScene < m_scenes.size()) {
+            auto curScene = m_scenes[m_currentScene];
+
+            std::function<void(Node*)> updateNodes = [this, updateNodes](Node* node) {
+                node->update(this->m_deltaTime);
+                for (auto child : node->getChildren()) {
+                    child->update(this->m_deltaTime);
+                    updateNodes(child.get());
+                }
+            };
+
+            updateNodes(curScene.get());
+
+            std::function<void(Node*)> drawNodes = [this, drawNodes](Node* node) {
+                node->draw();
+                for (auto child : node->getChildren()) {
+                    child->draw();
+                    drawNodes(child.get());
+                }
+            };
+
+            drawNodes(curScene.get());
+        }
+
+        glfwSwapBuffers(win);
+
+        // 3. wait to maintain target FPS if needed
+
+        auto timeToWait = frameStartTime + m_targetFrameTime - getTime();
+        if (timeToWait > 0.f) {
+            std::this_thread::sleep_for(std::chrono::duration<double>(timeToWait));
+        }
+
+        lastFrameTime = frameStartTime;
+
+        fps++;
+    }
+}
+
+void AppManager::pause() {
+    m_isRunning = false;
+}
+
+void AppManager::resume() {
+    m_isRunning = true;
+}
+
+void AppManager::end() {
+    m_isRunning = false;
+    glfwSetWindowShouldClose(WindowManager::instance()->getGLFWWindow(), true);
+}
 
 double AppManager::getTime() {
     return glfwGetTime();
@@ -25,25 +135,41 @@ double AppManager::getTime() {
 
 void AppManager::setContentScale(float scale) {}
 
-void AppManager::setCursorVisible(bool visible) {}
+void AppManager::setCursorVisible(bool visible) {
+    m_isCursorVisible = visible;
+    glfwSetInputMode(WindowManager::instance()->getGLFWWindow(), GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+}
 
-void AppManager::setCursorLocked(bool locked) {}
+void AppManager::setCursorLocked(bool locked) {
+    m_isCursorLocked = locked;
+    glfwSetInputMode(WindowManager::instance()->getGLFWWindow(), GLFW_CURSOR, locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
 
-void AppManager::openURL(const std::string& url) {}
+void AppManager::openURL(const std::string& url) {
+#ifdef _WIN32
+    ShellExecute(0, 0, url.c_str(), 0, 0, SW_SHOW);
+#elif defined(__linux__)
+    system(fmt::format("xdg-open {}", url).c_str());
+#else
+    logW("AppManager::openURL is not implemented on your platform!");
+#endif
+}
 
 std::shared_ptr<Scene> AppManager::getCurrentScene() {
     return std::shared_ptr<Scene>();
 }
 
-void AppManager::pushScene(std::shared_ptr<Scene> scene) {}
+void AppManager::pushScene(std::shared_ptr<Scene> scene) {
+    m_scenes.push_back(scene);
+    m_currentScene = m_scenes.size() - 1;
+}
 
-void AppManager::replaceScene(std::shared_ptr<Scene> scene) {}
+void AppManager::replaceScene(std::shared_ptr<Scene> scene) {
+    m_scenes[m_scenes.size() - 1] = scene;
+    m_currentScene = m_scenes.size() - 1;
+}
 
 void AppManager::goToScene(int step) {}
-
-float AppManager::getRealFPS() {
-    return 0.0f;
-}
 
 std::string AppManager::getClipboardText() {
     return std::string();

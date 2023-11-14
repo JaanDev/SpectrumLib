@@ -3,6 +3,7 @@
 #include <memory>
 #include <stb_image.h>
 #include "FileManager.hpp"
+#include "AppManager.hpp"
 #include "logger.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -13,7 +14,7 @@ WindowManager* WindowManager::instance() {
 }
 
 WindowManager::WindowManager()
-    : m_winSize({0, 0}), m_targetFrameTime(1.f / 60.f), m_windowHandle(nullptr), m_closeCallback(nullptr),
+    : m_winSize({0, 0}), m_windowHandle(nullptr), m_closeCallback(nullptr),
       m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
 
 WindowManager::~WindowManager() {
@@ -58,6 +59,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         logE("Failed to create a window!");
         exit(1);
     }
+    setFullscreen(fullscreen);
     glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
 
     glfwMakeContextCurrent(m_windowHandle);
@@ -78,6 +80,31 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
         logD("close");
     });
+
+    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+        logD("key {} {} {} {}", key, scancode, action, mods);
+    });
+
+    glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) {
+        logD("char {}", codepoint);
+    });
+
+    glfwSetDropCallback(m_windowHandle, [](GLFWwindow *window, int path_count, const char **paths) {
+        for (auto i = 0; i < path_count; i++) {
+            logD("drop file {}", paths[i]);
+        }
+    });
+
+    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) {
+        logD("scroll {} {}", x, y);
+    });
+
+    glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
+        // logD("cursor pos {} {}", xpos, ypos);
+    });
+
+    AppManager::instance()->m_winSize = sizeInPoints;
+    AppManager::instance()->m_pointsToPixels = sizeInPoints / sizeInPixels.to<float>();
 }
 
 void WindowManager::setWindowIcon(const std::string& iconPath) {

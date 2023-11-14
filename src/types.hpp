@@ -11,23 +11,64 @@ struct Vec2 {
     T x;
     T y;
 
-    Vec2<T> operator+(const Vec2<T>& other) { return {x + other.x, y + other.y}; }
-    Vec2<T> operator-(const Vec2<T>& other) { return {x - other.x, y - other.y}; }
-    Vec2<T> operator*(const Vec2<T>& other) { return {x * other.x, y * other.y}; }
-    Vec2<T> operator/(const Vec2<T>& other) { return {x / other.x, y / other.y}; }
-    Vec2<T> operator*(T other) { return {x * other, y * other}; }
-    Vec2<T> operator/(T other) { return {x / other, y / other}; }
+    template <typename T2>
+    Vec2<T> operator+(const Vec2<T2>& other) const {
+        return {x + other.x, y + other.y};
+    }
+    template <typename T2>
+    Vec2<T> operator-(const Vec2<T2>& other) const {
+        return {x - other.x, y - other.y};
+    }
+    template <typename T2>
+    Vec2<T> operator*(const Vec2<T2>& other) const {
+        return {x * other.x, y * other.y};
+    }
+    template <typename T2>
+    Vec2<T> operator/(const Vec2<T2>& other) const {
+        return {x / other.x, y / other.y};
+    }
+    template <typename T2>
+    Vec2<T> operator*(T2 other) const {
+        return {x * other, y * other};
+    }
+    template <typename T2>
+    Vec2<T> operator/(T2 other) const {
+        return {x / other, y / other};
+    }
 
-    void operator+=(const Vec2<T>& other) { *this = *this + other; }
-    void operator-=(const Vec2<T>& other) { *this = *this - other; }
-    void operator*=(const Vec2<T>& other) { *this = *this * other; }
-    void operator/=(const Vec2<T>& other) { *this = *this / other; }
-    void operator*=(T other) { *this = *this * other; }
-    void operator/=(T other) { *this = *this / other; }
+    template <typename T2>
+    void operator+=(const Vec2<T2>& other) {
+        *this = *this + other;
+    }
+    template <typename T2>
+    void operator-=(const Vec2<T2>& other) {
+        *this = *this - other;
+    }
+    template <typename T2>
+    void operator*=(const Vec2<T2>& other) {
+        *this = *this * other;
+    }
+    template <typename T2>
+    void operator/=(const Vec2<T2>& other) {
+        *this = *this / other;
+    }
+    template <typename T2>
+    void operator*=(T2 other) {
+        *this = *this * other;
+    }
+    template <typename T2>
+    void operator/=(T2 other) {
+        *this = *this / other;
+    }
 
-    float distance(const Vec2<T>& other) { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
+    float distance(const Vec2<T>& other) const { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
 
     operator Size<T>() const { return {x, y}; }
+
+    template <typename T2>
+    inline Vec2<T2> to() const {
+        return {static_cast<T2>(x), static_cast<T2>(y)};
+    }
 };
 
 template <typename T>
@@ -35,14 +76,33 @@ struct Size {
     T w;
     T h;
 
-    Size<T> operator*(T other) { return {w * other, h * other}; }
-    Size<T> operator/(T other) { return {w / other, h / other}; }
+    template <typename T2>
+    Size<T> operator*(T2 other) const {
+        return {static_cast<T>(w * other), static_cast<T>(h * other)};
+    }
+    template <typename T2>
+    Size<T> operator/(T2 other) const {
+        return {static_cast<T>(w / other), static_cast<T>(h / other)};
+    }
+    template <typename T2>
+    Size<T> operator*(Size<T2> other) const {
+        return {static_cast<T>(w * other), static_cast<T>(h * other)};
+    }
+    template <typename T2>
+    Size<T> operator/(Size<T2> other) const {
+        return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)};
+    }
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 
-    T getArea() { return w * h; }
+    T getArea() const { return w * h; }
 
     operator Vec2<T>() const { return {w, h}; }
+
+    template <typename T2>
+    inline Size<T2> to() const {
+        return {static_cast<T2>(w), static_cast<T2>(h)};
+    }
 };
 
 template <typename T>
@@ -52,7 +112,7 @@ struct Rect {
     T w;
     T h;
 
-    bool doesIntersect(const Rect<T>& other) {
+    bool doesIntersect(const Rect<T>& other) const {
         return x < other.x + other.w && x + w > other.x && y > other.y + other.h && y + h < other.y;
     }
 };
