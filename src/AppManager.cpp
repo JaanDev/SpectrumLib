@@ -2,11 +2,15 @@
 
 #include <thread>
 #include <chrono>
+#include <stack>
+#include <glm/mat4x4.hpp>
+#include <glm/gtx/transform.hpp>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 #include "logger.hpp"
 #include "ActionManager.hpp"
+#include "ShaderManager.hpp"
 #include "Scheduler.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -28,6 +32,8 @@ void AppManager::run() {
     }
     hasRun = true;
 
+    ShaderManager::instance();
+
     m_isRunning = true;
 
     auto win = WindowManager::instance()->getGLFWWindow();
@@ -41,6 +47,8 @@ void AppManager::run() {
     auto lastFrameTime = 0.f;
     int fps = 0;
     float fpsTime = 0.f;
+
+    std::stack<glm::mat4> matrixStack;
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
@@ -69,33 +77,77 @@ void AppManager::run() {
         ActionManager::instance()->update(m_deltaTime);
         Scheduler::instance()->update(m_deltaTime);
 
-        // 2. draw all the stuff
-
-        // auto col = (sinf(frameStartTime * 1.5f) + 1.f) / 2.f;
-        // glClearColor(col, 0.f, 0.f, 1.f);
-
-        glClearColor(0.f, 0.f, 0.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         if (m_currentScene < m_scenes.size()) {
             auto curScene = m_scenes[m_currentScene];
 
-            std::function<void(Node*)> updateNodes = [this, updateNodes](Node* node) {
+            std::function<void(Node*)> updateNodes;
+            updateNodes = [this, &updateNodes](Node* node) {
                 node->update(this->m_deltaTime);
                 for (auto child : node->getChildren()) {
-                    child->update(this->m_deltaTime);
                     updateNodes(child.get());
                 }
             };
 
             updateNodes(curScene.get());
+        }
 
-            std::function<void(Node*)> drawNodes = [this, drawNodes](Node* node) {
-                node->draw();
-                for (auto child : node->getChildren()) {
-                    child->draw();
+        // 2. draw all the stuff
+
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (m_currentScene < m_scenes.size()) {
+            // matrixStack = std::stack<glm::mat4>();
+            // matrixStack.push(glm::mat4(1.0f)); // identity matrix
+
+            auto curScene = m_scenes[m_currentScene];
+
+            // glm::mat4 projMtx = glm::scale(glm::mat4(1.f), m_pointsToPixels);
+            auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
+            // glPushMatrix();
+            // glLoadMatrixf(&projMtx[0][0]);
+            // glColor3f(0.f, 1.f, 0.f);
+            // glBegin(GL_QUADS);
+            // glVertex2f(100, 100);
+            // glVertex2f(100, 200);
+            // glVertex2f(200, 200);
+            // glVertex2f(200, 100);
+            // glEnd();
+            // glPopMatrix();
+            matrixStack.push(projMtx);
+
+            std::function<void(Node*)> drawNodes;
+            drawNodes = [this, &drawNodes, &matrixStack](Node* node) {
+                if (!node->isVisible())
+                    return;
+
+                // matrixStack.push(matrixStack.top());
+                matrixStack.push(matrixStack.top() * node->getMatrix());
+                auto nodeMtx = node->getMatrix();
+                auto trnsl = glm::vec3(nodeMtx[3]);
+                // logD("trnsl999 {} {} {}", trnsl.r, trnsl.g, trnsl.b);
+                // matrixStack.top() *= node->getMatrix();
+                // matrixStack.push(matrixStack.top() * glm::mat4(1.f));
+                glPushMatrix();
+                glLoadMatrixf(&matrixStack.top()[0][0]);
+
+                auto& children = node->getChildren();
+                bool selfDrawn = false;
+                for (auto child : children) {
+                    if (child->getZOrder() == 0 && !selfDrawn) {
+                        selfDrawn = true;
+                        node->draw();
+                    }
+                    
                     drawNodes(child.get());
                 }
+
+                if (!selfDrawn) {
+                    node->draw();
+                }
+
+                glPopMatrix();
+                matrixStack.pop();
             };
 
             drawNodes(curScene.get());
@@ -105,10 +157,10 @@ void AppManager::run() {
 
         // 3. wait to maintain target FPS if needed
 
-        auto timeToWait = frameStartTime + m_targetFrameTime - getTime();
-        if (timeToWait > 0.f) {
-            std::this_thread::sleep_for(std::chrono::duration<double>(timeToWait));
-        }
+        // auto timeToWait = frameStartTime + m_targetFrameTime - getTime();
+        // if (timeToWait > 0.f) {
+        //     std::this_thread::sleep_for(std::chrono::duration<double>(timeToWait));
+        // }
 
         lastFrameTime = frameStartTime;
 
@@ -178,19 +230,19 @@ std::string AppManager::getClipboardText() {
 void AppManager::setClipboardText(const std::string& text) {}
 
 Vec2f AppManager::pointsToPixels(const Vec2f& pointPos) {
-    return Vec2f();
+    return pointPos / m_pointsToPixels;
 }
 
 Vec2f AppManager::pixelsToPoints(const Vec2f& pixelPos) {
-    return Vec2f();
+    return pixelPos * m_pointsToPixels;
 }
 
 Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
-    return Sizef();
+    return pixelSize * m_pointsToPixels;
 }
 
 Sizef AppManager::sizeToPixels(const Sizef& size) {
-    return Sizef();
+    return size / m_pointsToPixels;
 }
 
 NS_SPECTRUM_END

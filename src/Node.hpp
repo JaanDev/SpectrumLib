@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <glm/mat4x4.hpp>
 #include "utils.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -16,6 +17,7 @@ class Node {
 
     inline float getScaleX() const { return m_scale.x; }
     inline float getScaleY() const { return m_scale.y; }
+    inline const Vec2f& getScale() const { return m_scale; }
     void setScaleX(float scale);
     void setScaleY(float scale);
     void setScale(float scale);
@@ -24,17 +26,19 @@ class Node {
     inline float getRotation() const { return m_rotation; }
     void setRotation(float degrees);
 
-    inline bool getVisible() const { return m_visible; }
-    void setVisible(bool visible);
+    inline bool isVisible() const { return m_visible; }
+    inline void setVisible(bool visible) { m_visible = visible; }
 
+    // 0 to 1
     inline float getOpacity() const { return m_opacity; }
+    // 0 to 1
     void setOpacity(float opacity);
 
     inline int getZOrder() const { return m_zOrder; }
     void setZOrder(int zOrder);
 
     inline unsigned int getObjectLimit() const { return m_objectLimit; }
-    void setObjectLimit(unsigned int objectlimit);
+    inline void setObjectLimit(unsigned int objectlimit) { m_objectLimit = objectlimit; }
 
     inline const Sizef& getBoundingBox() const { return m_boundingBox; }
     void setBoundingBox(const Sizef& size);
@@ -43,14 +47,14 @@ class Node {
     inline const Vec2f& getAnchorPoint() const { return m_anchorPoint; }
     void setAnchorPoint(const Vec2f& anchor);
 
-    void setTag(const char* tag);
+    inline void setTag(const char* tag) { m_tag = tag; }
     inline const char* getTag() const { return m_tag; }
 
     void runAction(std::shared_ptr<Action> action);
 
     // обновление нода (каждый кадр)
-    virtual void update(float dt) {};
-    virtual void draw();
+    virtual void update(float dt);
+    virtual void draw() {}
 
     virtual void onKeyEvent(KeyEventType evtType, int key, ModKeys modKeys) {};
     virtual void onTextEvent(unsigned int codepoint) {};
@@ -67,8 +71,13 @@ class Node {
     void removeFromParent();
     // получить родительский нод
     inline Node* getParent() const { return m_parent; }
+    inline void setParent(Node* node) { m_parent = node; }
+    std::shared_ptr<Node> getChildByTag(const char* tag) const;
+    std::shared_ptr<Node> getChildByIndex(int index) const;
 
-    void setShouldSortChildren(bool val);
+    inline void setShouldSortChildren(bool val) { m_shouldSortChildren = val; }
+
+    inline const glm::mat4& getMatrix() const { return m_matrix; }
 
   protected:
     void sortChildren();
@@ -84,8 +93,10 @@ class Node {
     const char* m_tag;
     std::vector<std::shared_ptr<Node>> m_children;
     Node* m_parent;
+    glm::mat4 m_matrix;
     bool m_visible;
     bool m_shouldSortChildren;
+    bool m_shouldCalcMtx;
 };
 
 NS_SPECTRUM_END

@@ -28,10 +28,6 @@ class Texture {
 
     void setTexParams(const TexParams& params);
 
-    void bind();
-
-    void cleanup();
-
   private:
     int m_format; // TODO: make use of this
     Sizei m_size; // in pixels

@@ -1,7 +1,8 @@
 #include "Texture.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 #include "AppManager.hpp"
-#include "stb_image.h"
 #include "logger.hpp"
 #include "FileManager.hpp"
 
@@ -68,7 +69,7 @@ Texture::~Texture() {
 }
 
 Sizef Texture::getSize() {
-    return AppManager::instance()->pixelsToSize({static_cast<float>(m_size.w), static_cast<float>(m_size.h)});
+    return AppManager::instance()->pixelsToSize(m_size.to<float>());
 }
 
 void Texture::setTexParams(const TexParams& params) {
@@ -78,14 +79,6 @@ void Texture::setTexParams(const TexParams& params) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magFilter);
     glBindTexture(GL_TEXTURE_2D, 0); // unbind current texture to prevent accidental editing
-}
-
-void Texture::bind() {
-    cleanup();
-}
-
-void Texture::cleanup() {
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 NS_SPECTRUM_END
