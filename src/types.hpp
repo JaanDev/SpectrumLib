@@ -86,11 +86,19 @@ struct Size {
     }
     template <typename T2>
     Size<T> operator*(Size<T2> other) const {
-        return {static_cast<T>(w * other), static_cast<T>(h * other)};
+        return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)};
     }
     template <typename T2>
     Size<T> operator/(Size<T2> other) const {
         return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)};
+    }
+    template <typename T2>
+    Size<T> operator*(Vec2<T2> other) const {
+        return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)};
+    }
+    template <typename T2>
+    Size<T> operator/(Vec2<T2> other) const {
+        return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)};
     }
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
@@ -267,7 +275,7 @@ enum class WindowFlags {
     FocusOnShow = 1 << 9,
     // whether the window content area should be resized based on the monitor content scale of any monitor it is placed on
     ScaleToMonitor = 1 << 10,
-    Default = Visible | Decorated | Focused | Resizable | AutoIconify | CenterCursor | FocusOnShow
+    Default = Visible | Decorated | Focused | AutoIconify | CenterCursor | FocusOnShow
 };
 
 inline WindowFlags operator&(WindowFlags a, WindowFlags b) {
