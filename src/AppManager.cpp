@@ -97,23 +97,9 @@ void AppManager::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (m_currentScene < m_scenes.size()) {
-            // matrixStack = std::stack<glm::mat4>();
-            // matrixStack.push(glm::mat4(1.0f)); // identity matrix
-
             auto curScene = m_scenes[m_currentScene];
 
-            // glm::mat4 projMtx = glm::scale(glm::mat4(1.f), m_pointsToPixels);
             auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
-            // glPushMatrix();
-            // glLoadMatrixf(&projMtx[0][0]);
-            // glColor3f(0.f, 1.f, 0.f);
-            // glBegin(GL_QUADS);
-            // glVertex2f(100, 100);
-            // glVertex2f(100, 200);
-            // glVertex2f(200, 200);
-            // glVertex2f(200, 100);
-            // glEnd();
-            // glPopMatrix();
             matrixStack.push(projMtx);
 
             std::function<void(Node*)> drawNodes;
@@ -121,13 +107,11 @@ void AppManager::run() {
                 if (!node->isVisible())
                     return;
 
-                // matrixStack.push(matrixStack.top());
                 matrixStack.push(matrixStack.top() * node->getMatrix());
                 auto nodeMtx = node->getMatrix();
                 auto trnsl = glm::vec3(nodeMtx[3]);
-                // logD("trnsl999 {} {} {}", trnsl.r, trnsl.g, trnsl.b);
-                // matrixStack.top() *= node->getMatrix();
-                // matrixStack.push(matrixStack.top() * glm::mat4(1.f));
+
+                // TODO: remove gl matrix stuff
                 glPushMatrix();
                 glLoadMatrixf(&matrixStack.top()[0][0]);
 
@@ -146,11 +130,14 @@ void AppManager::run() {
                     node->draw();
                 }
 
+                // TODO: remove gl matrix stuff
                 glPopMatrix();
                 matrixStack.pop();
             };
 
             drawNodes(curScene.get());
+
+            matrixStack.pop();
         }
 
         glfwSwapBuffers(win);
