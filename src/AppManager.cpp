@@ -4,6 +4,7 @@
 #include <chrono>
 #include <stack>
 #include <glm/mat4x4.hpp>
+#include <glm/gtx/transform.hpp>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
@@ -48,7 +49,6 @@ void AppManager::run() {
     float fpsTime = 0.f;
 
     std::stack<glm::mat4> matrixStack;
-    matrixStack.push(glm::mat4(1.0f)); // identity matrix
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
@@ -81,7 +81,6 @@ void AppManager::run() {
             auto curScene = m_scenes[m_currentScene];
 
             std::function<void(Node*)> updateNodes;
-
             updateNodes = [this, &updateNodes](Node* node) {
                 node->update(this->m_deltaTime);
                 for (auto child : node->getChildren()) {
@@ -98,17 +97,57 @@ void AppManager::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (m_currentScene < m_scenes.size()) {
+            // matrixStack = std::stack<glm::mat4>();
+            // matrixStack.push(glm::mat4(1.0f)); // identity matrix
+
             auto curScene = m_scenes[m_currentScene];
 
+            // glm::mat4 projMtx = glm::scale(glm::mat4(1.f), m_pointsToPixels);
+            auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
+            // glPushMatrix();
+            // glLoadMatrixf(&projMtx[0][0]);
+            // glColor3f(0.f, 1.f, 0.f);
+            // glBegin(GL_QUADS);
+            // glVertex2f(100, 100);
+            // glVertex2f(100, 200);
+            // glVertex2f(200, 200);
+            // glVertex2f(200, 100);
+            // glEnd();
+            // glPopMatrix();
+            matrixStack.push(projMtx);
+
             std::function<void(Node*)> drawNodes;
-            
-            drawNodes = [this, &drawNodes](Node* node) {
-                if (node->isVisible()) {
-                    node->draw();
-                    for (auto child : node->getChildren()) {
-                        drawNodes(child.get());
+            drawNodes = [this, &drawNodes, &matrixStack](Node* node) {
+                if (!node->isVisible())
+                    return;
+
+                // matrixStack.push(matrixStack.top());
+                matrixStack.push(matrixStack.top() * node->getMatrix());
+                auto nodeMtx = node->getMatrix();
+                auto trnsl = glm::vec3(nodeMtx[3]);
+                // logD("trnsl999 {} {} {}", trnsl.r, trnsl.g, trnsl.b);
+                // matrixStack.top() *= node->getMatrix();
+                // matrixStack.push(matrixStack.top() * glm::mat4(1.f));
+                glPushMatrix();
+                glLoadMatrixf(&matrixStack.top()[0][0]);
+
+                auto& children = node->getChildren();
+                bool selfDrawn = false;
+                for (auto child : children) {
+                    if (child->getZOrder() == 0 && !selfDrawn) {
+                        selfDrawn = true;
+                        node->draw();
                     }
+                    
+                    drawNodes(child.get());
                 }
+
+                if (!selfDrawn) {
+                    node->draw();
+                }
+
+                glPopMatrix();
+                matrixStack.pop();
             };
 
             drawNodes(curScene.get());

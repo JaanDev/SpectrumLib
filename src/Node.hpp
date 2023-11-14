@@ -17,6 +17,7 @@ class Node {
 
     inline float getScaleX() const { return m_scale.x; }
     inline float getScaleY() const { return m_scale.y; }
+    inline const Vec2f& getScale() const { return m_scale; }
     void setScaleX(float scale);
     void setScaleY(float scale);
     void setScale(float scale);
@@ -75,6 +76,8 @@ class Node {
     std::shared_ptr<Node> getChildByIndex(int index) const;
 
     inline void setShouldSortChildren(bool val) { m_shouldSortChildren = val; }
+
+    inline const glm::mat4& getMatrix() const { return m_matrix; }
 
   protected:
     void sortChildren();

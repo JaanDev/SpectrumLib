@@ -4,10 +4,21 @@ class MyScene : public spl::Scene {
   public:
     MyScene() : spl::Scene() {
         printf("My scene created\n");
-        auto spr = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test.png"));
-        // spr->setPos({100, 100});
-        addChild(spr);
+        m_spr = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test.png"));
+        m_spr->setPos(spl::AppManager::instance()->getWinSize() / 2.f);
+        // m_spr->setAnchorPoint({0, 0});
+        addChild(m_spr);
     }
+
+    void update(float dt) override {
+        // auto newPos = m_spr->getPos() + spl::Vec2f {dt * 25.f, dt * 25.f / 2.f};
+        // m_spr->setPos(newPos);
+        m_spr->setScale(m_spr->getScale() + spl::Vec2f {dt, dt} * 0.05f);
+        // m_spr->setRotation(m_spr->getRotation() + dt * 1.2f);
+    }
+
+    private:
+    std::shared_ptr<spl::Sprite> m_spr;
 };
 
 int main() {
