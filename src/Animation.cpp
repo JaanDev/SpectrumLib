@@ -11,7 +11,7 @@ Animation::Animation(float fps, std::vector<std::shared_ptr<Texture>> textures)
 Animation::Animation(float fps, const std::string& formatStr, int texCount)
     : m_timeDelay(1.f / fps), m_textures({}), m_timeRun(0.f), m_texCount(texCount), m_curTex(0), m_isPlaying(true) {
     for (auto i = 0; i < texCount; i++) {
-        auto texName = fmt::format(formatStr, i);
+        auto texName = fmt::format(fmt::runtime(formatStr), i);
         auto tex = TextureManager::instance()->getTexture(texName);
         if (tex)
             m_textures.push_back(tex);
