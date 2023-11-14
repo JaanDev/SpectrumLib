@@ -23,6 +23,8 @@ class MyScene : public spl::Scene {
         m_spr2->setScale(m_spr2->getScale() + spl::Vec2f {dt, dt} * 0.1f);
         m_spr->setRotation(m_spr->getRotation() + dt * 0.5f);
         m_spr2->setRotation(m_spr2->getRotation() + dt * 0.5f);
+
+        this->setColor({this->getColor().r + dt * 0.1f, 0.0f, 0.0f});
     }
 
   private:

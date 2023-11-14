@@ -41,7 +41,7 @@ class AppManager {
 
     void openURL(const std::string& url);
 
-    inline float getTimeScale() const;
+    inline float getTimeScale() const { return m_timeScale; }
     void setTimeScale(float ts);
 
     std::shared_ptr<Scene> getCurrentScene();
