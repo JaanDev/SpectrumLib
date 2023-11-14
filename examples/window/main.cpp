@@ -7,7 +7,7 @@ class MyScene : public spl::Scene {
         m_spr = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test.png"));
         m_spr->setPos((spl::Vec2f)spl::AppManager::instance()->getWinSize() / 2.f - spl::Vec2f {100, 50});
         // m_spr->setAnchorPoint({0.5, 0.5});
-        m_spr->setScale(0.7);
+        m_spr->setScale(0.7f);
         addChild(m_spr);
 
         m_spr2 = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test2.png"));
@@ -25,17 +25,17 @@ class MyScene : public spl::Scene {
         m_spr2->setRotation(m_spr2->getRotation() + dt * 0.5f);
     }
 
-    private:
+  private:
     std::shared_ptr<spl::Sprite> m_spr;
     std::shared_ptr<spl::Sprite> m_spr2;
 };
 
 int main() {
-    // spl::FileManager::instance()->addSearchPath("assets"); // for example
+    spl::FileManager::instance()->addSearchPath("assets"); // for example
     spl::WindowManager::instance()->createWindow({800, 600}, {400, 300}, "Hello Spectrum!", false,
                                                  spl::WindowFlags::Default | spl::WindowFlags::ScaleToMonitor);
     auto appMgr = spl::AppManager::instance();
-    appMgr->setTargetFrameTime(1.0 / 60);
+    appMgr->setTargetFrameTime(1.0f / 60);
     appMgr->pushScene(std::make_shared<MyScene>());
     appMgr->run();
 

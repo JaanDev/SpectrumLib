@@ -44,7 +44,7 @@ void AppManager::run() {
         return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     };
 
-    auto lastFrameTime = 0.f;
+    double lastFrameTime = 0.;
     int fps = 0;
     float fpsTime = 0.f;
 
@@ -53,10 +53,10 @@ void AppManager::run() {
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
         // logD("framestarttime {}", frameStartTime);
-        m_deltaTime = (frameStartTime - lastFrameTime) * m_timeScale;
+        m_deltaTime = static_cast<float>((frameStartTime - lastFrameTime) * m_timeScale);
         // logD("dt {}", m_deltaTime);
 
-        fpsTime += (frameStartTime - lastFrameTime);
+        fpsTime += static_cast<float>(frameStartTime - lastFrameTime);
         if (fpsTime >= 1.0f) {
             logD("{} FPS", fps);
             m_fps = fps;

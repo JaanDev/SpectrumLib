@@ -28,7 +28,7 @@ class AppManager {
 
     // frameTime = 1.0 / fps;
     inline void setTargetFrameTime(float frameTime) { m_targetFrameTime = frameTime; }
-    inline float getTargetFrameTime() const { return m_targetFrameTime; }
+    inline double getTargetFrameTime() const { return m_targetFrameTime; }
 
     // in points
     inline const Sizef& getWinSize() const { return m_winSize; }
