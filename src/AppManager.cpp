@@ -108,8 +108,6 @@ void AppManager::run() {
                     return;
 
                 matrixStack.push(matrixStack.top() * node->getMatrix());
-                auto nodeMtx = node->getMatrix();
-                auto trnsl = glm::vec3(nodeMtx[3]);
 
                 // TODO: remove gl matrix stuff
                 glPushMatrix();

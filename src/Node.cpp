@@ -13,7 +13,6 @@ Node::Node()
       m_matrix(glm::mat4(1.0f)), m_shouldSortChildren(false), m_shouldCalcMtx(true) {}
 
 void Node::setPos(const Vec2f& pos) {
-    logD("set pos {} {}", pos.x, pos.y);
     m_pos = pos;
     m_shouldCalcMtx = true;
 }
@@ -76,16 +75,11 @@ void Node::update(float dt) {
     if (m_shouldCalcMtx) {
         m_shouldCalcMtx = false;
         auto bb = m_boundingBox * m_scale;
-        // logD("calc mtx {} {} ; {} ; {} {} ; {} {} ; {} {}", m_pos.x, m_pos.y, m_rotation, m_scale.x, m_scale.y, bb.w,
-        //      bb.h, m_anchorPoint.x, m_anchorPoint.y);
-        // logD("mtx translate {} {}", m_pos.x - bb.w * m_anchorPoint.x, m_pos.y - bb.h * m_anchorPoint.y);
-        m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x - bb.w * m_anchorPoint.x,
-                                                            m_pos.y - bb.h * m_anchorPoint.y, 0.f));
-        m_matrix = glm::rotate(m_matrix, m_rotation, glm::vec3(0.f, 0.f, 1.f));
-        m_matrix = glm::scale(m_matrix, glm::vec3(m_scale.x, m_scale.y, 1.f));
 
-        auto trnsl = glm::vec3(m_matrix[3]);
-        // logD("trnsl!! {} {} {}", trnsl.r, trnsl.g, trnsl.b);
+        m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
+        m_matrix = glm::rotate(m_matrix, m_rotation, glm::vec3(0.f, 0.f, 1.f));
+        m_matrix = glm::translate(m_matrix, glm::vec3(-bb.w * m_anchorPoint.x, -bb.h * m_anchorPoint.y, 0.f));
+        m_matrix = glm::scale(m_matrix, glm::vec3(m_scale.x, m_scale.y, 1.f));
     }
 }
 

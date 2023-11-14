@@ -18,13 +18,19 @@ Sprite::Sprite(std::shared_ptr<Texture> texture)
 void Sprite::setBlendFunc(const BlendFunc& func) {}
 
 void Sprite::draw() {
-    glColor3f(1.f, 0.f, 0.f);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());
+    
+    // glColor3f(1.f, 0.f, 0.f);
     glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(0, m_boundingBox.h);
-    glVertex2f(m_boundingBox.w, m_boundingBox.h);
-    glVertex2f(m_boundingBox.w, 0);
+    glTexCoord2f(0, 0); glVertex2f(0, 0);
+    glTexCoord2f(0, 1); glVertex2f(0, m_boundingBox.h);
+    glTexCoord2f(1, 1); glVertex2f(m_boundingBox.w, m_boundingBox.h);
+    glTexCoord2f(1, 0); glVertex2f(m_boundingBox.w, 0);
     glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 }
 
 NS_SPECTRUM_END
