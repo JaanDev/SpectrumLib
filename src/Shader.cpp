@@ -82,6 +82,9 @@ bool Shader::loadFromString(std::string_view vertexShaderSrc, std::string_view f
         return false;
     }
 
+    glDetachShader(m_shaderProgram, vertShader);
+    glDetachShader(m_shaderProgram, fragShader);
+
     glDeleteShader(vertShader);
     glDeleteShader(fragShader);
 

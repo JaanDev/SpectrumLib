@@ -59,7 +59,7 @@ void AppManager::run() {
 
         fpsTime += static_cast<float>(frameStartTime - lastFrameTime);
         if (fpsTime >= 1.0f) {
-            logD("{} FPS", fps);
+            logD("{} FPS ({:.4f} ms/frame)", fps, 1000.0 / fps);
             m_fps = fps;
             fps = 0;
             fpsTime = 0.f;

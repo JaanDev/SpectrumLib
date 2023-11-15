@@ -32,6 +32,8 @@ class Sprite : public Node {
     inline void setShader(std::shared_ptr<Shader> shader) { m_shader = shader; }
 
   protected:
+    void makeVBO();
+  
     std::shared_ptr<Texture> m_texture;
     Col3u m_color;
     std::shared_ptr<Shader> m_shader;

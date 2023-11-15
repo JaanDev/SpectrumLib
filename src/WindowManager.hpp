@@ -48,6 +48,8 @@ class WindowManager {
     Vec2i getMouseDeltaInPixels();
 
   private:
+    void setDefaultWindowIcon();
+
     Sizei m_winSize; // in pixels
     GLFWwindow* m_windowHandle;
     std::function<bool()> m_closeCallback;

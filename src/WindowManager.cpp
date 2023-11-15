@@ -4,6 +4,7 @@
 #include <stb_image.h>
 #include "FileManager.hpp"
 #include "AppManager.hpp"
+#include "DefaultIcon.hpp"
 #include "logger.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -59,9 +60,6 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         logE("Failed to create a window!");
         exit(1);
     }
-    setFullscreen(fullscreen);
-    glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
-
     glfwMakeContextCurrent(m_windowHandle);
 
     gladLoadGL(glfwGetProcAddress);
@@ -70,6 +68,9 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     logD("GLAD Version:   {}", GLAD_GENERATOR_VERSION);
     logD("Renderer:       {}", (char*)glGetString(GL_RENDERER));
     logD("Vendor:         {}", (char*)glGetString(GL_VENDOR));
+
+    setFullscreen(fullscreen);
+    glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
 
     glfwSwapInterval(m_isVsync);
 
@@ -97,6 +98,8 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
         // logD("cursor pos {} {}", xpos, ypos);
     });
+
+    setDefaultWindowIcon();
 
     AppManager::instance()->m_winSize = sizeInPoints;
     AppManager::instance()->m_pointsToPixels = sizeInPoints / sizeInPixels.to<float>();
@@ -129,8 +132,10 @@ void WindowManager::setFullscreen(bool fullscreen) {
         auto mon = glfwGetPrimaryMonitor();
         auto mode = glfwGetVideoMode(mon);
         glfwSetWindowMonitor(m_windowHandle, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
+        glViewport(0, 0, mode->width, mode->height);
     } else {
         glfwSetWindowMonitor(m_windowHandle, nullptr, m_fsWinPos.x, m_fsWinPos.y, m_fsWinSize.w, m_fsWinSize.h, 0);
+        glViewport(0, 0, m_fsWinSize.w, m_fsWinSize.h);
     }
 }
 
@@ -181,6 +186,20 @@ Vec2f WindowManager::getMouseDelta() {
 
 Vec2i WindowManager::getMouseDeltaInPixels() {
     return Vec2i();
+}
+
+void WindowManager::setDefaultWindowIcon() {
+    int x, y, bpp;
+    auto loadedData = stbi_load_from_memory(g_defaultIconData, g_defaultIconDataSize, &x, &y, &bpp, 0);
+    if (!loadedData) {
+        logE("Failed to load a default window icon!");
+        return;
+    }
+
+    GLFWimage img = {.width = x, .height = y, .pixels = loadedData};
+    glfwSetWindowIcon(m_windowHandle, 1, &img);
+
+    stbi_image_free(loadedData);
 }
 
 NS_SPECTRUM_END

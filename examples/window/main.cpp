@@ -4,9 +4,9 @@ class MyScene : public spl::Scene {
   public:
     MyScene() : spl::Scene() {
         printf("My scene created\n");
-        m_spr = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test.png"));
+        m_spr = std::make_shared<spl::Sprite>("test.png");
         m_spr->setPos((spl::Vec2f)spl::AppManager::instance()->getWinSize() / 2.f - spl::Vec2f {100, 50});
-        // m_spr->setAnchorPoint({0.1, 0.1});
+        // m_spr->setAnchorPoint({0.8, 0.1});
         m_spr->setScale(0.7f);
         addChild(m_spr);
 

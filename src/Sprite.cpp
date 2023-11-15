@@ -38,4 +38,22 @@ void Sprite::draw() {
     glDisable(GL_TEXTURE_2D);
 }
 
+void Sprite::makeVBO() {
+    // float points[] = {
+    //     0.0f, 0.0f, 0.0f,
+    //     0.0f, 1.0f, 0.0f,
+    //     0.1f, 0.0f, 0.0f,
+    //     0.1f, 1.0f, 0.0f,
+    // };
+
+    // float colors[] = {
+    //     1.0f, 1.0f, 1.0f,
+    //     1.0f, 1.0f, 1.0f,
+    //     1.0f, 1.0f, 1.0f,
+    //     1.0f, 1.0f, 1.0f,
+    // };
+
+    
+}
+
 NS_SPECTRUM_END
