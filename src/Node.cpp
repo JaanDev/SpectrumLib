@@ -77,7 +77,7 @@ void Node::update(float dt) {
         auto bb = m_boundingBox * m_scale;
 
         m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
-        m_matrix = glm::rotate(m_matrix, m_rotation, glm::vec3(0.f, 0.f, 1.f));
+        m_matrix = glm::rotate(m_matrix, glm::radians(m_rotation), glm::vec3(0.f, 0.f, 1.f));
         m_matrix = glm::translate(m_matrix, glm::vec3(-bb.w * m_anchorPoint.x, -bb.h * m_anchorPoint.y, 0.f));
         m_matrix = glm::scale(m_matrix, glm::vec3(m_scale.x, m_scale.y, 1.f));
     }
