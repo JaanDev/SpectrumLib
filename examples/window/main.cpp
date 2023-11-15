@@ -4,34 +4,48 @@ class MyScene : public spl::Scene {
   public:
     MyScene() : spl::Scene() {
         printf("My scene created\n");
-        m_spr = std::make_shared<spl::Sprite>("test.png");
-        m_spr->setPos((spl::Vec2f)spl::AppManager::instance()->getWinSize() / 2.f - spl::Vec2f {100, 50});
-        // m_spr->setAnchorPoint({0.8, 0.1});
-        m_spr->setScale(0.7f);
-        addChild(m_spr);
 
-        auto tex2 = std::make_shared<spl::Texture>("test2.png");
-        tex2->setTexParams({.minFilter = GL_LINEAR_MIPMAP_LINEAR, .magFilter = GL_NEAREST, .wrapS = GL_CLAMP, .wrapT = GL_CLAMP});
-        m_spr2 = std::make_shared<spl::Sprite>(tex2);
-        m_spr2->setPos({0, 0});
-        m_spr2->setAnchorPoint({0, 0});
-        m_spr->addChild(m_spr2);
+        // do not delete this code!!!
+        // 14-18fps
+        // 55986 children
+        auto tex = std::make_shared<spl::Texture>("test.png");
+        srand(time(0));
+
+        std::function<void(Node*, int)> addChildren;
+        int count = 0;
+        addChildren = [this, &addChildren, &count, tex](Node* node, int depth) {
+            if (depth == 6)
+                return;
+
+            for (auto i = 0u; i < 6; i++) {
+                auto c = std::make_shared<spl::Sprite>(tex);
+                c->setPos({0.f + (rand() % static_cast<int>(30 - 0 + 1)), 0.f + (rand() % static_cast<int>(30 - 0 + 1))});
+                addChildren(c.get(), depth + 1);
+                node->addChild(c);
+                count++;
+            }
+        };
+
+        addChildren(this, 0);
+
+        printf("%i children\n", count);
     }
 
     void update(float dt) override {
-        auto newPos = m_spr->getPos() + spl::Vec2f {dt * 10.f, dt * 10.f / 2.f};
-        m_spr->setPos(newPos);
-        m_spr->setScale(m_spr->getScale() + spl::Vec2f {dt, dt} * 0.05f);
-        m_spr2->setScale(m_spr2->getScale() + spl::Vec2f {dt, dt} * 0.1f);
-        m_spr->setRotation(m_spr->getRotation() + dt * 12.f);
-        m_spr2->setRotation(m_spr2->getRotation() + dt * 18.f);
+        // do not delete this code!!!
+        // 14-18fps
+        // 55986 children
+        std::function<void(Node*)> upd;
+        upd = [this, &upd, dt](Node* node) {
+            for (auto c : node->getChildren()) {
+                c->setPos(c->getPos() + spl::Vec2f {dt * 5.f, dt * 2.5f});
+                c->setRotation(c->getRotation() + dt * 1.2f);
+                upd(c.get());
+            }
+        };
 
-        this->setBGColor({this->getBGColor().r + dt * 0.1f, 0, 0});
+        upd(this);
     }
-
-  private:
-    std::shared_ptr<spl::Sprite> m_spr;
-    std::shared_ptr<spl::Sprite> m_spr2;
 };
 
 int main() {
