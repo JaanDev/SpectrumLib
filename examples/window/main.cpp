@@ -10,7 +10,9 @@ class MyScene : public spl::Scene {
         m_spr->setScale(0.7f);
         addChild(m_spr);
 
-        m_spr2 = std::make_shared<spl::Sprite>(std::make_shared<spl::Texture>("test2.png"));
+        auto tex2 = std::make_shared<spl::Texture>("test2.png");
+        tex2->setTexParams({.minFilter = GL_LINEAR_MIPMAP_LINEAR, .magFilter = GL_NEAREST, .wrapS = GL_CLAMP, .wrapT = GL_CLAMP});
+        m_spr2 = std::make_shared<spl::Sprite>(tex2);
         m_spr2->setPos({0, 0});
         m_spr2->setAnchorPoint({0, 0});
         m_spr->addChild(m_spr2);
@@ -35,7 +37,8 @@ class MyScene : public spl::Scene {
 int main() {
     spl::FileManager::instance()->addSearchPath("assets"); // for example
     spl::WindowManager::instance()->createWindow({800, 600}, {400, 300}, "Hello Spectrum!", false,
-                                                 spl::WindowFlags::Default | spl::WindowFlags::ScaleToMonitor);
+                                                 spl::WindowFlags::Default | spl::WindowFlags::ScaleToMonitor |
+                                                     spl::WindowFlags::Resizable);
     auto appMgr = spl::AppManager::instance();
     appMgr->setTargetFrameTime(1.0f / 60);
     appMgr->pushScene(std::make_shared<MyScene>());

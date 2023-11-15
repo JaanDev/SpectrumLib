@@ -73,7 +73,10 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     glfwSwapInterval(m_isVsync);
 
-    glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) { logD("win size {}x{}", w, h); });
+    glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
+        logD("win size {}x{}", w, h);
+        glViewport(0, 0, w, h);
+    });
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) { logD("close"); });
 

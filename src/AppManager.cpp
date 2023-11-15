@@ -55,9 +55,7 @@ void AppManager::run() {
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
-        // logD("framestarttime {}", frameStartTime);
         m_deltaTime = static_cast<float>((frameStartTime - lastFrameTime) * m_timeScale);
-        // logD("dt {}", m_deltaTime);
 
         fpsTime += static_cast<float>(frameStartTime - lastFrameTime);
         if (fpsTime >= 1.0f) {
