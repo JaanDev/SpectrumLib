@@ -18,7 +18,8 @@ void logW(fmt::format_string<Args...> s, Args&&... args) {
 
 template <typename... Args>
 void logE(fmt::format_string<Args...> s, Args&&... args) {
-    fmt::print(fmt::fg(fmt::terminal_color::bright_red) | fmt::emphasis::bold, "[SPL] [E] {}\n", fmt::format(s, std::forward<Args>(args)...));
+    fmt::print(fmt::fg(fmt::terminal_color::bright_red) | fmt::emphasis::bold, "[SPL] [E] {}\n",
+               fmt::format(s, std::forward<Args>(args)...));
 }
 
 NS_SPECTRUM_END

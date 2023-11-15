@@ -14,8 +14,8 @@ WindowManager* WindowManager::instance() {
 }
 
 WindowManager::WindowManager()
-    : m_winSize({0, 0}), m_windowHandle(nullptr), m_closeCallback(nullptr),
-      m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
+    : m_winSize({0, 0}), m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr),
+      m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
 
 WindowManager::~WindowManager() {
     glfwDestroyWindow(m_windowHandle);
@@ -73,31 +73,23 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     glfwSwapInterval(m_isVsync);
 
-    glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
-        logD("win size {}x{}", w, h);
-    });
+    glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) { logD("win size {}x{}", w, h); });
 
-    glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
-        logD("close");
-    });
+    glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) { logD("close"); });
 
-    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
         logD("key {} {} {} {}", key, scancode, action, mods);
     });
 
-    glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) {
-        logD("char {}", codepoint);
-    });
+    glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) { logD("char {}", codepoint); });
 
-    glfwSetDropCallback(m_windowHandle, [](GLFWwindow *window, int path_count, const char **paths) {
+    glfwSetDropCallback(m_windowHandle, [](GLFWwindow* window, int path_count, const char** paths) {
         for (auto i = 0; i < path_count; i++) {
             logD("drop file {}", paths[i]);
         }
     });
 
-    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) {
-        logD("scroll {} {}", x, y);
-    });
+    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) { logD("scroll {} {}", x, y); });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
         // logD("cursor pos {} {}", xpos, ypos);

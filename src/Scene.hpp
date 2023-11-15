@@ -8,11 +8,11 @@ class Scene : public Node {
   public:
     Scene();
 
-    void setColor(Col3f color);
-    Col3f getColor();
+    inline void setBGColor(const Col3f& color) { m_bgColor = color; }
+    inline const Col3f& getBGColor() const { return m_bgColor; }
 
   private:
-    Col3f m_color;
+    Col3f m_bgColor;
 };
 
 NS_SPECTRUM_END

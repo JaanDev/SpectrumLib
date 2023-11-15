@@ -22,7 +22,8 @@ AppManager* AppManager::instance() {
 
 AppManager::AppManager()
     : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0),
-      m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f) {}
+      m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f),
+      m_curScene(nullptr) {}
 
 void AppManager::run() {
     static bool hasRun = false;
@@ -47,9 +48,10 @@ void AppManager::run() {
     double lastFrameTime = 0.;
     int fps = 0;
     float fpsTime = 0.f;
-    Col3f currentColor = {0, 0, 0};
 
     std::stack<glm::mat4> matrixStack;
+    auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
+    matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
@@ -78,11 +80,10 @@ void AppManager::run() {
         ActionManager::instance()->update(m_deltaTime);
         Scheduler::instance()->update(m_deltaTime);
 
-        if (m_currentScene < m_scenes.size()) {
-            auto curScene = m_scenes[m_currentScene];
-            
-            currentColor = curScene->getColor();
-            
+        Col3f currentColor = {0.f, 0.f, 0.f};
+        if (m_curScene) {
+            currentColor = m_curScene->getBGColor();
+
             std::function<void(Node*)> updateNodes;
             updateNodes = [this, &updateNodes](Node* node) {
                 node->update(this->m_deltaTime);
@@ -91,7 +92,7 @@ void AppManager::run() {
                 }
             };
 
-            updateNodes(curScene.get());
+            updateNodes(m_curScene);
         }
 
         // 2. draw all the stuff
@@ -99,14 +100,7 @@ void AppManager::run() {
         glClearColor(currentColor.r, currentColor.g, currentColor.b, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (m_currentScene < m_scenes.size()) {
-            auto curScene = m_scenes[m_currentScene];
-
-            auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
-            matrixStack.push(projMtx);
-
-            currentColor = curScene->getColor();
-
+        if (m_curScene) {
             std::function<void(Node*)> drawNodes;
             drawNodes = [this, &drawNodes, &matrixStack](Node* node) {
                 if (!node->isVisible())
@@ -125,7 +119,7 @@ void AppManager::run() {
                         selfDrawn = true;
                         node->draw();
                     }
-                    
+
                     drawNodes(child.get());
                 }
 
@@ -135,12 +129,11 @@ void AppManager::run() {
 
                 // TODO: remove gl matrix stuff
                 glPopMatrix();
+
                 matrixStack.pop();
             };
 
-            drawNodes(curScene.get());
-
-            matrixStack.pop();
+            drawNodes(m_curScene);
         }
 
         glfwSwapBuffers(win);
@@ -156,6 +149,8 @@ void AppManager::run() {
 
         fps++;
     }
+
+    matrixStack.pop();
 }
 
 void AppManager::pause() {
@@ -208,17 +203,22 @@ std::shared_ptr<Scene> AppManager::getCurrentScene() {
 void AppManager::pushScene(std::shared_ptr<Scene> scene) {
     m_scenes.push_back(scene);
     m_currentScene = m_scenes.size() - 1;
+    m_curScene = scene.get();
 }
 
 void AppManager::replaceScene(std::shared_ptr<Scene> scene) {
     m_scenes[m_scenes.size() - 1] = scene;
     m_currentScene = m_scenes.size() - 1;
+    m_curScene = scene.get();
 }
 
-void AppManager::goToScene(int step) {}
+void AppManager::goToScene(int step) {
+    logW("AppMgr::goToScene todo");
+}
 
 std::string AppManager::getClipboardText() {
-    return std::string();
+    auto str = glfwGetClipboardString(WindowManager::instance()->getGLFWWindow());
+    return str ? str : "";
 }
 
 void AppManager::setClipboardText(const std::string& text) {

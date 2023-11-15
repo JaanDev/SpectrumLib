@@ -71,6 +71,7 @@ class AppManager {
     float m_contentScale;
     std::vector<std::shared_ptr<Scene>> m_scenes;
     int m_currentScene;
+    Scene* m_curScene; // for speed
     bool m_isRunning;
     bool m_isCursorVisible;
     bool m_isCursorLocked;
