@@ -40,16 +40,16 @@ class MyScene : public Scene {
         // spr->setScale(2);
         // spr->setAnchorPoint({0, 1});
         addChild(spr);
-        spr->runAction(makenew<ActionMoveTo>(EasingType::Linear, 2.f, 1, Vec2f {100, 100}, Vec2f {300, 200}));
-        spr->runAction(makenew<ActionRotateTo>(EasingType::Linear, 2.f, 1, 10.f, 180.f));
-        spr->runAction(makenew<ActionScaleTo>(EasingType::Linear, 2.f, 1, 0.7f, 1.25f));
+        spr->runAction(makenew<ActionMoveTo>(EasingType::EaseInOutBack, 2.f, 1, Vec2f {100, 100}, Vec2f {300, 200}));
+        spr->runAction(makenew<ActionRotateTo>(EasingType::EaseInOutCubic, 2.f, 1, 10.f, 180.f));
+        spr->runAction(makenew<ActionScaleTo>(EasingType::EaseOutSine, 2.f, 1, 0.7f, 1.25f));
         spr->runAction(makenew<ActionTintTo>(EasingType::Linear, 2.f, 1, Col3u {255, 0, 255}, Col3u {0, 255, 0}));
 
         spr->runAction(makenew<ActionSequence>(
             std::vector<std::shared_ptr<Action>>(
-                {makenew<ActionDelay>(4.f),
-                 makenew<ActionMoveTo>(EasingType::Linear, 3.f, 1, Vec2f {300, 200}, AppManager::instance()->getWinSize() / 2.f),
-                 makenew<ActionDelay>(1.f), makenew<ActionRotateTo>(EasingType::Linear, 1.f, 1, 180, 0)}),
+                {makenew<ActionDelay>(3.f),
+                 makenew<ActionMoveTo>(EasingType::EaseInOutBounce, 3.f, 1, Vec2f {300, 200}, AppManager::instance()->getWinSize() / 2.f),
+                 makenew<ActionDelay>(1.f), makenew<ActionRotateTo>(EasingType::EaseInOutExpo, 1.f, 1, 180, 0)}),
             1));
 
         // auto spr2 = std::make_shared<Sprite>("test2.png");
