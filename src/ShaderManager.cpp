@@ -10,24 +10,36 @@ ShaderManager* ShaderManager::instance() {
 }
 
 ShaderManager::ShaderManager() : m_shaders({}) {
-#define STRINGIFY(...) #__VA_ARGS__
+    std::string_view sprShaderVert = R"(
+#version 330 core
+layout (location = 0) in vec3 vertexPos;
+layout (location = 1) in vec2 aTexCoord;
+uniform mat4 mvp;
 
-    auto defaultShader = std::make_shared<Shader>();
-    defaultShader->loadFromString(R"(#version 330 core
-layout(location = 0) in vec3 vertexPosition_modelspace;
+out vec2 texCoord;
+
 void main() {
-    gl_Position.xyz = vertexPosition_modelspace;
-    gl_Position.w = 1.0;
-})",
-                                  R"(#version 330 core
-out vec3 color;
+    gl_Position = mvp * vec4(vertexPos, 1.0);
+    // gl_Position = vec4(vertexPos, 1.0);
+    texCoord = aTexCoord;
+}
+)";
+    std::string_view sprShaderFrag = R"(
+#version 330 core
+
+in vec2 texCoord;
+uniform sampler2D tex;
+uniform vec3 col;
+
 void main() {
-    color = vec3(1,0,0);
-})");
+    gl_FragColor = texture(tex, texCoord) * vec4(col, 1.0);
+}
+)";
 
-    addShader(defaultShader, "builtin-shader");
+    auto sprShader = std::make_shared<Shader>();
+    sprShader->loadFromString(sprShaderVert.data(), sprShaderFrag.data());
 
-#undef STRINGIFY
+    addShader(sprShader, "sprite-shader");
 }
 
 std::shared_ptr<Shader> ShaderManager::getShader(const std::string& id) const {

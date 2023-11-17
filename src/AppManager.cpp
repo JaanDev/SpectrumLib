@@ -2,7 +2,6 @@
 
 #include <thread>
 #include <chrono>
-#include <stack>
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/transform.hpp>
 #ifdef _WIN32
@@ -49,9 +48,8 @@ void AppManager::run() {
     int fps = 0;
     float fpsTime = 0.f;
 
-    std::stack<glm::mat4> matrixStack;
     auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
-    matrixStack.push(projMtx);
+    m_matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
@@ -100,15 +98,15 @@ void AppManager::run() {
 
         if (m_curScene) {
             std::function<void(Node*)> drawNodes;
-            drawNodes = [this, &drawNodes, &matrixStack](Node* node) {
+            drawNodes = [this, &drawNodes](Node* node) {
                 if (!node->isVisible())
                     return;
 
-                matrixStack.push(matrixStack.top() * node->getMatrix());
+                m_matrixStack.push(m_matrixStack.top() * node->getMatrix());
 
                 // TODO: remove gl matrix stuff
-                glPushMatrix();
-                glLoadMatrixf(&matrixStack.top()[0][0]);
+                // glPushMatrix();
+                // glLoadMatrixf(&this->m_matrixStack.top()[0][0]);
 
                 auto& children = node->getChildren();
                 bool selfDrawn = false;
@@ -126,9 +124,9 @@ void AppManager::run() {
                 }
 
                 // TODO: remove gl matrix stuff
-                glPopMatrix();
+                // glPopMatrix();
 
-                matrixStack.pop();
+                m_matrixStack.pop();
             };
 
             drawNodes(m_curScene);
@@ -148,7 +146,7 @@ void AppManager::run() {
         fps++;
     }
 
-    matrixStack.pop();
+    m_matrixStack.pop();
 }
 
 void AppManager::pause() {
@@ -233,6 +231,10 @@ Vec2f AppManager::pixelsToPoints(const Vec2f& pixelPos) {
 
 Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
     return pixelSize * m_pointsToPixels;
+}
+
+const glm::mat4& AppManager::getMatrix() const {
+    return m_matrixStack.top();
 }
 
 Sizef AppManager::sizeToPixels(const Sizef& size) {

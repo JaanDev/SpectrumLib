@@ -1,12 +1,14 @@
 #include "Shader.hpp"
 
+#include <glm/glm.hpp>
 #include <fstream>
 #include "FileManager.hpp"
 #include "logger.hpp"
+#include "AppManager.hpp"
 
 NS_SPECTRUM_BEGIN
 
-Shader::Shader() : m_shaderProgram(0) {}
+Shader::Shader() : m_shaderProgram(0), m_mvpLocation(0) {}
 
 Shader::~Shader() {
     glDeleteProgram(m_shaderProgram);
@@ -88,11 +90,15 @@ bool Shader::loadFromString(std::string_view vertexShaderSrc, std::string_view f
     glDeleteShader(vertShader);
     glDeleteShader(fragShader);
 
+    glUseProgram(m_shaderProgram);
+    m_mvpLocation = glGetUniformLocation(m_shaderProgram, "mvp");
+
     return true;
 }
 
 void Shader::use() {
     glUseProgram(m_shaderProgram);
+    glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &AppManager::instance()->getMatrix()[0][0]);
 }
 
 NS_SPECTRUM_END

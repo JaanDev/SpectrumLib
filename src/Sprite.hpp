@@ -15,6 +15,7 @@ class Sprite : public Node {
   public:
     Sprite(const std::string& path);
     Sprite(std::shared_ptr<Texture> texture);
+    ~Sprite();
 
     void setTexture(std::shared_ptr<Texture> tex);
     inline std::shared_ptr<Texture> getTexture() const { return m_texture; }
@@ -33,11 +34,16 @@ class Sprite : public Node {
 
   protected:
     void makeVBO();
+    void init();
   
     std::shared_ptr<Texture> m_texture;
     Col3u m_color;
     std::shared_ptr<Shader> m_shader;
     BlendFunc m_blendFunc;
+    GLuint m_vao;
+    GLuint m_vbo;
+    GLuint m_ebo;
+    GLuint m_colUniform;
 };
 
 NS_SPECTRUM_END

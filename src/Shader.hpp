@@ -19,6 +19,7 @@ class Shader {
 
   private:
     GLuint m_shaderProgram;
+    GLint m_mvpLocation;
 };
 
 NS_SPECTRUM_END

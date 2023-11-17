@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <stack>
 #include <vector>
 #include "utils.hpp"
 #include "WindowManager.hpp"
@@ -61,6 +62,8 @@ class AppManager {
     Sizef sizeToPixels(const Sizef& size);
     Sizef pixelsToSize(const Sizef& pixelSize);
 
+    const glm::mat4& getMatrix() const;
+
   private:
     double m_targetFrameTime;
     float m_timeScale;
@@ -72,6 +75,7 @@ class AppManager {
     std::vector<std::shared_ptr<Scene>> m_scenes;
     int m_currentScene;
     Scene* m_curScene; // for speed
+    std::stack<glm::mat4> m_matrixStack;
     bool m_isRunning;
     bool m_isCursorVisible;
     bool m_isCursorLocked;

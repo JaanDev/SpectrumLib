@@ -77,6 +77,8 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
         logD("win size {}x{}", w, h);
         glViewport(0, 0, w, h);
+        auto mgr = AppManager::instance();
+        mgr->m_pointsToPixels = mgr->getWinSize() / Vec2i {w, h};
     });
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) { logD("close"); });
@@ -153,7 +155,7 @@ void WindowManager::setWinSizeInPixels(const Sizei& size) {
 }
 
 Vec2f WindowManager::getMousePos() {
-    return Vec2f();
+    return AppManager::instance()->pixelsToPoints(getMousePosInPixels());
 }
 
 Vec2f WindowManager::getMousePosInPixels() {
