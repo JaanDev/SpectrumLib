@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <string>
 #include "logger.hpp"
+#include "ActionManager.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -66,7 +67,10 @@ void Node::setAnchorPoint(const Vec2f& anchor) {
     m_shouldCalcMtx = true;
 }
 
-void Node::runAction(std::shared_ptr<Action> action) {}
+void Node::runAction(std::shared_ptr<Action> action) {
+    action->setNode(this);
+    ActionManager::instance()->addAction(action);
+}
 
 void Node::update(float dt) {
     if (m_shouldSortChildren)

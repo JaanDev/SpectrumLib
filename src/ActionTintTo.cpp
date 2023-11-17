@@ -13,14 +13,16 @@ void ActionTintTo::update(float dt) {
     auto spr = dynamic_cast<Sprite*>(m_node);
 
     if (spr)
-        spr->setColor(utils::lerpValue(m_startCol, m_endCol, m_progress));
+        spr->setColor({static_cast<unsigned char>(m_startCol.r + (m_endCol.r - m_startCol.r) * m_progress),
+                       static_cast<unsigned char>(m_startCol.g + (m_endCol.g - m_startCol.g) * m_progress),
+                       static_cast<unsigned char>(m_startCol.b + (m_endCol.b - m_startCol.b) * m_progress)});
 }
 
 void ActionTintTo::setNode(Node* node) {
     auto spr = dynamic_cast<Sprite*>(node);
     if (spr) {
         Action::setNode(node);
-        spr->setColor(utils::lerpValue(m_startCol, m_endCol, m_progress));
+        spr->setColor(m_startCol);
     }
 }
 

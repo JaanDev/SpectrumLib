@@ -10,7 +10,10 @@ ActionManager* ActionManager::instance() {
 ActionManager::ActionManager() : m_actions({}) {}
 
 void ActionManager::update(float dt) {
-    for (auto it = m_actions.begin(); it != m_actions.end();) {
+    for (auto it = m_actions.begin();;) {
+        if (it == m_actions.end())
+            break;
+
         bool go = true;
 
         auto action = *it;
@@ -25,8 +28,7 @@ void ActionManager::update(float dt) {
     }
 }
 
-void ActionManager::addAction(std::shared_ptr<Action> action, Node* node) {
-    action->setNode(node);
+void ActionManager::addAction(std::shared_ptr<Action> action) {
     m_actions.push_back(action);
 }
 

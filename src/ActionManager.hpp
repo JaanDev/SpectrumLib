@@ -13,7 +13,7 @@ class ActionManager {
 
     void update(float dt);
 
-    void addAction(std::shared_ptr<Action> action, Node* node);
+    void addAction(std::shared_ptr<Action> action);
     void removeAction(std::shared_ptr<Action> action);
 
   private:
