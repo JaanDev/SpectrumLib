@@ -6,7 +6,7 @@ NS_SPECTRUM_BEGIN
 
 namespace utils {
     uint32_t Col3uToInt(const Col3u& col) {
-        return *(uint32_t*)&col & 0xFF'FF'FF'00u;
+        return *(uint32_t*)&col | 0x00'00'00'FFu; // convert to int and make the last byte equal to 255
     }
 
     uint32_t Col3fToInt(const Col3f& col) {
