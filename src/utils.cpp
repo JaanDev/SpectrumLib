@@ -112,26 +112,20 @@ namespace utils {
                    : x < 0.5 ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2
                              : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
         case EasingType::EaseInBounce:
-            return x * x * sin(PI * 4.5 * x);
-            // return 1 - calcEasing(EasingType::EaseOutBounce, 1 - x);
+            return 1 - calcEasing(EasingType::EaseOutBounce, 1 - x);
         case EasingType::EaseOutBounce: {
-            // const float n1 = 7.5625;
-            // const float d1 = 2.75;
-
-            // if (x < 1 / d1) {
-            //     return n1 * x * x;
-            // } else if (x < 2 / d1) {
-            //     x -= 1.5;
-            //     return n1 * (x / d1) * x + 0.75;
-            // } else if (x < 2.5 / d1) {
-            //     x -= 2.25;
-            //     return n1 * (x / d1) * x + 0.9375;
-            // } else {
-            //     x -= 2.625;
-            //     return n1 * (x / d1) * x + 0.984375;
-            // }
-            // return x * x * sin(PI * 4.5 * x);
-            return 1 - calcEasing(EasingType::EaseInBounce, 1 - x);
+            if (x < 1.f / 2.75f) {
+                return x * x * 7.5625f;
+            } else if (x < 2.f / 2.75f) {
+                x -= 1.5f / 2.75f;
+                return x * x * 7.5625f + 0.75f;
+            } else if (x < 2.5f / 2.75f) {
+                x -= 2.25f / 2.75f;
+                return x * x * 7.5625f + 0.9375f;
+            } else {
+                x -= 2.625f / 2.75f;
+                return x * x * 7.5625f + 0.984375f;
+            }
         } break;
         case EasingType::EaseInOutBounce:
             return x < 0.5 ? (1 - calcEasing(EasingType::EaseOutBounce, 1 - 2 * x)) / 2
