@@ -34,6 +34,7 @@ void Sprite::setTexture(std::shared_ptr<Texture> tex) {
     m_texture = tex;
     m_boundingBox = tex->getSize();
 
+    // clang-format off
     const float vertices[] = {
         // positions                               texCoords
         0.0f,            0.0f,            0.0f,    0.0f, 0.0f,
@@ -41,6 +42,7 @@ void Sprite::setTexture(std::shared_ptr<Texture> tex) {
         m_boundingBox.w, 0.0f,            0.0f,    1.0f, 0.0f,
         m_boundingBox.w, m_boundingBox.h, 0.0f,    1.0f, 1.0f,
     };
+    // clang-format on
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);

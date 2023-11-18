@@ -35,7 +35,7 @@ class Sprite : public Node {
   protected:
     void makeVBO();
     void init();
-  
+
     std::shared_ptr<Texture> m_texture;
     Col3u m_color;
     std::shared_ptr<Shader> m_shader;

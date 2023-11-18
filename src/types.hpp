@@ -144,9 +144,13 @@ struct Col3 {
         return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)};
     }
     template <typename T2>
-    Col3<T> operator*(T2 other) { return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)}; }
+    Col3<T> operator*(T2 other) {
+        return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)};
+    }
     template <typename T2>
-    Col3<T> operator/(T2 other) { return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)}; }
+    Col3<T> operator/(T2 other) {
+        return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)};
+    }
 
     void operator+=(const Col3<T>& other) { *this = *this + other; }
     void operator-=(const Col3<T>& other) { *this = *this - other; }
