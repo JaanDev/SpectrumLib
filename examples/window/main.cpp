@@ -50,7 +50,16 @@ class MyScene : public Scene {
                                                   create<ActionMoveTo>(EasingType::EaseOutBounce, 3.f, 1, Vec2f {300, 200},
                                                                        AppManager::instance()->getWinSize() / 2.f),
                                                   create<ActionDelay>(0.5f),
-                                                  create<ActionRotateTo>(EasingType::EaseInOutExpo, 1.f, 1, 180, 0)}),
+                                                  create<ActionRotateTo>(EasingType::EaseInOutExpo, 1.f, 1, 180, 0),
+                                                  create<ActionCallback>([](Node* node) {
+                                                      printf("Hello from a callback!\n");
+                                                      node->setScale(1.0f);
+                                                      ((Sprite*)node)->setTexture(create<Texture>("test2.png"));
+                                                      node->setRotation(45);
+                                                      node->setScale(3.0f);
+                                                      ((Sprite*)node)->setColor({255, 255, 255});
+                                                      node->setAnchorPoint({.5, 0});
+                                                  })}),
             1));
 
         // auto spr2 = std::make_shared<Sprite>("test2.png");

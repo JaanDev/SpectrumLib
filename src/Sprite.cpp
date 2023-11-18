@@ -30,7 +30,22 @@ Sprite::~Sprite() {
     glDeleteBuffers(1, &m_ebo);
 }
 
-void Sprite::setTexture(std::shared_ptr<Texture> tex) {}
+void Sprite::setTexture(std::shared_ptr<Texture> tex) {
+    m_texture = tex;
+    m_boundingBox = tex->getSize();
+
+    const float vertices[] = {
+        // positions                               texCoords
+        0.0f,            0.0f,            0.0f,    0.0f, 0.0f,
+        0.0f,            m_boundingBox.h, 0.0f,    0.0f, 1.0f,
+        m_boundingBox.w, 0.0f,            0.0f,    1.0f, 0.0f,
+        m_boundingBox.w, m_boundingBox.h, 0.0f,    1.0f, 1.0f,
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
 void Sprite::setBlendFunc(const BlendFunc& func) {}
 

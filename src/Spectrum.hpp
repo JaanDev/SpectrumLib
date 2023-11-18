@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Action.hpp"
+#include "ActionCallback.hpp"
 #include "ActionDelay.hpp"
 #include "ActionLerp.hpp"
 #include "ActionManager.hpp"
