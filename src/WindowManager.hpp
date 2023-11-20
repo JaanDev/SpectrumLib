@@ -25,7 +25,7 @@ class WindowManager {
     void setVsync(bool vsync);
     inline bool getVsync() const { return m_isVsync; }
 
-    inline const Sizei& getWinSizeInPixels() const { return m_winSize; }
+    Sizei getWinSizeInPixels();
     void setWinSizeInPixels(const Sizei& size);
 
     inline GLFWwindow* getGLFWWindow() const { return m_windowHandle; }
@@ -50,7 +50,6 @@ class WindowManager {
   private:
     void setDefaultWindowIcon();
 
-    Sizei m_winSize; // in pixels
     GLFWwindow* m_windowHandle;
     std::function<bool()> m_closeCallback;
     std::function<void(std::vector<std::string>)> m_filesDroppedCallback;

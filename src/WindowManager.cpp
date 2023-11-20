@@ -4,6 +4,7 @@
 #include <stb_image.h>
 #include "FileManager.hpp"
 #include "AppManager.hpp"
+#include "InputDispatcher.hpp"
 #include "DefaultIcon.hpp"
 #include "logger.hpp"
 
@@ -15,8 +16,8 @@ WindowManager* WindowManager::instance() {
 }
 
 WindowManager::WindowManager()
-    : m_winSize({0, 0}), m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr),
-      m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
+    : m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false),
+      m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
 
 WindowManager::~WindowManager() {
     glfwDestroyWindow(m_windowHandle);
@@ -75,30 +76,49 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwSwapInterval(m_isVsync);
 
     glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
-        logD("win size {}x{}", w, h);
         glViewport(0, 0, w, h);
         auto mgr = AppManager::instance();
         mgr->m_pointsToPixels = mgr->getWinSize() / Vec2i {w, h};
     });
 
-    glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) { logD("close"); });
-
-    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        logD("key {} {} {} {}", key, scancode, action, mods);
-    });
-
-    glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) { logD("char {}", codepoint); });
-
-    glfwSetDropCallback(m_windowHandle, [](GLFWwindow* window, int path_count, const char** paths) {
-        for (auto i = 0; i < path_count; i++) {
-            logD("drop file {}", paths[i]);
+    glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
+        auto wmgr = WindowManager::instance();
+        if (wmgr->m_closeCallback) {
+            glfwSetWindowShouldClose(wmgr->m_windowHandle, wmgr->m_closeCallback());
         }
     });
 
-    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) { logD("scroll {} {}", x, y); });
+    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        InputDispatcher::instance()->keyCallback(key, scancode, action, mods);
+    });
+
+    glfwSetCharCallback(m_windowHandle,
+                        [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::instance()->charCallback(codepoint); });
+
+    glfwSetDropCallback(m_windowHandle, [](GLFWwindow* window, int path_count, const char** paths) {
+        auto wmgr = WindowManager::instance();
+        if (wmgr->m_filesDroppedCallback) {
+            std::vector<std::string> files;
+
+            for (auto i = 0; i < path_count; i++) {
+                files.push_back(paths[i]);
+            }
+
+            wmgr->m_filesDroppedCallback(files);
+        }
+    });
+
+    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) {
+        InputDispatcher::instance()->mouseScrollCallback({static_cast<float>(x), static_cast<float>(y)});
+    });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        // logD("cursor pos {} {}", xpos, ypos);
+        InputDispatcher::instance()->mousePosCallback(
+            AppManager::instance()->pixelsToPoints({static_cast<float>(xpos), static_cast<float>(ypos)}));
+    });
+
+    glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) {
+        InputDispatcher::instance()->mouseBtnCallback(button, action, mods);
     });
 
     setDefaultWindowIcon();
@@ -142,12 +162,15 @@ void WindowManager::setFullscreen(bool fullscreen) {
 }
 
 void WindowManager::setVsync(bool vsync) {
-    if (m_isVsync == vsync)
-        return;
-
     m_isVsync = vsync;
 
     glfwSwapInterval(m_isVsync);
+}
+
+Sizei WindowManager::getWinSizeInPixels() {
+    int w, h;
+    glfwGetWindowSize(m_windowHandle, &w, &h);
+    return {w, h};
 }
 
 void WindowManager::setWinSizeInPixels(const Sizei& size) {

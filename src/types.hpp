@@ -123,6 +123,10 @@ struct Rect {
     bool doesIntersect(const Rect<T>& other) const {
         return x < other.x + other.w && x + w > other.x && y > other.y + other.h && y + h < other.y;
     }
+
+    bool contains(const Vec2<T>& other) const {
+        return other.x >= x && other.x <= x + w && other.y >= y && other.y <= y + h;
+    }
 };
 
 template <typename T>
@@ -232,27 +236,10 @@ enum class EasingType {
     EaseInOutBounce
 };
 
-enum class KeyEventType {
-    KeyDown,
-    KeyUp
-};
-
 enum class MouseEventType {
-    MouseHold,
-    MouseRelease,
     MouseMove,
     MouseEnterArea,
     MouseLeaveArea
-};
-
-enum class ModKeys {
-    None = 0,
-    Shift = 1 << 0,
-    Control = 1 << 1,
-    Alt = 1 << 2,
-    Super = 1 << 3,
-    CapsLock = 1 << 4, // if the GLFW_LOCK_KEY_MODS input mode is set.
-    NumLock = 1 << 5   // if the GLFW_LOCK_KEY_MODS input mode is set.
 };
 
 enum class WindowFlags {

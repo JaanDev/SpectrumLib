@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <string>
 #include "logger.hpp"
+#include "AppManager.hpp"
 #include "ActionManager.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -11,7 +12,7 @@ NS_SPECTRUM_BEGIN
 Node::Node()
     : m_pos({0.f, 0.f}), m_boundingBox({0, 0}), m_anchorPoint({.5f, .5f}), m_scale({1.f, 1.f}), m_rotation(0.f), m_opacity(1.f),
       m_objectLimit(UINT_MAX), m_zOrder(0), m_tag(""), m_children({}), m_parent(nullptr), m_visible(true),
-      m_matrix(glm::mat4(1.0f)), m_shouldSortChildren(false), m_shouldCalcMtx(true) {}
+      m_matrix(glm::mat4(1.0f)), m_shouldSortChildren(false), m_shouldCalcMtx(false), m_isMouseOver(false) {}
 
 void Node::setPos(const Vec2f& pos) {
     m_pos = pos;
@@ -60,6 +61,30 @@ void Node::setBoundingBox(const Sizef& size) {
 
 Sizef Node::getScaledBoundingBox() {
     return m_boundingBox * m_scale;
+}
+
+Rectf Node::getRect() {
+    // if (fmodf(m_rotation, 90.f) == 0) { // if the rect is in its place
+    //     auto box = getScaledBoundingBox();
+    //     return {m_pos.x - box.w * m_anchorPoint.x, m_pos.y - box.h * m_anchorPoint.y, box.w, box.h};
+    // } else { // if the rect is rotated
+    //     auto& box = m_boundingBox;
+
+    //     auto topleft = m_matrix * glm::vec4(-box.w * m_anchorPoint.x, -box.h * m_anchorPoint.y, 0.f, 0.f);
+    //     auto bottomright = m_matrix * glm::vec4(box.w * (1.f - m_anchorPoint.x), box.h * (1.f - m_anchorPoint.y), 0.f, 0.f);
+    //     auto bottomleft = m_matrix * glm::vec4(-box.w * m_anchorPoint.x, box.h * (1.f - m_anchorPoint.y), 0.f, 0.f);
+    //     auto topright = m_matrix * glm::vec4(box.w * (1.f - m_anchorPoint.x), -box.h * m_anchorPoint.y, 0.f, 0.f);
+
+    //     auto rx = bottomleft.r;
+    //     auto ry = topleft.g;
+    //     auto rw = topright.r - rx;
+    //     auto rh = bottomright.g - ry;
+
+    //     return {m_pos.x + rx, m_pos.y + ry, rw, rh};
+    // }
+    
+    auto box = getScaledBoundingBox();
+    return {m_pos.x - box.w * m_anchorPoint.x, m_pos.y - box.h * m_anchorPoint.y, box.w, box.h};
 }
 
 void Node::setAnchorPoint(const Vec2f& anchor) {

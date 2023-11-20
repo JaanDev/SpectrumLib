@@ -104,10 +104,6 @@ void AppManager::run() {
 
                 m_matrixStack.push(m_matrixStack.top() * node->getMatrix());
 
-                // TODO: remove gl matrix stuff
-                // glPushMatrix();
-                // glLoadMatrixf(&this->m_matrixStack.top()[0][0]);
-
                 auto& children = node->getChildren();
                 bool selfDrawn = false;
                 for (auto child : children) {
@@ -122,9 +118,6 @@ void AppManager::run() {
                 if (!selfDrawn) {
                     node->draw();
                 }
-
-                // TODO: remove gl matrix stuff
-                // glPopMatrix();
 
                 m_matrixStack.pop();
             };
