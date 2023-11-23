@@ -82,7 +82,7 @@ Rectf Node::getRect() {
 
     //     return {m_pos.x + rx, m_pos.y + ry, rw, rh};
     // }
-    
+
     auto box = getScaledBoundingBox();
     return {m_pos.x - box.w * m_anchorPoint.x, m_pos.y - box.h * m_anchorPoint.y, box.w, box.h};
 }

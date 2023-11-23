@@ -20,7 +20,6 @@ out vec2 texCoord;
 
 void main() {
     gl_Position = mvp * vec4(vertexPos, 1.0);
-    // gl_Position = vec4(vertexPos, 1.0);
     texCoord = aTexCoord;
 }
 )";

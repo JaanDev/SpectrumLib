@@ -124,7 +124,7 @@ void InputDispatcher::mousePosCallback(const Vec2f& pos) {
 
 void InputDispatcher::mouseBtnCallback(int button, int action, int mods) {
     auto mousePos = WindowManager::instance()->getMousePos();
-    
+
     for (auto node : m_mouseEvents) {
         auto nodeRect = node->getRect();
         if (nodeRect.contains(mousePos)) {

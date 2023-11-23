@@ -124,9 +124,7 @@ struct Rect {
         return x < other.x + other.w && x + w > other.x && y > other.y + other.h && y + h < other.y;
     }
 
-    bool contains(const Vec2<T>& other) const {
-        return other.x >= x && other.x <= x + w && other.y >= y && other.y <= y + h;
-    }
+    bool contains(const Vec2<T>& other) const { return other.x >= x && other.x <= x + w && other.y >= y && other.y <= y + h; }
 };
 
 template <typename T>

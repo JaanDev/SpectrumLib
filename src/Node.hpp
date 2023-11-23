@@ -17,8 +17,14 @@ class Node {
     void setPos(const Vec2f& pos);
     inline float getPosX() const { return m_pos.x; }
     inline float getPosY() const { return m_pos.y; }
-    inline void setPosX(float val) { m_pos.x = val; m_shouldCalcMtx = true; }
-    inline void setPosY(float val) { m_pos.y = val; m_shouldCalcMtx = true; }
+    inline void setPosX(float val) {
+        m_pos.x = val;
+        m_shouldCalcMtx = true;
+    }
+    inline void setPosY(float val) {
+        m_pos.y = val;
+        m_shouldCalcMtx = true;
+    }
 
     inline float getScaleX() const { return m_scale.x; }
     inline float getScaleY() const { return m_scale.y; }
