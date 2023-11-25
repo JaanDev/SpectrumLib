@@ -1,5 +1,6 @@
 #include "FileManager.hpp"
 
+#include <algorithm>
 #include "logger.hpp"
 
 NS_SPECTRUM_BEGIN

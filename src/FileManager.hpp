@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <vector>
 #include "utils.hpp"
 
 NS_SPECTRUM_BEGIN
