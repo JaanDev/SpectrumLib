@@ -20,7 +20,9 @@ class Sprite : public Node {
     ~Sprite();
 
     void setTexture(std::shared_ptr<Texture> tex);
+    void setTextureFrame(std::shared_ptr<TextureFrame> frame);
     inline std::shared_ptr<Texture> getTexture() const { return m_texture; }
+    inline std::shared_ptr<TextureFrame> getTextureFrame() const { return m_frame; };
 
     inline Col3u getColor() const { return m_color; }
     inline void setColor(const Col3u& color) { m_color = color; }

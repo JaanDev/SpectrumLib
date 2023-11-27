@@ -72,6 +72,36 @@ void Sprite::setTexture(std::shared_ptr<Texture> tex) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
+    m_frame = frame;
+    m_texture = frame->getTexture();
+    m_boundingBox = frame->getSize();
+
+    auto rect = frame->getRect();
+    auto size = m_texture->getSizeInPixels();
+    
+    m_texCoords = {
+        (float)rect.x / size.w,
+        (float)rect.y / size.h,
+        (float)rect.w / size.w,
+        (float)rect.h / size.h
+    };
+
+    // clang-format off
+    const float vertices[] = {
+        // positions                               texCoords
+        0.0f,            0.0f,            0.0f,    m_texCoords.x,                 m_texCoords.y,
+        0.0f,            m_boundingBox.h, 0.0f,    m_texCoords.x,                 m_texCoords.y + m_texCoords.h,
+        m_boundingBox.w, 0.0f,            0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y,
+        m_boundingBox.w, m_boundingBox.h, 0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y + m_texCoords.h,
+    };
+    // clang-format on
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Sprite::setBlendFunc(const BlendFunc& func) {}
 
 void Sprite::draw() {

@@ -43,10 +43,14 @@ class MyScene : public Scene {
         auto tm = TextureManager::instance();
         tm->loadSpriteSheet("assets/test.json");
         auto part1 = tm->getTextureFrame("part1.png");
+        auto part2 = tm->getTextureFrame("part2.png");
 
         auto spr = create<Sprite>(part1);
         spr->setPos({100, 100});
         addChild(spr);
+
+        // works fine
+        spr->setTextureFrame(part2);
 
         InputDispatcher::instance()->registerMouseEvents(m_spr.get());
         InputDispatcher::instance()->registerKeyEvents(m_spr.get());
