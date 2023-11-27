@@ -73,4 +73,23 @@ void TextureManager::removeAllTextures() {
     m_textures.clear();
 }
 
+void TextureManager::removeFrame(const std::string& name) {
+    if (auto it = m_frames.find(name); it != m_frames.end())
+        m_frames.erase(it);
+}
+
+void TextureManager::removeFramesFromFile(const std::filesystem::path& path) {
+    std::fstream stream(path);
+    std::ostringstream osstream;
+    osstream << stream.rdbuf();
+    std::string json(osstream.str());
+
+    rapidjson::Document doc;
+    doc.Parse(json.c_str());
+    
+    for(auto& pair : doc["frames"].GetObj()){
+        removeFrame(pair.name.GetString());
+    }
+}
+
 NS_SPECTRUM_END

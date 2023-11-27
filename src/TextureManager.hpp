@@ -28,6 +28,9 @@ class TextureManager {
     void removeTexture(const std::string& name);
     void removeAllTextures();
 
+    void removeFrame(const std::string& name);
+    void removeFramesFromFile(const std::filesystem::path& path);
+
   private:
     std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
     std::unordered_map<std::string, std::shared_ptr<TextureFrame>> m_frames;
