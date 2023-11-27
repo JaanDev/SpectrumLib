@@ -2,6 +2,7 @@
 #include "utils.hpp"
 #include "Node.hpp"
 #include "Texture.hpp"
+#include "TextureFrame.hpp"
 #include "Shader.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -15,6 +16,7 @@ class Sprite : public Node {
   public:
     Sprite(const std::string& path);
     Sprite(std::shared_ptr<Texture> texture);
+    Sprite(std::shared_ptr<TextureFrame> frame);
     ~Sprite();
 
     void setTexture(std::shared_ptr<Texture> tex);
@@ -37,7 +39,9 @@ class Sprite : public Node {
     void init();
 
     std::shared_ptr<Texture> m_texture;
+    std::shared_ptr<TextureFrame> m_frame;
     Col3u m_color;
+    Rectf m_texCoords;
     std::shared_ptr<Shader> m_shader;
     BlendFunc m_blendFunc;
     GLuint m_vao;
