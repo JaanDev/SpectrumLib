@@ -1,7 +1,8 @@
 #include "TextureManager.hpp"
 #include "FileManager.hpp"
 #include <memory>
-
+#include <rapidjson/document.h>
+#include <fstream>
 
 NS_SPECTRUM_BEGIN
 
@@ -13,6 +14,9 @@ TextureManager* TextureManager::instance() {
 TextureManager::TextureManager() : m_textures({}), m_frames({}) {}
 
 std::shared_ptr<Texture> TextureManager::getTexture(const std::string& name) {
+    if(m_textures.count(name) == 0)
+        addTexture(name);
+    
     return m_textures.count(name) > 0 ? m_textures[name] : nullptr;
 }
 
@@ -37,11 +41,27 @@ void TextureManager::addTexture(const std::string& name, std::shared_ptr<Texture
 }
 
 void TextureManager::loadSpriteSheet(const std::string& path) {
-    addTexture("test.png");
-    m_frames["part1.png"] = std::make_shared<TextureFrame>(getTexture("test.png"), Recti {0, 0, 128, 128}, false);
-    m_frames["part2.png"] = std::make_shared<TextureFrame>(getTexture("test.png"), Recti {128, 0, 128, 128}, false);
-    m_frames["part3.png"] = std::make_shared<TextureFrame>(getTexture("test.png"), Recti {0, 128, 128, 128}, false);
-    m_frames["part4.png"] = std::make_shared<TextureFrame>(getTexture("test.png"), Recti {128, 128, 128, 128}, false);
+    std::fstream stream(path);
+    std::ostringstream osstream;
+    osstream << stream.rdbuf();
+    std::string json(osstream.str());
+
+    rapidjson::Document doc;
+    doc.Parse(json.c_str());
+    
+    auto texture = getTexture(doc["metadata"]["texture-filename"].GetString());
+
+    for(auto& pair : doc["frames"].GetObj()){
+        Recti rect = {
+            pair.value["rect"].GetArray()[0].GetInt(),
+            pair.value["rect"].GetArray()[1].GetInt(),
+            pair.value["rect"].GetArray()[2].GetInt(),
+            pair.value["rect"].GetArray()[3].GetInt()
+        };
+
+        m_frames[pair.name.GetString()] = std::make_shared<TextureFrame>(texture, rect, pair.value["rotated"].GetBool());
+    }
+
 }
 
 void TextureManager::removeTexture(const std::string& name) {

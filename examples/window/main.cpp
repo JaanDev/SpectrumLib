@@ -36,12 +36,12 @@ class MyScene : public Scene {
         InputDispatcher::instance()->registerMouseEvents(this);
         InputDispatcher::instance()->registerMouseScrollEvents(this);
 
-        // m_spr = create<MySprite>("test.png");
-        // m_spr->setPos(AppManager::instance()->getWinSize() / 2.f);
-        // addChild(m_spr);
+        m_spr = create<MySprite>("test.png");
+        m_spr->setPos(AppManager::instance()->getWinSize() / 2.f);
+        addChild(m_spr);
 
         auto tm = TextureManager::instance();
-        tm->loadSpriteSheet("");
+        tm->loadSpriteSheet("assets/test.json");
         auto part1 = tm->getTextureFrame("part1.png");
 
         auto spr = create<Sprite>(part1);
