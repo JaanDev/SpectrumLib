@@ -17,6 +17,7 @@ class Texture {
     Texture(const std::string& path);
     // from memory, dont forget to free `data` after loading the tex
     Texture(uint8_t* data, unsigned int dataLen);
+    Texture(uint8_t* data, Sizei size, int format);
 
     ~Texture();
 
