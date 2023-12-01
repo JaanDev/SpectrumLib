@@ -61,7 +61,7 @@ class MyScene : public Scene {
         fontSpr->setScale(0.5f);
         addChild(fontSpr);
 
-        std::string str = "Hello Kolyah35 =)";
+        std::string str = "Hello world!";
 
         auto font = fm->getFont("arial");
         int posX = 100;
@@ -79,6 +79,8 @@ class MyScene : public Scene {
 
         InputDispatcher::instance()->registerMouseEvents(m_spr.get());
         InputDispatcher::instance()->registerKeyEvents(m_spr.get());
+
+        setBGColor({.1, .1, .1});
     }
 
     virtual void onMouseBtn(int button, bool down, int mods) override {
