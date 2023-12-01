@@ -64,6 +64,28 @@ Texture::Texture(uint8_t* data, unsigned int dataLen) : m_format(0), m_size({0, 
     glBindTexture(GL_TEXTURE_2D, 0); // unbind current texture to prevent accidental editing
 }
 
+Texture::Texture(uint8_t* data, Sizei size, int format = GL_RGB) : m_format(0), m_size(size), m_textureID(0) {
+    if (!data || (m_size.w * m_size.h) == 0) {
+        logE("Failed to load a texture from memory (invalid input: data = 0x{:08X}, dataLen = 0x{:08X})", (uintptr_t)data,
+             (m_size.w * m_size.h));
+        return;
+    }
+
+    glGenTextures(1, &m_textureID);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, format, m_size.w, m_size.h, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0); // unbind current texture to prevent accidental editing
+}
+
+
 Texture::~Texture() {
     glDeleteTextures(1, &m_textureID);
 }

@@ -40,6 +40,42 @@ class MyScene : public Scene {
         m_spr->setPos(AppManager::instance()->getWinSize() / 2.f);
         addChild(m_spr);
 
+        auto tm = TextureManager::instance();
+        tm->loadSpriteSheet("assets/test.json");
+        auto part1 = tm->getTextureFrame("part1.png");
+        auto part2 = tm->getTextureFrame("part2.png");
+
+        auto spr = create<Sprite>(part1);
+        spr->setPos({100, 100});
+        addChild(spr);
+
+        // works fine
+        spr->setTextureFrame(part2);
+
+        auto fm = FontManager::instance();
+        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36);
+
+        auto fontSpr = create<Sprite>(fm->getFont("arial").fontAtlas);
+        fontSpr->setPos({200, 100});
+        fontSpr->setAnchorPoint({0.5f, 0.0f});
+        fontSpr->setScale(0.5f);
+        addChild(fontSpr);
+
+        std::string str = "spectrum!";
+
+        auto font = fm->getFont("arial");
+        int posX = 100;
+
+        for(char c : str) {
+            auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, font.glyphs[c].textureRect, false);
+            printf("%d %d %d %d\n", sprframe->getRect().x, sprframe->getRect().y, sprframe->getRect().w, sprframe->getRect().h);
+            auto ch = create<Sprite>(sprframe);
+            ch->setPosX(posX + font.glyphs[c].xOffset);
+            ch->setPosY(10);
+            posX += font.glyphs[c].xAdvance;
+            addChild(ch);
+        }
+
         InputDispatcher::instance()->registerMouseEvents(m_spr.get());
         InputDispatcher::instance()->registerKeyEvents(m_spr.get());
     }

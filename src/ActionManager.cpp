@@ -1,5 +1,7 @@
 #include "ActionManager.hpp"
 
+#include <algorithm>
+
 NS_SPECTRUM_BEGIN
 
 ActionManager* ActionManager::instance() {

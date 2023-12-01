@@ -7,19 +7,42 @@
 NS_SPECTRUM_BEGIN
 
 Sprite::Sprite(const std::string& path)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_vao(0) {
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
     m_texture = std::make_shared<Texture>(path);
+    m_boundingBox = m_texture->getSize();
+
     init();
 }
 
 Sprite::Sprite(std::shared_ptr<Texture> texture)
     : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_texture(texture),
+      m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
+    m_boundingBox = m_texture->getSize();
+
+    init();
+}
+
+Sprite::Sprite(std::shared_ptr<TextureFrame> frame) 
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_frame(frame), 
       m_vao(0) {
+    
+    m_texture = frame->getTexture();
+    m_boundingBox = frame->getSize();
+
+    auto rect = frame->getRect();
+    auto size = frame->getTexture()->getSizeInPixels();
+    
+    m_texCoords = {
+        (float)rect.x / size.w,
+        (float)rect.y / size.h,
+        (float)rect.w / size.w,
+        (float)rect.h / size.h
+    };
+
     init();
 }
 
 void Sprite::init() {
-    m_boundingBox = m_texture->getSize();
     m_shader = ShaderManager::instance()->getShader("sprite-shader");
     makeVBO();
 }
@@ -49,6 +72,36 @@ void Sprite::setTexture(std::shared_ptr<Texture> tex) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
+    m_frame = frame;
+    m_texture = frame->getTexture();
+    m_boundingBox = frame->getSize();
+
+    auto rect = frame->getRect();
+    auto size = m_texture->getSizeInPixels();
+    
+    m_texCoords = {
+        (float)rect.x / size.w,
+        (float)rect.y / size.h,
+        (float)rect.w / size.w,
+        (float)rect.h / size.h
+    };
+
+    // clang-format off
+    const float vertices[] = {
+        // positions                               texCoords
+        0.0f,            0.0f,            0.0f,    m_texCoords.x,                 m_texCoords.y,
+        0.0f,            m_boundingBox.h, 0.0f,    m_texCoords.x,                 m_texCoords.y + m_texCoords.h,
+        m_boundingBox.w, 0.0f,            0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y,
+        m_boundingBox.w, m_boundingBox.h, 0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y + m_texCoords.h,
+    };
+    // clang-format on
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Sprite::setBlendFunc(const BlendFunc& func) {}
 
 void Sprite::draw() {
@@ -68,10 +121,10 @@ void Sprite::makeVBO() {
     // clang-format off
     const float vertices[] = {
         // positions                               texCoords
-        0.0f,            0.0f,            0.0f,    0.0f, 0.0f,
-        0.0f,            m_boundingBox.h, 0.0f,    0.0f, 1.0f,
-        m_boundingBox.w, 0.0f,            0.0f,    1.0f, 0.0f,
-        m_boundingBox.w, m_boundingBox.h, 0.0f,    1.0f, 1.0f,
+        0.0f,            0.0f,            0.0f,    m_texCoords.x,                 m_texCoords.y,
+        0.0f,            m_boundingBox.h, 0.0f,    m_texCoords.x,                 m_texCoords.y + m_texCoords.h,
+        m_boundingBox.w, 0.0f,            0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y,
+        m_boundingBox.w, m_boundingBox.h, 0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y + m_texCoords.h,
     };
 
     const unsigned int indices[] = {
