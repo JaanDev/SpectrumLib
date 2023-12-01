@@ -61,17 +61,18 @@ class MyScene : public Scene {
         fontSpr->setScale(0.5f);
         addChild(fontSpr);
 
-        std::string str = "spectrum!";
+        std::string str = "Hello Kolyah35 =)";
 
         auto font = fm->getFont("arial");
         int posX = 100;
 
         for(char c : str) {
             auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, font.glyphs[c].textureRect, false);
-            printf("%d %d %d %d\n", sprframe->getRect().x, sprframe->getRect().y, sprframe->getRect().w, sprframe->getRect().h);
+            printf("%d %d %d %d %f %c\n", sprframe->getRect().x, sprframe->getRect().y, sprframe->getRect().w, sprframe->getRect().h, font.glyphs[c].yOffset, c);
             auto ch = create<Sprite>(sprframe);
             ch->setPosX(posX + font.glyphs[c].xOffset);
-            ch->setPosY(10);
+            ch->setPosY(40 + font.glyphs[c].yOffset);
+            ch->setAnchorPoint({0, 0});
             posX += font.glyphs[c].xAdvance;
             addChild(ch);
         }

@@ -2,11 +2,10 @@
 
 #include "FontManager.hpp"
 #include "FileManager.hpp"
+#include "AppManager.hpp"
 #include <stb_truetype.h>
 #include <fstream>
 #include "logger.hpp"
-
-
 
 NS_SPECTRUM_BEGIN
 
@@ -52,12 +51,14 @@ void FontManager::loadFont(const std::filesystem::path& path, const std::string&
     
     std::unordered_map<unsigned int, Glyph> glyphs;
 
+    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+
     for(unsigned int i = 0; i < charData.size(); i++) {
         glyphs.insert(std::make_pair(i, Glyph {
             .textureRect = Recti {charData[i].x0, charData[i].y0, charData[i].x1 - charData[i].x0, charData[i].y1 - charData[i].y0},
-            .xOffset = charData[i].xoff,
-            .yOffset = charData[i].yoff,
-            .xAdvance = charData[i].xadvance
+            .xOffset = charData[i].xoff * ratio.x,
+            .yOffset = charData[i].yoff * ratio.y,
+            .xAdvance = charData[i].xadvance * ratio.x
         }));
     }
     

@@ -62,6 +62,8 @@ class AppManager {
     Sizef sizeToPixels(const Sizef& size);
     Sizef pixelsToSize(const Sizef& pixelSize);
 
+    inline const Vec2f& getPointsToPixelsRatio() const { return m_pointsToPixels; }
+
     const glm::mat4& getMatrix() const;
 
   private:
