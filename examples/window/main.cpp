@@ -53,18 +53,19 @@ class MyScene : public Scene {
         spr->setTextureFrame(part2);
 
         auto fm = FontManager::instance();
-        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36);
+        // fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36);
+        fm->loadBitmapFont("pusab.fnt", "pusab");
 
-        auto fontSpr = create<Sprite>(fm->getFont("arial").fontAtlas);
-        fontSpr->setPos({200, 100});
+        auto fontSpr = create<Sprite>(fm->getFont("pusab").fontAtlas);
+        fontSpr->setPos({200, 200});
         fontSpr->setAnchorPoint({0.5f, 0.0f});
-        fontSpr->setScale(0.5f);
+        fontSpr->setScale(0.25f);
         addChild(fontSpr);
 
         std::string str = "Hello world!";
 
-        auto font = fm->getFont("arial");
-        int posX = 100;
+        auto font = fm->getFont("pusab");
+        int posX = 20;
 
         for(char c : str) {
             auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, font.glyphs[c].textureRect, false);

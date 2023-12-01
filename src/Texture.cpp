@@ -24,9 +24,9 @@ Texture::Texture(const std::string& path) : m_format(0), m_size({0, 0}), m_textu
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int bpp;
-    auto data = stbi_load(absPath.string().c_str(), &m_size.w, &m_size.h, &bpp, 0);
+    auto data = stbi_load(absPath.string().c_str(), &m_size.w, &m_size.h, &bpp, 4);
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_size.w, m_size.h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_size.w, m_size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         logE("Failed to load a texture from file {}", absPath.string());
