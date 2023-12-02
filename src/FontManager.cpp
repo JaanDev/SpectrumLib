@@ -110,7 +110,80 @@ void FontManager::loadFont(const std::filesystem::path& path, const std::string&
                         .glyphs = glyphs};
 }
 
-void FontManager::loadBitmapFont(const std::string& path, const std::string& id) {}
+void FontManager::loadBitmapFont(const std::string& path, const std::string& id) {
+    auto absPath = FileManager::instance()->fullPathForFile(path);
+    if (!std::filesystem::exists(absPath)) {
+        logE("Failed to load a texture from file {}", absPath.string());
+        return;
+    }
+
+    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+
+    Font font;
+    std::ifstream stream(absPath);
+    std::string line;
+    
+    while(std::getline(stream, line)) {
+        if(line.find("info") != std::string::npos) continue;
+        
+        if(line.find("common") != std::string::npos) {
+            int varsParsed = sscanf(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
+            if(varsParsed < 2){ 
+                logE("Can't parse common line in file {}", absPath.string());
+                return;
+            }
+            continue;
+        }
+
+        if(auto it = line.find("file"); it != std::string::npos && font.fontAtlas == nullptr) {
+            line.erase(0, it);
+            char* filename = new char[129];
+
+            int varsParsed = sscanf(line.c_str(), "file=\"%128[^\"]\"", filename);
+            if(varsParsed < 1){
+                logE("Can't parse page line in file {}", absPath.string());
+                return;
+            }
+
+            font.fontAtlas = std::make_shared<Texture>(filename);
+
+            delete[] filename;
+            continue;
+        }
+
+        if(line.find("chars count") != std::string::npos) {
+            int charscount;
+            int varsParsed = sscanf(line.c_str(), "chars count=%i", &charscount);
+
+            if(varsParsed < 1)
+                logW("Can't parse chars count {}", absPath.string());
+            else
+                font.glyphs.reserve(charscount);
+            continue;
+        }
+
+        if(line.find("char ") != std::string::npos) {
+            unsigned int id;
+            Glyph glyph;
+
+            int varsParsed = sscanf(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f", 
+                &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w, &glyph.textureRect.h, &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
+
+            if(varsParsed < 8) {
+                logW("Can't parse char id {} in file {}", id, absPath.string());
+                continue;
+            }
+
+            glyph.xAdvance *= ratio.x;
+            glyph.xOffset *= ratio.x;
+            glyph.yOffset *= ratio.y;
+
+            font.glyphs[id] = glyph;
+        }
+    }
+
+    m_fonts[id] = font;
+}
 
 const Font& FontManager::getFont(const std::string& id) const {
     return m_fonts.at(id);
