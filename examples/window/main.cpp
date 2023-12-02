@@ -53,8 +53,8 @@ class MyScene : public Scene {
         spr->setTextureFrame(part2);
 
         auto fm = FontManager::instance();
-        // fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36);
-        fm->loadBitmapFont("pusab.fnt", "pusab");
+        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "pusab", 36, {FontRange::BasicLatin});
+        // fm->loadBitmapFont("pusab.fnt", "pusab");
 
         auto fontSpr = create<Sprite>(fm->getFont("pusab").fontAtlas);
         fontSpr->setPos({200, 200});
