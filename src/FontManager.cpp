@@ -67,20 +67,15 @@ void FontManager::loadFont(const std::filesystem::path& path, const std::string&
 
     stbtt_pack_range ranges[2];
 
-    ranges[0] = stbtt_pack_range {
-        .font_size = lineHeight,
-        .first_unicode_codepoint_in_range = 'a',
-        .num_chars = 'z' - 'a' + 1,
-        .chardata_for_range = new stbtt_packedchar['z' - 'a' + 1]
-    };
+    ranges[0] = stbtt_pack_range {.font_size = lineHeight,
+                                  .first_unicode_codepoint_in_range = 'a',
+                                  .num_chars = 'z' - 'a' + 1,
+                                  .chardata_for_range = new stbtt_packedchar['z' - 'a' + 1]};
 
-    ranges[1] = stbtt_pack_range {
-        .font_size = lineHeight,
-        .first_unicode_codepoint_in_range = 0x410,
-        .num_chars = 0x3F,
-        .chardata_for_range = new stbtt_packedchar[0x3F]
-    };
-
+    ranges[1] = stbtt_pack_range {.font_size = lineHeight,
+                                  .first_unicode_codepoint_in_range = 0x410,
+                                  .num_chars = 0x3F,
+                                  .chardata_for_range = new stbtt_packedchar[0x3F]};
 
     stbtt_PackFontRanges(&packCtx, fontInfo.data, 0, ranges, 2);
 
@@ -97,14 +92,15 @@ void FontManager::loadFont(const std::filesystem::path& path, const std::string&
     //                                  .xAdvance = charData[i].xadvance * ratio.x}));
     // }
 
-    for(int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         for (unsigned int j = 0; j < ranges[i].num_chars; j++) {
-        glyphs.insert(
-            std::make_pair(j, Glyph {.textureRect = Recti {ranges[i].chardata_for_range[j].x0, ranges[i].chardata_for_range[j].y0, 
-                                    ranges[i].chardata_for_range[j].x1 - ranges[i].chardata_for_range[j].x0, ranges[i].chardata_for_range[j].y1 - ranges[i].chardata_for_range[j].y0},
-                                    .xOffset = ranges[i].chardata_for_range[j].xoff * ratio.x,
-                                    .yOffset = ranges[i].chardata_for_range[j].yoff * ratio.y,
-                                    .xAdvance = ranges[i].chardata_for_range[j].xadvance * ratio.x}));
+            glyphs.insert(std::make_pair(
+                j, Glyph {.textureRect = Recti {ranges[i].chardata_for_range[j].x0, ranges[i].chardata_for_range[j].y0,
+                                                ranges[i].chardata_for_range[j].x1 - ranges[i].chardata_for_range[j].x0,
+                                                ranges[i].chardata_for_range[j].y1 - ranges[i].chardata_for_range[j].y0},
+                          .xOffset = ranges[i].chardata_for_range[j].xoff * ratio.x,
+                          .yOffset = ranges[i].chardata_for_range[j].yoff * ratio.y,
+                          .xAdvance = ranges[i].chardata_for_range[j].xadvance * ratio.x}));
         }
     }
 
