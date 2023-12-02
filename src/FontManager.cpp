@@ -141,15 +141,17 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
 
         if(auto it = line.find("file"); it != std::string::npos && font.fontAtlas == nullptr) {
             line.erase(0, it);
-            char filename[129];
+            char* filename = new char[129];
 
-            int varsParsed = sscanf(line.c_str(), "file=\"%128[^\"]\"", &filename);
+            int varsParsed = sscanf(line.c_str(), "file=\"%128[^\"]\"", filename);
             if(varsParsed < 1){
                 logE("Can't parse page line in file {}", absPath.string());
                 return;
             }
 
             font.fontAtlas = std::make_shared<Texture>(filename);
+
+            delete[] filename;
             continue;
         }
 
