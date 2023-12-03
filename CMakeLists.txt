@@ -9,6 +9,7 @@ add_subdirectory(external/glfw)
 add_subdirectory(external/fmt)
 add_subdirectory(external/glm)
 add_subdirectory(external/rapidjson)
+add_subdirectory(external/utfcpp)
 
 file(GLOB SOURCES
     src/*.cpp
@@ -17,7 +18,7 @@ file(GLOB SOURCES
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm RapidJSON)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm RapidJSON utf8cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src
