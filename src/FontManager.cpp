@@ -14,7 +14,8 @@ FontManager* FontManager::instance() {
     return instance.get();
 }
 
-void FontManager::loadFont(const std::string& path, const std::string& id, float lineHeight, std::vector<FontRange> ranges) {
+void FontManager::loadFont(const std::string& path, const std::string& id, float lineHeight,
+                           const std::vector<FontRange>& ranges) {
     auto absPath = FileManager::instance()->fullPathForFile(path);
     if (!std::filesystem::exists(absPath)) {
         logE("Failed to load file {}!", absPath.string());
@@ -45,7 +46,6 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     }
 
     Sizei size = {1024, 1024};
-    std::vector<stbtt_packedchar> charData(0x5D);
     std::vector<uint8_t> pixels(size.w * size.h);
 
     stbrp_context someCtx = {.x = 0, .y = 0, .height = 1024, .width = 1024, .bottom_y = 0};
@@ -61,42 +61,37 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                                 .v_oversample = 1,
                                 .width = 1024};
 
-    stbtt_pack_range ranges_[2];
+    stbtt_pack_range ttRanges[ranges.size()];
 
-    ranges_[0] = stbtt_pack_range {.font_size = lineHeight,
-                                   .first_unicode_codepoint_in_range = 'a',
-                                   .num_chars = 'z' - 'a' + 1,
-                                   .chardata_for_range = new stbtt_packedchar['z' - 'a' + 1]};
+    for (auto i = 0u; i < ranges.size(); i++) {
+        const auto& range = ranges[i];
+        auto numChars = range.endCP - range.startCP + 1;
 
-    ranges_[1] = stbtt_pack_range {.font_size = lineHeight,
-                                   .first_unicode_codepoint_in_range = 0x410,
-                                   .num_chars = 0x3F,
-                                   .chardata_for_range = new stbtt_packedchar[0x3F]};
+        auto chars = new stbtt_packedchar[numChars];
+        memset(chars, 0, numChars * sizeof(stbtt_packedchar)); // this is done to prevent random values for characters that are
+                                                               // not present in the font but still used by the user
 
-    stbtt_PackFontRanges(&packCtx, fontInfo.data, 0, ranges_, 2);
+        ttRanges[i] = stbtt_pack_range {.font_size = lineHeight,
+                                        .first_unicode_codepoint_in_range = range.startCP,
+                                        .num_chars = numChars,
+                                        .chardata_for_range = chars};
+    }
+
+    stbtt_PackFontRanges(&packCtx, fontInfo.data, 0, ttRanges, ranges.size());
 
     std::unordered_map<unsigned int, Glyph> glyphs;
 
     auto ratio = AppManager::instance()->getPointsToPixelsRatio();
 
-    // for (unsigned int i = 0; i < charData.size(); i++) {
-    //     glyphs.insert(
-    //         std::make_pair(i, Glyph {.textureRect = Recti {charData[i].x0, charData[i].y0, charData[i].x1 - charData[i].x0,
-    //                                                        charData[i].y1 - charData[i].y0},
-    //                                  .xOffset = charData[i].xoff * ratio.x,
-    //                                  .yOffset = charData[i].yoff * ratio.y,
-    //                                  .xAdvance = charData[i].xadvance * ratio.x}));
-    // }
+    for (const auto& range : ttRanges) {
+        for (auto i = 0u; i < range.num_chars; i++) {
+            const auto& chr = range.chardata_for_range[i];
 
-    for (int i = 0; i < 2; i++) {
-        for (unsigned int j = 0; j < ranges_[i].num_chars; j++) {
-            glyphs.insert(std::make_pair(
-                j, Glyph {.textureRect = Recti {ranges_[i].chardata_for_range[j].x0, ranges_[i].chardata_for_range[j].y0,
-                                                ranges_[i].chardata_for_range[j].x1 - ranges_[i].chardata_for_range[j].x0,
-                                                ranges_[i].chardata_for_range[j].y1 - ranges_[i].chardata_for_range[j].y0},
-                          .xOffset = ranges_[i].chardata_for_range[j].xoff * ratio.x,
-                          .yOffset = ranges_[i].chardata_for_range[j].yoff * ratio.y,
-                          .xAdvance = ranges_[i].chardata_for_range[j].xadvance * ratio.x}));
+            glyphs[range.first_unicode_codepoint_in_range + i] =
+                Glyph {.textureRect = Recti {chr.x0, chr.y0, chr.x1 - chr.x0, chr.y1 - chr.y0},
+                       .xAdvance = chr.xadvance * ratio.x,
+                       .xOffset = chr.xoff * ratio.x,
+                       .yOffset = chr.yoff * ratio.y};
         }
     }
 
@@ -104,6 +99,10 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                         .base = 0.0f,
                         .fontAtlas = std::make_shared<Texture>(pixels.data(), Sizei {size.w, size.h}, GL_RED),
                         .glyphs = glyphs};
+
+    for (const auto& range : ttRanges) {
+        delete[] range.chardata_for_range;
+    }
 
     delete[] bytes;
 }

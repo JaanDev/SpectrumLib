@@ -276,7 +276,7 @@ class FontManager {
   public:
     static FontManager* instance();
 
-    void loadFont(const std::string& path, const std::string& id, float lineHeight, std::vector<FontRange> ranges);
+    void loadFont(const std::string& path, const std::string& id, float lineHeight, const std::vector<FontRange>& ranges);
     void loadBitmapFont(const std::string& path, const std::string& id);
 
     const Font& getFont(const std::string& id) const;

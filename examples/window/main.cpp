@@ -28,7 +28,7 @@ class MyScene : public Scene {
         fntSpr->setScale(120.f / fntSpr->getTexture()->getSize().w);
         addChild(fntSpr);
 
-        std::string str = "Привет Spectrum!";
+        std::string str = "Привет, SpectrumLib!";
 
         float posY = 150.f;
         for (const std::string& fontName : {"arial", "pusab"}) {
@@ -41,6 +41,8 @@ class MyScene : public Scene {
             auto end = str.end();
             while (it != str.end()) {
                 auto cp = utf8::next(it, end);
+                if (!font.glyphs.contains(cp))
+                    continue;
                 const auto& glyph = font.glyphs[cp];
                 auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, glyph.textureRect, false);
                 auto ch = create<Sprite>(sprframe);
@@ -52,11 +54,12 @@ class MyScene : public Scene {
             }
 
             container->setPos({20, posY});
-            container->setScale(0.7f);
             addChild(container);
 
             posY += 30;
         }
+
+        getChildByIndex(3)->setScale(.4f); // pusab
     }
 
   private:
