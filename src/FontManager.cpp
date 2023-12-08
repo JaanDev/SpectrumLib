@@ -6,6 +6,8 @@
 #include <stb_truetype.h>
 #include <fstream>
 #include "logger.hpp"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../external/stb/stb_image_write.h"
 
 NS_SPECTRUM_BEGIN
 
@@ -45,21 +47,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         return;
     }
 
-    Sizei size = {1024, 1024};
-    std::vector<uint8_t> pixels(size.w * size.h);
-
-    stbrp_context someCtx = {.x = 0, .y = 0, .height = 1024, .width = 1024, .bottom_y = 0};
-    stbtt_pack_context packCtx {.h_oversample = 1,
-                                .height = 1024,
-                                .nodes = nullptr,
-                                .pack_info = &someCtx,
-                                .padding = 2,
-                                .pixels = pixels.data(),
-                                .skip_missing = 1,
-                                .stride_in_bytes = 1024,
-                                .user_allocator_context = nullptr,
-                                .v_oversample = 1,
-                                .width = 1024};
+    const auto padding = 2;
 
     stbtt_pack_range ttRanges[ranges.size()];
 
@@ -76,6 +64,55 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                                         .num_chars = numChars,
                                         .chardata_for_range = chars};
     }
+
+    stbtt_pack_context packCtx1 = {.h_oversample = 1, .v_oversample = 1, .skip_missing = 1, .padding = padding};
+    auto totalChars = 0u;
+    for (const auto& range : ranges) {
+        totalChars += range.endCP - range.startCP + 1;
+    }
+    stbrp_rect rects[totalChars];
+    auto numRects = stbtt_PackFontRangesGatherRects(&packCtx1, &fontInfo, ttRanges, ranges.size(), rects);
+    auto area = 0u;
+    for (auto i = 0; i < numRects; i++) {
+        area += rects[i].w * rects[i].h;
+    }
+
+    logD("Font area {}", area);
+    auto atlasW = (int)(sqrtf(area) * 1.2f);
+
+    auto atlasH = 0;
+    int px, py;
+    px = py = 0;
+    for (auto i = 0u; i < numRects; i++) {
+        const auto& rect = rects[i];
+
+        if (px + rect.w > atlasW) {
+            px = 0;
+            py = atlasH;
+        }
+
+        px += rect.w;
+        if (py + rect.h > atlasH)
+            atlasH = py + rect.h;
+    }
+    atlasH += padding;
+
+    logD("{} x {}", atlasW, atlasH);
+
+    std::vector<uint8_t> pixels(atlasW * atlasH);
+    
+    stbrp_context someCtx = {.x = 0, .y = 0, .height = atlasH, .width = atlasW, .bottom_y = 0};
+    stbtt_pack_context packCtx {.h_oversample = 1,
+                                .height = atlasH,
+                                .nodes = nullptr,
+                                .pack_info = &someCtx,
+                                .padding = padding,
+                                .pixels = pixels.data(),
+                                .skip_missing = 1,
+                                .stride_in_bytes = atlasW,
+                                .user_allocator_context = nullptr,
+                                .v_oversample = 1,
+                                .width = atlasW};
 
     stbtt_PackFontRanges(&packCtx, fontInfo.data, 0, ttRanges, ranges.size());
 
@@ -95,9 +132,10 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         }
     }
 
+    stbi_write_png("aa.png", atlasW, atlasH, 1, pixels.data(), atlasW);
+
     m_fonts[id] = Font {.lineHeight = lineHeight,
-                        .base = 0.0f,
-                        .fontAtlas = std::make_shared<Texture>(pixels.data(), Sizei {size.w, size.h}, GL_RED),
+                        .fontAtlas = std::make_shared<Texture>(pixels.data(), Sizei {atlasW, atlasH}, GL_RED),
                         .glyphs = glyphs};
 
     for (const auto& range : ttRanges) {
@@ -125,8 +163,8 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             continue;
 
         if (line.find("common") != std::string::npos) {
-            int varsParsed = sscanf(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
-            if (varsParsed < 2) {
+            int varsParsed = sscanf(line.c_str(), "common lineHeight=%f", &font.lineHeight);
+            if (varsParsed < 1) {
                 logE("Can't parse common line in file {}", absPath.string());
                 return;
             }

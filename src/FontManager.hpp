@@ -267,7 +267,6 @@ struct Glyph {
 
 struct Font {
     float lineHeight;
-    float base;
     std::shared_ptr<Texture> fontAtlas;
     std::unordered_map<unsigned int, Glyph> glyphs;
 };

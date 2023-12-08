@@ -13,7 +13,8 @@ class MyScene : public Scene {
         setBGColor({.1, .1, .1});
 
         auto fm = FontManager::instance();
-        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36, {FontRange::BasicLatin, FontRange::Cyrillic});
+        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36,
+                     {FontRange::BasicLatin, {0x401, 0x451}}); // only useful cyrillic letters
         fm->loadBitmapFont("pusab.fnt", "pusab");
 
         auto ttfSpr = create<Sprite>(fm->getFont("arial").fontAtlas);
