@@ -105,7 +105,6 @@ void Node::update(float dt) {
         m_shouldCalcMtx = false;
         auto bb = m_boundingBox * m_scale;
 
-        // m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
         m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
         m_matrix = glm::rotate(m_matrix, glm::radians(m_rotation), glm::vec3(0.f, 0.f, 1.f));
         m_matrix = glm::translate(m_matrix, glm::vec3(-bb.w * m_anchorPoint.x, -bb.h * m_anchorPoint.y, 0.f));
@@ -116,14 +115,29 @@ void Node::update(float dt) {
 void Node::addChild(std::shared_ptr<Node> child) {
     m_shouldSortChildren = true;
     child->setParent(this);
-    m_children.push_back(child);
+
+    if (m_children.size() == 0) {
+        logD("0 children");
+        m_children.push_back(child);
+    } else if (m_children.size() == 1) {
+        logD("1 child");
+        if (m_children[0]->getZOrder() <= child->getZOrder()) {
+            m_children.push_back(child);
+        } else {
+            m_children.insert(m_children.begin(), child);
+        }
+    } else {
+        m_children.push_back(child);
+        logD("!!! {}", m_children.size());
+        for (int i = m_children.size() - 1; i >= 0; i--) {
+            logD("i {}", i);
+        }
+    }
 }
 
 void Node::addChild(std::shared_ptr<Node> child, int zOrder) {
-    m_shouldSortChildren = true;
     child->setZOrder(zOrder);
-    child->setParent(this);
-    m_children.push_back(child);
+    addChild(child);
 }
 
 void Node::removeChild(int index) {

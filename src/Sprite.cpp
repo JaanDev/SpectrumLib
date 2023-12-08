@@ -107,6 +107,9 @@ void Sprite::setBlendFunc(const BlendFunc& func) {}
 void Sprite::draw() {
     m_shader->use();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());
 
@@ -115,6 +118,8 @@ void Sprite::draw() {
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);
+
+    glDisable(GL_BLEND);
 }
 
 void Sprite::makeVBO() {
