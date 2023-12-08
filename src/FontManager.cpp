@@ -6,8 +6,6 @@
 #include <stb_truetype.h>
 #include <fstream>
 #include "logger.hpp"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../external/stb/stb_image_write.h"
 
 NS_SPECTRUM_BEGIN
 
@@ -77,7 +75,6 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         area += rects[i].w * rects[i].h;
     }
 
-    logD("Font area {}", area);
     auto atlasW = (int)(sqrtf(area) * 1.2f);
 
     auto atlasH = 0;
@@ -96,8 +93,6 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
             atlasH = py + rect.h;
     }
     atlasH += padding;
-
-    logD("{} x {}", atlasW, atlasH);
 
     std::vector<uint8_t> pixels(atlasW * atlasH);
     
@@ -131,8 +126,6 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                        .yOffset = chr.yoff * ratio.y};
         }
     }
-
-    stbi_write_png("aa.png", atlasW, atlasH, 1, pixels.data(), atlasW);
 
     m_fonts[id] = Font {.lineHeight = lineHeight,
                         .fontAtlas = std::make_shared<Texture>(pixels.data(), Sizei {atlasW, atlasH}, GL_RED),
