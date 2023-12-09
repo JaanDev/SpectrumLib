@@ -8,6 +8,11 @@
 
 NS_SPECTRUM_BEGIN
 
+struct BatchQuad {
+    Rectf rect;
+    Rectf texCoords;
+};
+
 class SpriteBatch : public Node {
   public:
     SpriteBatch();
@@ -15,8 +20,8 @@ class SpriteBatch : public Node {
     virtual void update(float dt) override;
     virtual void draw() override;
 
-    inline std::vector<Rectf>& getRects() { return m_rects; }
-    void addRect(const Rectf& rect);
+    inline std::vector<BatchQuad>& getRects() { return m_quads; }
+    void addRect(const BatchQuad& rect);
 
     inline void setTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
     inline std::shared_ptr<Texture> getTexture() { return m_texture; }
@@ -32,7 +37,7 @@ class SpriteBatch : public Node {
   private:
     void rebuild();
 
-    std::vector<Rectf> m_rects;
+    std::vector<BatchQuad> m_quads;
     std::shared_ptr<Texture> m_texture;
     std::shared_ptr<Shader> m_shader;
     Col3u m_color;
