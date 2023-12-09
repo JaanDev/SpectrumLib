@@ -95,6 +95,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     atlasH += padding;
 
     uint8_t* pixels = new uint8_t[atlasW * atlasH];
+    memset(pixels, NULL, atlasW * atlasH);
 
     stbrp_context someCtx = {.width = atlasW, .height = atlasH, .x = 0, .y = 0, .bottom_y = 0};
     stbtt_pack_context packCtx {.user_allocator_context = nullptr,
