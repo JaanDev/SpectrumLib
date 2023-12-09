@@ -47,7 +47,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 
     const auto padding = 2;
 
-    stbtt_pack_range ttRanges[ranges.size()];
+    stbtt_pack_range* ttRanges = new stbtt_pack_range[ranges.size()];
 
     for (auto i = 0u; i < ranges.size(); i++) {
         const auto& range = ranges[i];
@@ -63,12 +63,12 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                                         .chardata_for_range = chars};
     }
 
-    stbtt_pack_context packCtx1 = {.h_oversample = 1, .v_oversample = 1, .skip_missing = 1, .padding = padding};
+    stbtt_pack_context packCtx1 = {.padding = padding, .skip_missing = 1, .h_oversample = 1, .v_oversample = 1};
     auto totalChars = 0u;
     for (const auto& range : ranges) {
         totalChars += range.endCP - range.startCP + 1;
     }
-    stbrp_rect rects[totalChars];
+    stbrp_rect* rects = new stbrp_rect[totalChars];
     auto numRects = stbtt_PackFontRangesGatherRects(&packCtx1, &fontInfo, ttRanges, ranges.size(), rects);
     auto area = 0u;
     for (auto i = 0; i < numRects; i++) {
@@ -94,20 +94,21 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     }
     atlasH += padding;
 
-    std::vector<uint8_t> pixels(atlasW * atlasH);
-    
-    stbrp_context someCtx = {.x = 0, .y = 0, .height = atlasH, .width = atlasW, .bottom_y = 0};
-    stbtt_pack_context packCtx {.h_oversample = 1,
-                                .height = atlasH,
-                                .nodes = nullptr,
+    uint8_t* pixels = new uint8_t[atlasW * atlasH];
+    memset(pixels, NULL, atlasW * atlasH);
+
+    stbrp_context someCtx = {.width = atlasW, .height = atlasH, .x = 0, .y = 0, .bottom_y = 0};
+    stbtt_pack_context packCtx {.user_allocator_context = nullptr,
                                 .pack_info = &someCtx,
-                                .padding = padding,
-                                .pixels = pixels.data(),
-                                .skip_missing = 1,
+                                .width = atlasW,
+                                .height = atlasH,
                                 .stride_in_bytes = atlasW,
-                                .user_allocator_context = nullptr,
+                                .padding = padding,
+                                .skip_missing = 1,
+                                .h_oversample = 1,
                                 .v_oversample = 1,
-                                .width = atlasW};
+                                .pixels = pixels,
+                                .nodes = nullptr};
 
     stbtt_PackFontRanges(&packCtx, fontInfo.data, 0, ttRanges, ranges.size());
 
@@ -115,27 +116,30 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 
     auto ratio = AppManager::instance()->getPointsToPixelsRatio();
 
-    for (const auto& range : ttRanges) {
-        for (auto i = 0u; i < range.num_chars; i++) {
-            const auto& chr = range.chardata_for_range[i];
+    for (auto i = 0u; i < ranges.size(); i++) {
+        for (auto j = 0u; j < ttRanges[i].num_chars; j++) {
+            const auto& chr = ttRanges[i].chardata_for_range[j];
 
-            glyphs[range.first_unicode_codepoint_in_range + i] =
+            glyphs[ttRanges[i].first_unicode_codepoint_in_range + j] =
                 Glyph {.textureRect = Recti {chr.x0, chr.y0, chr.x1 - chr.x0, chr.y1 - chr.y0},
-                       .xAdvance = chr.xadvance * ratio.x,
                        .xOffset = chr.xoff * ratio.x,
-                       .yOffset = chr.yoff * ratio.y};
+                       .yOffset = chr.yoff * ratio.y,
+                       .xAdvance = chr.xadvance * ratio.x};
         }
     }
 
     m_fonts[id] = Font {.lineHeight = lineHeight,
-                        .fontAtlas = std::make_shared<Texture>(pixels.data(), Sizei {atlasW, atlasH}, GL_RED),
+                        .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
                         .glyphs = glyphs};
 
-    for (const auto& range : ttRanges) {
-        delete[] range.chardata_for_range;
+    for (auto i = 0u; i < ranges.size(); i++) {
+        delete[] ttRanges[i].chardata_for_range;
     }
 
     delete[] bytes;
+    delete[] ttRanges;
+    delete[] rects;
+    delete[] pixels;
 }
 
 void FontManager::loadBitmapFont(const std::string& path, const std::string& id) {
