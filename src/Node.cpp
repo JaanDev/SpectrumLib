@@ -12,7 +12,7 @@ NS_SPECTRUM_BEGIN
 Node::Node()
     : m_pos({0.f, 0.f}), m_boundingBox({0, 0}), m_anchorPoint({.5f, .5f}), m_scale({1.f, 1.f}), m_rotation(0.f), m_opacity(1.f),
       m_objectLimit(UINT_MAX), m_zOrder(0), m_tag(""), m_children({}), m_parent(nullptr), m_visible(true),
-      m_matrix(glm::mat4(1.0f)), m_shouldSortChildren(false), m_shouldCalcMtx(false), m_isMouseOver(false) {}
+      m_matrix(glm::mat4(1.0f)), m_shouldCalcMtx(false), m_isMouseOver(false) {}
 
 void Node::setPos(const Vec2f& pos) {
     m_pos = pos;
@@ -51,7 +51,7 @@ void Node::setOpacity(float opacity) {
 void Node::setZOrder(int zOrder) {
     m_zOrder = zOrder;
     if (m_parent)
-        m_parent->setShouldSortChildren(true);
+        m_parent->sortChildren();
 }
 
 void Node::setBoundingBox(const Sizef& size) {
@@ -98,9 +98,6 @@ void Node::runAction(std::shared_ptr<Action> action) {
 }
 
 void Node::update(float dt) {
-    if (m_shouldSortChildren)
-        sortChildren();
-
     if (m_shouldCalcMtx) {
         m_shouldCalcMtx = false;
         auto bb = m_boundingBox * m_scale;
@@ -113,7 +110,6 @@ void Node::update(float dt) {
 }
 
 void Node::addChild(std::shared_ptr<Node> child) {
-    m_shouldSortChildren = true;
     child->setParent(this);
 
     if (m_children.size() == 0) {
@@ -157,6 +153,11 @@ void Node::removeFromParent() {
     }
 }
 
+void Node::setParent(Node* node) {
+    removeFromParent();
+    m_parent = node;
+}
+
 std::shared_ptr<Node> Node::getChildByTag(const char* tag) const {
     for (const auto child : m_children) {
         if (std::string(child->getTag()) == tag) {
@@ -172,7 +173,6 @@ std::shared_ptr<Node> Node::getChildByIndex(int index) const {
 }
 
 void Node::sortChildren() {
-    m_shouldSortChildren = false;
     // TODO: a more optimized solution?
     std::sort(m_children.begin(), m_children.end(),
               [](std::shared_ptr<Node> a, std::shared_ptr<Node> b) { return a->getZOrder() < b->getZOrder(); });

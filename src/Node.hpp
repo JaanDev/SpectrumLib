@@ -85,20 +85,18 @@ class Node {
     void removeFromParent();
     // получить родительский нод
     inline Node* getParent() const { return m_parent; }
-    inline void setParent(Node* node) { m_parent = node; }
+    void setParent(Node* node);
     std::shared_ptr<Node> getChildByTag(const char* tag) const;
     std::shared_ptr<Node> getChildByIndex(int index) const;
-
-    inline void setShouldSortChildren(bool val) { m_shouldSortChildren = val; }
 
     inline const glm::mat4& getMatrix() const { return m_matrix; }
 
     inline bool isMouseOver() const { return m_isMouseOver; }
     inline void setMouseOver(bool val) { m_isMouseOver = val; }
 
-  protected:
     void sortChildren();
 
+  protected:
     Vec2f m_pos; // относительно родителя
     Sizef m_boundingBox;
     Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
@@ -112,7 +110,6 @@ class Node {
     Node* m_parent;
     glm::mat4 m_matrix;
     bool m_visible;
-    bool m_shouldSortChildren;
     bool m_shouldCalcMtx;
     bool m_isMouseOver;
 };
