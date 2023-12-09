@@ -117,20 +117,15 @@ void Node::addChild(std::shared_ptr<Node> child) {
     child->setParent(this);
 
     if (m_children.size() == 0) {
-        logD("0 children");
         m_children.push_back(child);
-    } else if (m_children.size() == 1) {
-        logD("1 child");
-        if (m_children[0]->getZOrder() <= child->getZOrder()) {
-            m_children.push_back(child);
-        } else {
-            m_children.insert(m_children.begin(), child);
-        }
     } else {
-        m_children.push_back(child);
-        logD("!!! {}", m_children.size());
-        for (int i = m_children.size() - 1; i >= 0; i--) {
-            logD("i {}", i);
+        auto childZ = child->getZOrder();
+
+        for (auto i = m_children.size() - 1; i >= 0; i--) {
+            if (m_children[i]->getZOrder() <= childZ) {
+                m_children.insert(m_children.begin() + i + 1, child);
+                break;
+            }
         }
     }
 }
