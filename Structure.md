@@ -20,7 +20,7 @@
 ### v1.1
 - [ ] joystick support?
 - [ ] particles
-- [ ] ccspritebatchnode
+- [x] ccspritebatchnode
 - [ ] rendertexture
 - [ ] skew
 - [ ] чтото похожее на getWritablePath
