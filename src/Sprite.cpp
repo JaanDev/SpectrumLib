@@ -44,6 +44,8 @@ Sprite::Sprite(std::shared_ptr<TextureFrame> frame)
 
 void Sprite::init() {
     m_shader = ShaderManager::instance()->getShader("sprite-shader");
+    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
+    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
     makeVBO();
 }
 
@@ -122,6 +124,12 @@ void Sprite::draw() {
     glDisable(GL_BLEND);
 }
 
+void Sprite::setShader(std::shared_ptr<Shader> shader) {
+    m_shader = shader;
+    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
+    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+}
+
 void Sprite::makeVBO() {
     // clang-format off
     const float vertices[] = {
@@ -156,9 +164,6 @@ void Sprite::makeVBO() {
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
-    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

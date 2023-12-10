@@ -67,10 +67,11 @@ class MyScene : public Scene {
 
         getChildByIndex(3)->setScale(.4f); // pusab
 
-        auto batch = create<SpriteBatch>();
-        batch->setTexture(TextureManager::instance()->addTexture("test.png"));
-        batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 0.5}});
-        batch->addRect({.rect = {220, 125, 150, 50}, .texCoords = {0, 0.5, 1, 0.5}});
+        auto batch = create<SpriteBatch>(TextureManager::instance()->addTexture("test.png"));
+        batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
+        batch->addRect({.rect = {220, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
+        // batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 0.5}});
+        // batch->addRect({.rect = {220, 125, 150, 50}, .texCoords = {0, 0.5, 1, 0.5}});
         addChild(batch);
     }
 

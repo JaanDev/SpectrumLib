@@ -15,7 +15,8 @@ struct BatchQuad {
 
 class SpriteBatch : public Node {
   public:
-    SpriteBatch();
+    SpriteBatch(std::shared_ptr<Texture> tex);
+    ~SpriteBatch();
 
     virtual void update(float dt) override;
     virtual void draw() override;
@@ -26,7 +27,7 @@ class SpriteBatch : public Node {
     inline void setTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
     inline std::shared_ptr<Texture> getTexture() { return m_texture; }
 
-    inline void setShader(std::shared_ptr<Shader> shader) { m_shader = shader; }
+    void setShader(std::shared_ptr<Shader> shader);
     inline std::shared_ptr<Shader> getShader() { return m_shader; }
 
     inline const Col3u& getColor() const { return m_color; }
@@ -41,6 +42,10 @@ class SpriteBatch : public Node {
     std::shared_ptr<Texture> m_texture;
     std::shared_ptr<Shader> m_shader;
     Col3u m_color;
+    GLuint m_vao;
+    GLuint m_vbo;
+    GLuint m_ebo;
+    GLuint m_colUniform;
     bool m_shouldRebuild;
 };
 

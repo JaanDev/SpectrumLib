@@ -34,7 +34,7 @@ class Sprite : public Node {
     virtual void draw() override;
 
     inline std::shared_ptr<Shader> getShader() const { return m_shader; }
-    inline void setShader(std::shared_ptr<Shader> shader) { m_shader = shader; }
+    void setShader(std::shared_ptr<Shader> shader);
 
   protected:
     void makeVBO();
