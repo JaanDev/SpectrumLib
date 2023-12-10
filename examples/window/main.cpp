@@ -17,7 +17,7 @@ class MyScene : public Scene {
         fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36,
                      {FontRange::BasicLatin, {0x401, 0x451}}); // only useful cyrillic letters
         fm->loadBitmapFont("pusab.fnt", "pusab");
-        
+
         auto ttfSpr = create<Sprite>(fm->getFont("arial").fontAtlas);
         ttfSpr->setPos({0, 0});
         ttfSpr->setAnchorPoint({0, 0});
@@ -29,7 +29,7 @@ class MyScene : public Scene {
         fntSpr->setAnchorPoint({1, 0});
         fntSpr->setScale(120.f / fntSpr->getTexture()->getSize().w);
         addChild(fntSpr);
-        
+
         auto transparentSpr = create<Sprite>("alphaSprite.png");
         addChild(transparentSpr, 999);
         transparentSpr->setPos({200, 200});
@@ -66,6 +66,12 @@ class MyScene : public Scene {
         }
 
         getChildByIndex(3)->setScale(.4f); // pusab
+
+        auto batch = create<SpriteBatch>();
+        batch->setTexture(TextureManager::instance()->addTexture("test.png"));
+        batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 0.5}});
+        batch->addRect({.rect = {220, 125, 150, 50}, .texCoords = {0, 0.5, 1, 0.5}});
+        addChild(batch);
     }
 
   private:

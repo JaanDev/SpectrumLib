@@ -26,7 +26,7 @@ class SpriteBatch : public Node {
     inline void setTexture(std::shared_ptr<Texture> texture) { m_texture = texture; }
     inline std::shared_ptr<Texture> getTexture() { return m_texture; }
 
-    inline void setShader(std::shared_ptr<Shader> shader);
+    inline void setShader(std::shared_ptr<Shader> shader) { m_shader = shader; }
     inline std::shared_ptr<Shader> getShader() { return m_shader; }
 
     inline const Col3u& getColor() const { return m_color; }
