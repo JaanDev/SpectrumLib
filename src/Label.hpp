@@ -3,12 +3,13 @@
 #include "utils.hpp"
 #include "Node.hpp"
 #include "FontManager.hpp"
+#include "SpriteBatch.hpp"
 
 NS_SPECTRUM_BEGIN
 
-class Label : public Node {
+class Label : public SpriteBatch {
   public:
-    // fontID это то что указывали при загрузке в FontManager
+    // fontID это то, что указывали при загрузке в FontManager
     Label(const std::string& text, const std::string& fontID);
     Label(const std::string& text, const Font& font);
 

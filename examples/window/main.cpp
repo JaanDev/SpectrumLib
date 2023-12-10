@@ -36,34 +36,39 @@ class MyScene : public Scene {
 
         std::string str = "Привет, SpectrumLib!";
 
-        float posY = 150.f;
-        for (const std::string& fontName : {"arial", "pusab"}) {
-            auto font = fm->getFont(fontName);
-            int posX = 0;
+        auto label = create<Label>(str, "pusab");
+        label->setPos({100, 100});
+        label->setScale(0.5f);
+        addChild(label);
 
-            auto container = create<Node>();
+        // float posY = 150.f;
+        // for (const std::string& fontName : {"arial", "pusab"}) {
+        //     auto font = fm->getFont(fontName);
+        //     int posX = 0;
 
-            auto it = str.begin();
-            auto end = str.end();
-            while (it != str.end()) {
-                auto cp = utf8::next(it, end);
-                if (!font.glyphs.contains(cp))
-                    continue;
-                const auto& glyph = font.glyphs[cp];
-                auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, glyph.textureRect, false);
-                auto ch = create<Sprite>(sprframe);
-                ch->setPosX(posX + glyph.xOffset);
-                ch->setPosY(glyph.yOffset);
-                ch->setAnchorPoint({0, 0});
-                posX += glyph.xAdvance;
-                container->addChild(ch);
-            }
+        //     auto container = create<Node>();
 
-            container->setPos({20, posY});
-            addChild(container);
+        //     auto it = str.begin();
+        //     auto end = str.end();
+        //     while (it != str.end()) {
+        //         auto cp = utf8::next(it, end);
+        //         if (!font.glyphs.contains(cp))
+        //             continue;
+        //         const auto& glyph = font.glyphs[cp];
+        //         auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, glyph.textureRect, false);
+        //         auto ch = create<Sprite>(sprframe);
+        //         ch->setPosX(posX + glyph.xOffset);
+        //         ch->setPosY(glyph.yOffset);
+        //         ch->setAnchorPoint({0, 0});
+        //         posX += glyph.xAdvance;
+        //         container->addChild(ch);
+        //     }
 
-            posY += 30;
-        }
+        //     container->setPos({20, posY});
+        //     addChild(container);
+
+        //     posY += 30;
+        // }
 
         getChildByIndex(3)->setScale(.4f); // pusab
 
