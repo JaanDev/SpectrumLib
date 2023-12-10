@@ -64,6 +64,7 @@ class Node {
     inline const char* getTag() const { return m_tag; }
 
     void runAction(std::shared_ptr<Action> action);
+    void removeAllActions();
 
     // обновление нода (каждый кадр)
     virtual void update(float dt);

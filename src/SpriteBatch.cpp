@@ -9,11 +9,13 @@ NS_SPECTRUM_BEGIN
 SpriteBatch::SpriteBatch(std::shared_ptr<Texture> tex)
     : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0),
       m_indicesSize(0) {
-    m_shader = ShaderManager::instance()->getShader("sprite-shader");
-    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
-    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    init();
+}
 
-    initialBuild();
+SpriteBatch::SpriteBatch()
+    : m_quads({}), m_texture(nullptr), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0),
+      m_indicesSize(0) {
+    init();
 }
 
 SpriteBatch::~SpriteBatch() {
@@ -23,6 +25,8 @@ SpriteBatch::~SpriteBatch() {
 }
 
 void SpriteBatch::update(float dt) {
+    Node::update(dt);
+    
     if (m_shouldRebuild) {
         m_shouldRebuild = false;
         rebuild();
@@ -91,12 +95,13 @@ void SpriteBatch::rebuild() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     m_indicesSize = indices.size();
-
-    logD("rebuild");
 }
 
-void SpriteBatch::initialBuild() {
-    logD("initbuild");
+void SpriteBatch::init() {
+    m_shader = ShaderManager::instance()->getShader("sprite-shader");
+    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
+    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);

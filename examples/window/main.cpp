@@ -41,41 +41,9 @@ class MyScene : public Scene {
         label->setScale(0.5f);
         addChild(label);
 
-        // float posY = 150.f;
-        // for (const std::string& fontName : {"arial", "pusab"}) {
-        //     auto font = fm->getFont(fontName);
-        //     int posX = 0;
-
-        //     auto container = create<Node>();
-
-        //     auto it = str.begin();
-        //     auto end = str.end();
-        //     while (it != str.end()) {
-        //         auto cp = utf8::next(it, end);
-        //         if (!font.glyphs.contains(cp))
-        //             continue;
-        //         const auto& glyph = font.glyphs[cp];
-        //         auto sprframe = std::make_shared<TextureFrame>(font.fontAtlas, glyph.textureRect, false);
-        //         auto ch = create<Sprite>(sprframe);
-        //         ch->setPosX(posX + glyph.xOffset);
-        //         ch->setPosY(glyph.yOffset);
-        //         ch->setAnchorPoint({0, 0});
-        //         posX += glyph.xAdvance;
-        //         container->addChild(ch);
-        //     }
-
-        //     container->setPos({20, posY});
-        //     addChild(container);
-
-        //     posY += 30;
-        // }
-
-        getChildByIndex(3)->setScale(.4f); // pusab
-
-        auto batch = create<SpriteBatch>(TextureManager::instance()->addTexture("test.png"));
-        batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
-        batch->addRect({.rect = {220, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
-        addChild(batch);
+        auto label2 = create<Label>(str, "arial");
+        label2->setPos({100, 150});
+        addChild(label2);
     }
 
   private:
