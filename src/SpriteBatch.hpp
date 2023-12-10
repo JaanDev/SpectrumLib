@@ -46,6 +46,7 @@ class SpriteBatch : public Node {
     GLuint m_vbo;
     GLuint m_ebo;
     GLuint m_colUniform;
+    unsigned int m_indicesSize;
     bool m_shouldRebuild;
 };
 

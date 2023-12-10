@@ -7,8 +7,9 @@
 NS_SPECTRUM_BEGIN
 
 SpriteBatch::SpriteBatch(std::shared_ptr<Texture> tex)
-    : m_quads({}), m_texture(tex), m_shader(ShaderManager::instance()->getShader("sprite-shader")), m_color({255, 255, 255}),
-      m_shouldRebuild(false) {
+    : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0),
+      m_indicesSize(0) {
+    m_shader = ShaderManager::instance()->getShader("sprite-shader");
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
 }
@@ -30,7 +31,7 @@ void SpriteBatch::draw() {
     m_shader->use();
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());
@@ -38,7 +39,7 @@ void SpriteBatch::draw() {
     glUniform3f(m_colUniform, m_color.r / 255.f, m_color.g / 255.f, m_color.b / 255.f);
 
     glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);
 
     glDisable(GL_BLEND);
@@ -79,18 +80,6 @@ void SpriteBatch::rebuild() {
         indices.insert(indices.end(), {idx, idx + 1, idx + 2, idx + 1, idx + 2, idx + 3});
     }
 
-    for (auto val : vertices) {
-        std::cout << val << " ";
-    }
-
-    std::cout << std::endl;
-
-    for (auto val : indices) {
-        std::cout << val << " ";
-    }
-
-    std::cout << std::endl;
-
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -99,10 +88,10 @@ void SpriteBatch::rebuild() {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size(), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size(), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -118,6 +107,7 @@ void SpriteBatch::rebuild() {
     m_vao = VAO;
     m_vbo = VBO;
     m_ebo = EBO;
+    m_indicesSize = indices.size();
 }
 
 NS_SPECTRUM_END
