@@ -37,6 +37,7 @@ class SpriteBatch : public Node {
 
   private:
     void rebuild();
+    void initialBuild();
 
     std::vector<BatchQuad> m_quads;
     std::shared_ptr<Texture> m_texture;
