@@ -30,7 +30,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     }
 
     stream.seekg(0, std::ios::end);
-    size_t len = stream.tellg();
+    size_t len = (size_t)stream.tellg();
     stream.seekg(0, std::ios::beg);
 
     auto bytes = new uint8_t[len];
@@ -75,7 +75,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         area += rects[i].w * rects[i].h;
     }
 
-    auto atlasW = (int)(sqrtf(area) * 1.2f);
+    auto atlasW = (int)(sqrt(area) * 1.2f);
 
     auto atlasH = 0;
     int px, py;

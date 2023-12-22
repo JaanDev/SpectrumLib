@@ -1,5 +1,6 @@
 #include "Label.hpp"
 #include "AppManager.hpp"
+#include "ShaderManager.hpp"
 #include <utf8.h>
 
 NS_SPECTRUM_BEGIN
@@ -49,6 +50,7 @@ void Label::setMaxWidth(float maxW) {
 }
 
 void Label::rebuild() {
+    // this->setShader(ShaderManager::instance()->getShader("ttf-shader"));
     setTexture(this->getFont().fontAtlas);
     Vec2f pos = this->getPos();
 
