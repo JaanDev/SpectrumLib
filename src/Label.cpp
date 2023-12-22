@@ -54,6 +54,7 @@ void Label::setMaxWidth(float maxW) {
 void Label::rebuild() {
     setTexture(m_font.fontAtlas);
     m_quads.clear();
+    this->setShader(ShaderManager::instance()->getShader("ttf-shader"));
 
     Vec2f pos = {0, 0};
     auto ratio = AppManager::instance()->getPointsToPixelsRatio();

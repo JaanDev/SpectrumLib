@@ -36,7 +36,7 @@ class MyScene : public Scene {
 
         std::string str = "Привет, SpectrumLib!";
 
-        auto label = create<Label>(str, "arial");
+        auto label = create<Label>(str, "pusab");
         label->setPos({100, 100});
         label->setScale(0.5f);
         addChild(label);
