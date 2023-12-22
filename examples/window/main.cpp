@@ -41,12 +41,9 @@ class MyScene : public Scene {
         label->setScale(0.5f);
         addChild(label);
 
-        getChildByIndex(3)->setScale(.4f); // pusab
-
-        auto batch = create<SpriteBatch>(TextureManager::instance()->addTexture("test.png"));
-        batch->addRect({.rect = {150, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
-        batch->addRect({.rect = {220, 125, 50, 50}, .texCoords = {0, 0, 1, 1}});
-        addChild(batch);
+        auto label2 = create<Label>(str, "arial");
+        label2->setPos({100, 150});
+        addChild(label2);
     }
 
   private:

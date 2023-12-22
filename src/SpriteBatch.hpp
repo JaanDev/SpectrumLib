@@ -16,6 +16,7 @@ struct BatchQuad {
 class SpriteBatch : public Node {
   public:
     SpriteBatch(std::shared_ptr<Texture> tex);
+    SpriteBatch();
     ~SpriteBatch();
 
     virtual void update(float dt) override;
@@ -37,8 +38,9 @@ class SpriteBatch : public Node {
 
   private:
     void rebuild();
-    void initialBuild();
+    void init();
 
+  protected:
     std::vector<BatchQuad> m_quads;
     std::shared_ptr<Texture> m_texture;
     std::shared_ptr<Shader> m_shader;

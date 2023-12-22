@@ -15,6 +15,7 @@ class ActionManager {
 
     void addAction(std::shared_ptr<Action> action);
     void removeAction(std::shared_ptr<Action> action);
+    void removeActionsForNode(Node* node);
 
   private:
     std::vector<std::shared_ptr<Action>> m_actions;

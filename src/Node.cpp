@@ -97,6 +97,10 @@ void Node::runAction(std::shared_ptr<Action> action) {
     ActionManager::instance()->addAction(action);
 }
 
+void Node::removeAllActions() {
+    ActionManager::instance()->removeActionsForNode(this);
+}
+
 void Node::update(float dt) {
     if (m_shouldCalcMtx) {
         m_shouldCalcMtx = false;

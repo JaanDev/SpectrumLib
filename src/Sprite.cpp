@@ -7,7 +7,8 @@
 NS_SPECTRUM_BEGIN
 
 Sprite::Sprite(const std::string& path)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0),
+      m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
     m_texture = std::make_shared<Texture>(path);
     m_boundingBox = m_texture->getSize();
 
@@ -15,29 +16,23 @@ Sprite::Sprite(const std::string& path)
 }
 
 Sprite::Sprite(std::shared_ptr<Texture> texture)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_texture(texture),
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_texture(texture),
       m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
     m_boundingBox = m_texture->getSize();
 
     init();
 }
 
-Sprite::Sprite(std::shared_ptr<TextureFrame> frame) 
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_BLEND_SRC, GL_BLEND_DST}), m_frame(frame), 
-      m_vao(0) {
-    
+Sprite::Sprite(std::shared_ptr<TextureFrame> frame)
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_frame(frame), m_vao(0) {
+
     m_texture = frame->getTexture();
     m_boundingBox = frame->getSize();
 
     auto rect = frame->getRect();
     auto size = frame->getTexture()->getSizeInPixels();
-    
-    m_texCoords = {
-        (float)rect.x / size.w,
-        (float)rect.y / size.h,
-        (float)rect.w / size.w,
-        (float)rect.h / size.h
-    };
+
+    m_texCoords = {(float)rect.x / size.w, (float)rect.y / size.h, (float)rect.w / size.w, (float)rect.h / size.h};
 
     init();
 }
@@ -79,15 +74,10 @@ void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     m_texture = frame->getTexture();
     m_boundingBox = frame->getSize();
 
-    auto rect = frame->getRect();
-    auto size = m_texture->getSizeInPixels();
-    
-    m_texCoords = {
-        (float)rect.x / size.w,
-        (float)rect.y / size.h,
-        (float)rect.w / size.w,
-        (float)rect.h / size.h
-    };
+    const auto& rect = frame->getRect();
+    const auto& size = m_texture->getSizeInPixels();
+
+    m_texCoords = {(float)rect.x / size.w, (float)rect.y / size.h, (float)rect.w / size.w, (float)rect.h / size.h};
 
     // clang-format off
     const float vertices[] = {
@@ -104,13 +94,15 @@ void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::setBlendFunc(const BlendFunc& func) {}
+void Sprite::setBlendFunc(const BlendFunc& func) {
+    m_blendFunc = func;
+}
 
 void Sprite::draw() {
     m_shader->use();
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+    glBlendFunc(m_blendFunc.src, m_blendFunc.dst);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());

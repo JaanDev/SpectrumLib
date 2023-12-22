@@ -39,4 +39,19 @@ void ActionManager::removeAction(std::shared_ptr<Action> action) {
         m_actions.erase(it);
 }
 
+void ActionManager::removeActionsForNode(Node* node) {
+    for (auto it = m_actions.begin(); it != m_actions.end();) {
+        bool go = true;
+
+        auto action = *it;
+        if ((uintptr_t)action->getNode() == (uintptr_t)node) {
+            m_actions.erase(it);
+            go = false;
+        }
+
+        if (go)
+            it++;
+    }
+}
+
 NS_SPECTRUM_END
