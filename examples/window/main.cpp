@@ -11,39 +11,16 @@ class MyScene : public Scene {
     MyScene() : Scene() {
         printf("My scene created\n");
 
-        setBGColor({.1, .1, .1});
+        setBGColor({1.0f, 1.0f, 1.0f});
 
         auto fm = FontManager::instance();
-        fm->loadFont("C:\\Windows\\Fonts\\Arial.ttf", "arial", 36,
+        fm->loadFont("DiaryOfAn8BitMage-lYDD.ttf", "8bit", 30,
                      {FontRange::BasicLatin, {0x401, 0x451}}); // only useful cyrillic letters
-        fm->loadBitmapFont("pusab.fnt", "pusab");
 
-        auto ttfSpr = create<Sprite>(fm->getFont("arial").fontAtlas);
-        ttfSpr->setPos({0, 0});
-        ttfSpr->setAnchorPoint({0, 0});
-        ttfSpr->setScale(120.f / ttfSpr->getTexture()->getSize().w);
-        addChild(ttfSpr);
-
-        auto fntSpr = create<Sprite>(fm->getFont("pusab").fontAtlas);
-        fntSpr->setPos({400, 0});
-        fntSpr->setAnchorPoint({1, 0});
-        fntSpr->setScale(120.f / fntSpr->getTexture()->getSize().w);
-        addChild(fntSpr);
-
-        auto transparentSpr = create<Sprite>("alphaSprite.png");
-        addChild(transparentSpr, 999);
-        transparentSpr->setPos({200, 200});
-
-        std::string str = "Привет, SpectrumLib!";
-
-        auto label = create<Label>(str, "pusab");
-        label->setPos({100, 100});
-        label->setScale(0.5f);
+        auto label = create<Label>("Привет, SpectrumLib!", "8bit");
+        label->setColor({ 128, 128, 128 });
+        label->setPos(AppManager::instance()->getWinSize() / 2);
         addChild(label);
-
-        auto label2 = create<Label>(str, "arial");
-        label2->setPos({100, 150});
-        addChild(label2);
     }
 
   private:
@@ -52,7 +29,7 @@ class MyScene : public Scene {
 
 int main() {
     FileManager::instance()->addSearchPath("assets");
-    WindowManager::instance()->createWindow({1024, 768}, {400, 300}, "Hello Spectrum!", false,
+    WindowManager::instance()->createWindow({800, 450}, {800, 450}, "Hello Spectrum!", false,
                                             WindowFlags::Default | WindowFlags::ScaleToMonitor | WindowFlags::Resizable);
 
     auto appMgr = AppManager::instance();
