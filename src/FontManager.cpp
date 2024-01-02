@@ -128,10 +128,20 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         }
     }
 
-    m_fonts[id] = Font {.lineHeight = lineHeight,
-                        .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
-                        .glyphs = glyphs};
+    int iascent, idescent, ilineGap;
+    iascent = idescent = ilineGap = 0;
+    auto scale = stbtt_ScaleForPixelHeight(&fontInfo, lineHeight);
+    stbtt_GetFontVMetrics(&fontInfo, &iascent, &idescent, &ilineGap);
+    float ascent = iascent * scale;
+    float descent = idescent * scale;
+    float lineGap = ilineGap * scale;
 
+    m_fonts[id] = Font {.lineHeight = (ascent - descent + lineGap) * ratio.y,
+                        .base = lineHeight,
+                        .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
+                        .glyphs = glyphs,
+                        .shaderName = "ttf-shader"};
+    
     for (auto i = 0u; i < ranges.size(); i++) {
         delete[] ttRanges[i].chardata_for_range;
     }
@@ -152,6 +162,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
     auto ratio = AppManager::instance()->getPointsToPixelsRatio();
 
     Font font;
+    font.shaderName = "sprite-shader";
     std::ifstream stream(absPath);
     std::string line;
 
@@ -160,11 +171,13 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             continue;
 
         if (line.find("common") != std::string::npos) {
-            int varsParsed = sscanf_s(line.c_str(), "common lineHeight=%f", &font.lineHeight);
-            if (varsParsed < 1) {
+            int varsParsed = sscanf_s(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
+            if (varsParsed < 2) {
                 logE("Can't parse common line in file {}", absPath.string());
                 return;
             }
+            font.lineHeight *= ratio.y;
+            font.base *= ratio.y;
             continue;
         }
 
@@ -219,8 +232,12 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
     m_fonts[id] = font;
 }
 
-const Font& FontManager::getFont(const std::string& id) const {
-    return m_fonts.at(id);
+void FontManager::addFont(const Font& font, const std::string& id) {
+    m_fonts[id] = font;
+}
+
+Font& FontManager::getFont(const std::string& id) {
+    return m_fonts[id];
 }
 
 NS_SPECTRUM_END

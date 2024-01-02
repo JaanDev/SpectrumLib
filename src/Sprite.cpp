@@ -16,15 +16,16 @@ Sprite::Sprite(const std::string& path)
 }
 
 Sprite::Sprite(std::shared_ptr<Texture> texture)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_texture(texture),
-      m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}),
+      m_texture(texture), m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
     m_boundingBox = m_texture->getSize();
 
     init();
 }
 
 Sprite::Sprite(std::shared_ptr<TextureFrame> frame)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_frame(frame), m_vao(0) {
+    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_frame(frame),
+      m_vao(0) {
 
     m_texture = frame->getTexture();
     m_boundingBox = frame->getSize();

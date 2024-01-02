@@ -26,7 +26,7 @@ SpriteBatch::~SpriteBatch() {
 
 void SpriteBatch::update(float dt) {
     Node::update(dt);
-    
+
     if (m_shouldRebuild) {
         m_shouldRebuild = false;
         rebuild();

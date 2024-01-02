@@ -3,18 +3,19 @@
 #include "ShaderManager.hpp"
 #include <utf8.h>
 
+#include "logger.hpp"
+
 NS_SPECTRUM_BEGIN
 
-Label::Label(const std::string& text, const std::string& fontID)
-    : m_text(text), m_fontID(fontID), m_font(FontManager::instance()->getFont(fontID)), m_textAlignmentH(TextAlignmentH::Center),
-      m_textAlignmentV(TextAlignmentV::Center), m_maxWidth(0.f) {
+Label::Label(const std::string& text, const std::string& fontID, TextAlignment alignment, float maxWidth)
+    : m_text(text), m_fontID(fontID), m_font(FontManager::instance()->getFont(fontID)), m_textAlignment(alignment),
+      m_maxWidth(maxWidth) {
     m_texture = m_font.fontAtlas;
     rebuild();
 }
 
-Label::Label(const std::string& text, const Font& font)
-    : m_text(text), m_fontID(""), m_font(font), m_textAlignmentH(TextAlignmentH::Center),
-      m_textAlignmentV(TextAlignmentV::Center), m_maxWidth(0.f) {
+Label::Label(const std::string& text, const Font& font, TextAlignment alignment, float maxWidth)
+    : m_text(text), m_fontID(""), m_font(font), m_textAlignment(alignment), m_maxWidth(maxWidth) {
     m_texture = m_font.fontAtlas;
     rebuild();
 }
@@ -31,18 +32,13 @@ void Label::setFont(const std::string& fontID) {
 }
 
 void Label::setFont(const Font& font) {
-    m_fontID = "";
+    m_fontID.clear();
     m_font = font;
     rebuild();
 }
 
-void Label::setHorizontalAlignment(TextAlignmentH alignment) {
-    m_textAlignmentH = alignment;
-    rebuild();
-}
-
-void Label::setVerticalAlignment(TextAlignmentV alignment) {
-    m_textAlignmentV = alignment;
+void Label::setAlignment(TextAlignment alignment) {
+    m_textAlignment = alignment;
     rebuild();
 }
 
@@ -54,31 +50,115 @@ void Label::setMaxWidth(float maxW) {
 void Label::rebuild() {
     setTexture(m_font.fontAtlas);
     m_quads.clear();
-    this->setShader(ShaderManager::instance()->getShader("ttf-shader"));
+    setShader(ShaderManager::instance()->getShader(m_font.shaderName == nullptr ? "sprite-shader" : m_font.shaderName));
 
-    Vec2f pos = {0, 0};
+    auto lines = separateText();
+
     auto ratio = AppManager::instance()->getPointsToPixelsRatio();
     auto size = m_font.fontAtlas->getSizeInPixels();
+    Sizef box = {0, m_font.base};
+    Vec2f pos = {0, m_font.base};
 
+    logD("line h {}", m_font.lineHeight);
+
+    for (const auto& line : lines) {
+        logD("- {}", line);
+
+        pos.x = 0;
+        int lineQuadCount = 0;
+
+        auto it = line.begin();
+        auto end = line.end();
+        while (it != line.end()) {
+            auto cp = utf8::next(it, end);
+
+            if (!m_font.glyphs.contains(cp))
+                continue;
+
+            const auto& glyph = m_font.glyphs[cp];
+
+            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio.x,
+                               (float)glyph.textureRect.h * ratio.y};
+
+            if (auto y2 = glyphRect.y + glyphRect.h; y2 > box.h)
+                box.h = y2;
+
+            addRect(BatchQuad {.rect = glyphRect,
+                               .texCoords = {.x = glyph.textureRect.x / (float)size.w,
+                                             .y = glyph.textureRect.y / (float)size.h,
+                                             .w = glyph.textureRect.w / (float)size.w,
+                                             .h = glyph.textureRect.h / (float)size.h}});
+
+            pos.x += glyph.xAdvance;
+            if (pos.x > box.w)
+                box.w = pos.x;
+            lineQuadCount++;
+        }
+
+        float lineWidth = pos.x;
+
+        if (m_textAlignment == TextAlignment::Center) {
+            auto lineOffset = lineWidth / 2.f;
+            auto quadLen = m_quads.size();
+            for (auto i = 0u; i < lineQuadCount; i++) {
+                m_quads[quadLen - 1 - i].rect.x -= lineOffset;
+            }
+        } else if (m_textAlignment == TextAlignment::Right) {
+            auto quadLen = m_quads.size();
+            for (auto i = 0u; i < lineQuadCount; i++) {
+                m_quads[quadLen - 1 - i].rect.x -= lineWidth;
+            }
+        }
+
+        pos.y += m_font.lineHeight;
+    }
+
+    if (m_textAlignment == TextAlignment::Right) {
+        for (auto& quad : m_quads) {
+            quad.rect.x += box.w;
+        }
+    }
+
+    setBoundingBox(box);
+}
+
+std::vector<std::string> Label::separateText() {
+    std::vector<std::string> ret;
+
+    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+
+    std::string current;
+    float currentWidth = 0.f;
     auto it = m_text.begin();
     auto end = m_text.end();
     while (it != m_text.end()) {
         auto cp = utf8::next(it, end);
 
+        if (cp == '\n') {
+            ret.push_back(current);
+            current.clear();
+            currentWidth = 0.f;
+            continue;
+        }
+
         if (!m_font.glyphs.contains(cp))
             continue;
 
         const auto& glyph = m_font.glyphs[cp];
+        if (m_maxWidth > 0.f && currentWidth + glyph.textureRect.w > m_maxWidth) {
+            // logD("yay!! {}", current);
+            ret.push_back(current);
+            current.clear();
+            currentWidth = 0.f;
+        }
 
-        addRect({.rect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio.x,
-                          (float)glyph.textureRect.h * ratio.y},
-                 .texCoords = {.x = glyph.textureRect.x / (float)size.w,
-                               .y = glyph.textureRect.y / (float)size.h,
-                               .w = glyph.textureRect.w / (float)size.w,
-                               .h = glyph.textureRect.h / (float)size.h}});
-
-        pos.x += glyph.xAdvance;
+        currentWidth += glyph.xOffset + glyph.xAdvance;
+        utf8::append(cp, current);
     }
+
+    ret.push_back(current);
+
+    return ret;
 }
 
 NS_SPECTRUM_END

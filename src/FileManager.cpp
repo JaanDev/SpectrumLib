@@ -18,7 +18,7 @@ std::filesystem::path FileManager::fullPathForFile(const std::string& name) {
     auto fsPath = std::filesystem::path(name);
     if (fsPath.is_absolute())
         return fsPath;
-    
+
     for (const auto& searchPath : m_searchPaths) {
         for (auto file : std::filesystem::directory_iterator(searchPath)) {
             auto filePath = file.path();

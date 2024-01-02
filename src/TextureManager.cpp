@@ -14,9 +14,9 @@ TextureManager* TextureManager::instance() {
 TextureManager::TextureManager() : m_textures({}), m_frames({}) {}
 
 std::shared_ptr<Texture> TextureManager::getTexture(const std::string& name) {
-    if(m_textures.count(name) == 0)
+    if (m_textures.count(name) == 0)
         addTexture(name);
-    
+
     return m_textures.count(name) > 0 ? m_textures[name] : nullptr;
 }
 
@@ -48,20 +48,15 @@ void TextureManager::loadSpriteSheet(const std::string& path) {
 
     rapidjson::Document doc;
     doc.Parse(json.c_str());
-    
+
     auto texture = getTexture(doc["metadata"]["texture-filename"].GetString());
 
-    for(auto& pair : doc["frames"].GetObj()){
-        Recti rect = {
-            pair.value["rect"].GetArray()[0].GetInt(),
-            pair.value["rect"].GetArray()[1].GetInt(),
-            pair.value["rect"].GetArray()[2].GetInt(),
-            pair.value["rect"].GetArray()[3].GetInt()
-        };
+    for (auto& pair : doc["frames"].GetObj()) {
+        Recti rect = {pair.value["rect"].GetArray()[0].GetInt(), pair.value["rect"].GetArray()[1].GetInt(),
+                      pair.value["rect"].GetArray()[2].GetInt(), pair.value["rect"].GetArray()[3].GetInt()};
 
         m_frames[pair.name.GetString()] = std::make_shared<TextureFrame>(texture, rect, pair.value["rotated"].GetBool());
     }
-
 }
 
 void TextureManager::removeTexture(const std::string& name) {
@@ -86,8 +81,8 @@ void TextureManager::removeFramesFromFile(const std::filesystem::path& path) {
 
     rapidjson::Document doc;
     doc.Parse(json.c_str());
-    
-    for(auto& pair : doc["frames"].GetObj()){
+
+    for (auto& pair : doc["frames"].GetObj()) {
         removeFrame(pair.name.GetString());
     }
 }

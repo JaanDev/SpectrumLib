@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <type_traits>
 
 #define NS_SPECTRUM_BEGIN namespace spl {
 #define NS_SPECTRUM_END }

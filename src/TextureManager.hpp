@@ -6,7 +6,6 @@
 #include "TextureFrame.hpp"
 #include <filesystem>
 
-
 NS_SPECTRUM_BEGIN
 
 class TextureManager {

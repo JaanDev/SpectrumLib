@@ -132,6 +132,7 @@ namespace utils {
                            : (1 + calcEasing(EasingType::EaseOutBounce, 2 * x - 1)) / 2;
         default:
             logW("Unknown easing type!");
+            return x;
             break;
         }
     }

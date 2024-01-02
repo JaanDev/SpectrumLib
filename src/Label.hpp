@@ -10,8 +10,9 @@ NS_SPECTRUM_BEGIN
 class Label : public SpriteBatch {
   public:
     // fontID это то, что указывали при загрузке в FontManager
-    Label(const std::string& text, const std::string& fontID);
-    Label(const std::string& text, const Font& font);
+    Label(const std::string& text, const std::string& fontID, TextAlignment alignment = TextAlignment::Left,
+          float maxWidth = 0.f);
+    Label(const std::string& text, const Font& font, TextAlignment alignment = TextAlignment::Left, float maxWidth = 0.f);
 
     void setText(const std::string& text);
     inline const std::string& getText() const { return m_text; }
@@ -21,11 +22,8 @@ class Label : public SpriteBatch {
     void setFont(const std::string& fontID);
     void setFont(const Font& font);
 
-    inline TextAlignmentH getHorizontalAlignment() const { return m_textAlignmentH; }
-    void setHorizontalAlignment(TextAlignmentH alignment);
-
-    inline TextAlignmentV getVerticalAlignment() const { return m_textAlignmentV; }
-    void setVerticalAlignment(TextAlignmentV alignment);
+    inline TextAlignment getAlignment() const { return m_textAlignment; }
+    void setAlignment(TextAlignment alignment);
 
     // 0.f (like by default) => not used
     inline float getMaxWidth() const { return m_maxWidth; }
@@ -33,13 +31,13 @@ class Label : public SpriteBatch {
 
   protected:
     void rebuild();
+    std::vector<std::string> separateText();
 
     std::string m_text;
     std::string m_fontID;
     Font m_font;
-    TextAlignmentH m_textAlignmentH;
-    TextAlignmentV m_textAlignmentV;
     float m_maxWidth;
+    TextAlignment m_textAlignment;
 };
 
 NS_SPECTRUM_END

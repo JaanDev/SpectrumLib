@@ -1,8 +1,5 @@
 #include <Spectrum.hpp>
 
-#include <utf8.h>
-#include <logger.hpp>
-
 using namespace spl;
 #define create std::make_shared
 
@@ -16,15 +13,14 @@ class MyScene : public Scene {
         auto fm = FontManager::instance();
         fm->loadFont("DiaryOfAn8BitMage-lYDD.ttf", "8bit", 30,
                      {FontRange::BasicLatin, {0x401, 0x451}}); // only useful cyrillic letters
+        fm->loadBitmapFont("pusab.fnt", "pusab");
 
-        auto label = create<Label>("Привет, SpectrumLib!", "8bit");
-        label->setColor({ 128, 128, 128 });
-        label->setPos(AppManager::instance()->getWinSize() / 2);
-        addChild(label);
+        auto label2 = create<Label>("Привет, SpectrumLib!", "pusab");
+        label2->setColor({ 128, 128, 128 });
+        label2->setAnchorPoint({0, 0});
+        label2->setScale(0.3f);
+        addChild(label2);
     }
-
-  private:
-    //
 };
 
 int main() {
@@ -33,7 +29,7 @@ int main() {
                                             WindowFlags::Default | WindowFlags::ScaleToMonitor | WindowFlags::Resizable);
 
     auto appMgr = AppManager::instance();
-    appMgr->setTargetFrameTime(1.0f / 60);
+    appMgr->setTargetFrameTime(1 / 60.0f);
     appMgr->pushScene(create<MyScene>());
     appMgr->run();
 
