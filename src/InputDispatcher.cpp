@@ -1,5 +1,6 @@
 #include "InputDispatcher.hpp"
 
+#include <algorithm>
 #include "logger.hpp"
 
 NS_SPECTRUM_BEGIN
@@ -11,7 +12,11 @@ InputDispatcher* InputDispatcher::get() {
 
 InputDispatcher::InputDispatcher()
     : m_mouseEvents({}), m_mouseScrollEvents({}), m_keyEvents({}), m_textEvents({}), m_mouseCb(nullptr), m_mouseScrollCb(nullptr),
-      m_keyCb(nullptr), m_textCb(nullptr) {}
+      m_keyCb(nullptr), m_textCb(nullptr), m_joysticks({}) {
+    for (auto i = 0u; i < GLFW_JOYSTICK_LAST + 1; i++) {
+        m_joysticks[i] = Joystick(i);
+    }
+}
 
 void InputDispatcher::registerMouseEvents(Node* node) {
     if (std::find(m_mouseEvents.begin(), m_mouseEvents.end(), node) == m_mouseEvents.end())
@@ -83,6 +88,10 @@ void InputDispatcher::addPassiveKeyListener(std::function<void(int key, int scan
 
 void InputDispatcher::addPassiveTextListener(std::function<void(unsigned int codepoint)> callback) {
     m_textCb = callback;
+}
+
+Joystick& InputDispatcher::getJoystick(int id) {
+    return m_joysticks[std::clamp(id, 0, 15)];
 }
 
 void InputDispatcher::keyCallback(int key, int scancode, int action, int mods) {

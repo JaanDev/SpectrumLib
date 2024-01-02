@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(SpectrumLib VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
@@ -24,6 +24,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include
     external/rapidjson/include
+    external/SDL_GameControllerDB
 )
 target_include_directories(${PROJECT_NAME} PRIVATE
     external/stb

@@ -1,5 +1,7 @@
 #include <Spectrum.hpp>
 
+#include "logger.hpp"
+
 using namespace spl;
 #define create std::make_shared
 
@@ -15,23 +17,45 @@ class MyScene : public Scene {
 
     virtual void onKeyEvent(int key, int scancode, int action, int mods) override {
         if (action == GLFW_PRESS) {
-            if (key == GLFW_KEY_X) {
-                auto spr = create<Sprite>("test.png");
-                spr->setScale(0.5f);
-                spr->setRotation(m_val);
-                m_val += 5.f;
-                spr->setPos(AppManager::get()->getWinSize() / 2.f);
-                addChild(spr);
-            } else if (key == GLFW_KEY_ESCAPE) {
-                AppManager::get()->end();
+            switch (key) {
+            case GLFW_KEY_R: {
+                logD("hello world");
+                auto& joystick = InputDispatcher::get()->getJoystick(0);
+                logD("present {}", joystick.isPresent());
+                logD("is gamepad {}", joystick.isGamepad());
+                if (joystick.isPresent()) {
+                    auto jname = joystick.getName();
+                    logD("name {}", jname);
+                    auto jguid = joystick.getGUID();
+                    logD("GUID {}", jguid);
+                    // auto mapping = 
+                }
+                if (joystick.isGamepad()) {
+                    logD("!!!IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD!!!");
+                }
+
+                int count;
+                const float* axes = glfwGetJoystickAxes(0, &count);
+                logD("count {}", count);
+                for (auto i = 0u; i < count; i++) {
+                    logD("{}", axes[i]);
+                }
+
+                // int count;
+                const unsigned char* buttons = glfwGetJoystickButtons(0, &count);
+                logD("count {}", count);
+                for (auto i = 0u; i < count; i++) {
+                    logD("{}", buttons[i]);
+                }
+            } break;
+            default:
+                break;
             }
         }
     }
 
     virtual void update(float dt) override {
-        for (auto child : m_children) {
-            child->setPos(WindowManager::get()->getMousePos());
-        }
+        //
     }
 
   private:

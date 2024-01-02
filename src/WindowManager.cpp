@@ -67,6 +67,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     logD("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
     logD("GLSL Version:   {}", (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
     logD("GLAD Version:   {}", GLAD_GENERATOR_VERSION);
+    logD("GLFW Version:   {}", glfwGetVersionString());
     logD("Renderer:       {}", (char*)glGetString(GL_RENDERER));
     logD("Vendor:         {}", (char*)glGetString(GL_VENDOR));
 

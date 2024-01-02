@@ -16,3 +16,6 @@
 [submodule "external/utfcpp"]
 	path = external/utfcpp
 	url = https://github.com/nemtrif/utfcpp.git
+[submodule "external/SDL_GameControllerDB"]
+	path = external/SDL_GameControllerDB
+	url = https://github.com/gabomdq/SDL_GameControllerDB.git

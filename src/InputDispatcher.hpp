@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
+#include <array>
 #include "utils.hpp"
 #include "Node.hpp"
 #include "WindowManager.hpp"
+#include "Joystick.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -33,6 +35,8 @@ class InputDispatcher {
     void addPassiveKeyListener(std::function<void(int key, int scancode, int action, int mods)> callback);
     void addPassiveTextListener(std::function<void(unsigned int codepoint)> callback);
 
+    Joystick& getJoystick(int id);
+
   private:
     void keyCallback(int key, int scancode, int action, int mods);
     void charCallback(unsigned int codepoint);
@@ -48,6 +52,7 @@ class InputDispatcher {
     std::function<void(const Vec2f& delta)> m_mouseScrollCb;
     std::function<void(int key, int scancode, int action, int mods)> m_keyCb;
     std::function<void(unsigned int codepoint)> m_textCb;
+    std::array<Joystick, GLFW_JOYSTICK_LAST + 1> m_joysticks;
 };
 
 NS_SPECTRUM_END
