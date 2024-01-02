@@ -75,10 +75,15 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     glfwSwapInterval(m_isVsync);
 
+    int w, h;
+    glfwGetWindowSize(m_windowHandle, &w, &h);
+    logD("{}x{} ; {}x{}", sizeInPixels.w, sizeInPixels.h, w, h);
+    m_curPointsToPixels = sizeInPoints / Vec2i {w, h};
+
     glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
         glViewport(0, 0, w, h);
-        auto mgr = AppManager::instance();
-        mgr->m_pointsToPixels = mgr->getWinSize() / Vec2i {w, h};
+        logD("{}x{}", w, h);
+        WindowManager::instance()->m_curPointsToPixels = AppManager::instance()->getWinSize() / Vec2i {w, h};
     });
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
@@ -113,8 +118,8 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        InputDispatcher::instance()->mousePosCallback(
-            AppManager::instance()->pixelsToPoints({static_cast<float>(xpos), static_cast<float>(ypos)}));
+        InputDispatcher::instance()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} *
+                                                      WindowManager::instance()->m_curPointsToPixels);
     });
 
     glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) {
@@ -124,7 +129,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     setDefaultWindowIcon();
 
     AppManager::instance()->m_winSize = sizeInPoints;
-    AppManager::instance()->m_pointsToPixels = sizeInPoints / sizeInPixels.to<float>();
+    AppManager::instance()->m_pointsToPixels = sizeInPoints / sizeInPixels;
 }
 
 void WindowManager::setWindowIcon(const std::string& iconPath) {
@@ -178,7 +183,7 @@ void WindowManager::setWinSizeInPixels(const Sizei& size) {
 }
 
 Vec2f WindowManager::getMousePos() {
-    return AppManager::instance()->pixelsToPoints(getMousePosInPixels());
+    return getMousePosInPixels() * m_curPointsToPixels;
 }
 
 Vec2f WindowManager::getMousePosInPixels() {
@@ -199,18 +204,6 @@ void WindowManager::setWindowPos(const Vec2i& pos) {
 
 void WindowManager::setWindowTitle(const std::string& title) {
     glfwSetWindowTitle(m_windowHandle, title.c_str());
-}
-
-Vec2f WindowManager::getMouseWheelDelta() {
-    return Vec2f();
-}
-
-Vec2f WindowManager::getMouseDelta() {
-    return Vec2f();
-}
-
-Vec2i WindowManager::getMouseDeltaInPixels() {
-    return Vec2i();
 }
 
 void WindowManager::setDefaultWindowIcon() {

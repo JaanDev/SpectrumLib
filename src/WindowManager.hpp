@@ -42,11 +42,6 @@ class WindowManager {
         m_filesDroppedCallback = callback;
     }
 
-    // all 3 are for this frame
-    Vec2f getMouseWheelDelta();
-    Vec2f getMouseDelta();
-    Vec2i getMouseDeltaInPixels();
-
   private:
     void setDefaultWindowIcon();
 
@@ -55,6 +50,7 @@ class WindowManager {
     std::function<void(std::vector<std::string>)> m_filesDroppedCallback;
     Sizei m_fsWinSize; // for fullscreen
     Vec2i m_fsWinPos;  // for fullscreen
+    Vec2f m_curPointsToPixels;
     bool m_isFullscreen;
     bool m_isVsync;
 };
