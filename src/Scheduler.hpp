@@ -14,7 +14,7 @@ struct Timer {
 
 class Scheduler {
   public:
-    static Scheduler* instance();
+    static Scheduler* get();
     Scheduler();
 
     // returns the timer id which can be used to unschedule it

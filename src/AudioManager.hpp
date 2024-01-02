@@ -28,7 +28,7 @@ struct Channel {
 
 class AudioManager {
   public:
-    static AudioManager* instance();
+    static AudioManager* get();
 
     void playSample(const std::string& sample, uint32_t repeats);
     void playSample(const std::string& sample, uint8_t channel, uint32_t repeats);

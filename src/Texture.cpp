@@ -9,7 +9,7 @@
 NS_SPECTRUM_BEGIN
 
 Texture::Texture(const std::string& path) : m_format(0), m_size({0, 0}), m_textureID(0) {
-    auto absPath = FileManager::instance()->fullPathForFile(path);
+    auto absPath = FileManager::get()->fullPathForFile(path);
     if (!std::filesystem::exists(absPath)) {
         logE("Failed to load a texture from file {}", absPath.string());
         return;
@@ -91,7 +91,7 @@ Texture::~Texture() {
 }
 
 Sizef Texture::getSize() {
-    return AppManager::instance()->pixelsToSize(m_size.to<float>());
+    return AppManager::get()->pixelsToSize(m_size.to<float>());
 }
 
 void Texture::setTexParams(const TexParams& params) {

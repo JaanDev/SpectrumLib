@@ -275,7 +275,7 @@ struct Font {
 
 class FontManager {
   public:
-    static FontManager* instance();
+    static FontManager* get();
 
     void loadFont(const std::string& path, const std::string& id, float lineHeight, const std::vector<FontRange>& ranges);
     void loadBitmapFont(const std::string& path, const std::string& id);

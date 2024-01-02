@@ -8,7 +8,7 @@
 NS_SPECTRUM_BEGIN
 
 Label::Label(const std::string& text, const std::string& fontID, TextAlignment alignment, float maxWidth)
-    : m_text(text), m_fontID(fontID), m_font(FontManager::instance()->getFont(fontID)), m_textAlignment(alignment),
+    : m_text(text), m_fontID(fontID), m_font(FontManager::get()->getFont(fontID)), m_textAlignment(alignment),
       m_maxWidth(maxWidth) {
     m_texture = m_font.fontAtlas;
     rebuild();
@@ -27,7 +27,7 @@ void Label::setText(const std::string& text) {
 
 void Label::setFont(const std::string& fontID) {
     m_fontID = fontID;
-    m_font = FontManager::instance()->getFont(fontID);
+    m_font = FontManager::get()->getFont(fontID);
     rebuild();
 }
 
@@ -50,11 +50,11 @@ void Label::setMaxWidth(float maxW) {
 void Label::rebuild() {
     setTexture(m_font.fontAtlas);
     m_quads.clear();
-    setShader(ShaderManager::instance()->getShader(m_font.shaderName == nullptr ? "sprite-shader" : m_font.shaderName));
+    setShader(ShaderManager::get()->getShader(m_font.shaderName == nullptr ? "sprite-shader" : m_font.shaderName));
 
     auto lines = separateText();
 
-    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+    auto ratio = AppManager::get()->getPointsToPixelsRatio();
     auto size = m_font.fontAtlas->getSizeInPixels();
     Sizef box = {0, m_font.base};
     Vec2f pos = {0, m_font.base};
@@ -125,7 +125,7 @@ void Label::rebuild() {
 std::vector<std::string> Label::separateText() {
     std::vector<std::string> ret;
 
-    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+    auto ratio = AppManager::get()->getPointsToPixelsRatio();
 
     std::string current;
     float currentWidth = 0.f;

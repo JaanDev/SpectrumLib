@@ -6,9 +6,9 @@
 
 NS_SPECTRUM_BEGIN
 
-TextureManager* TextureManager::instance() {
-    static auto instance = std::make_unique<TextureManager>();
-    return instance.get();
+TextureManager* TextureManager::get() {
+    static auto instance = TextureManager();
+    return &instance;
 }
 
 TextureManager::TextureManager() : m_textures({}), m_frames({}) {}

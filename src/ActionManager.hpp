@@ -8,7 +8,7 @@ NS_SPECTRUM_BEGIN
 
 class ActionManager {
   public:
-    static ActionManager* instance();
+    static ActionManager* get();
     ActionManager();
 
     void update(float dt);

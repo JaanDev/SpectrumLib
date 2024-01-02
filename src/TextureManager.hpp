@@ -10,7 +10,7 @@ NS_SPECTRUM_BEGIN
 
 class TextureManager {
   public:
-    static TextureManager* instance();
+    static TextureManager* get();
     TextureManager();
 
     // adds texture if not added previously

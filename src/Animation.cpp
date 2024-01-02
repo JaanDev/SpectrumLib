@@ -16,7 +16,7 @@ Animation::Animation(float frameTime, int timesToRun, const std::string& formatS
 
     for (auto i = startNum; i <= endNum; i++) {
         auto texName = fmt::format(fmt::runtime(formatStr), i);
-        auto tex = TextureManager::instance()->getTexture(texName);
+        auto tex = TextureManager::get()->getTexture(texName);
         if (tex) {
             m_textures.push_back(tex);
         } else {

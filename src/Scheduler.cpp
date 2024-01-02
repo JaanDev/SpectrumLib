@@ -5,9 +5,9 @@
 
 NS_SPECTRUM_BEGIN
 
-Scheduler* Scheduler::instance() {
-    static auto instance = std::make_unique<Scheduler>();
-    return instance.get();
+Scheduler* Scheduler::get() {
+    static auto instance = Scheduler();
+    return &instance;
 }
 
 Scheduler::Scheduler()

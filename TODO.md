@@ -3,7 +3,7 @@
 - [ ] render textures
 - [ ] particles
 - [ ] skew
-- [ ] more textures
+- [ ] more texture formats
 - [ ] scene transitions
-- [ ] label
+- [x] label
 - [ ] audio

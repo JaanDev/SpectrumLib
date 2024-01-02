@@ -10,7 +10,7 @@ class InputDispatcher {
     friend class WindowManager;
 
   public:
-    static InputDispatcher* instance();
+    static InputDispatcher* get();
     InputDispatcher();
 
     void registerMouseEvents(Node* node);

@@ -10,9 +10,9 @@
 
 NS_SPECTRUM_BEGIN
 
-WindowManager* WindowManager::instance() {
-    static auto instance = std::make_unique<WindowManager>();
-    return instance.get();
+WindowManager* WindowManager::get() {
+    static auto instance = WindowManager();
+    return &instance;
 }
 
 WindowManager::WindowManager()
@@ -77,31 +77,29 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     int w, h;
     glfwGetWindowSize(m_windowHandle, &w, &h);
-    logD("{}x{} ; {}x{}", sizeInPixels.w, sizeInPixels.h, w, h);
     m_curPointsToPixels = sizeInPoints / Vec2i {w, h};
 
     glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
         glViewport(0, 0, w, h);
-        logD("{}x{}", w, h);
-        WindowManager::instance()->m_curPointsToPixels = AppManager::instance()->getWinSize() / Vec2i {w, h};
+        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize() / Vec2i {w, h};
     });
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
-        auto wmgr = WindowManager::instance();
+        auto wmgr = WindowManager::get();
         if (wmgr->m_closeCallback) {
             glfwSetWindowShouldClose(wmgr->m_windowHandle, wmgr->m_closeCallback());
         }
     });
 
     glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        InputDispatcher::instance()->keyCallback(key, scancode, action, mods);
+        InputDispatcher::get()->keyCallback(key, scancode, action, mods);
     });
 
     glfwSetCharCallback(m_windowHandle,
-                        [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::instance()->charCallback(codepoint); });
+                        [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::get()->charCallback(codepoint); });
 
     glfwSetDropCallback(m_windowHandle, [](GLFWwindow* window, int path_count, const char** paths) {
-        auto wmgr = WindowManager::instance();
+        auto wmgr = WindowManager::get();
         if (wmgr->m_filesDroppedCallback) {
             std::vector<std::string> files;
 
@@ -114,26 +112,26 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     });
 
     glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) {
-        InputDispatcher::instance()->mouseScrollCallback({static_cast<float>(x), static_cast<float>(y)});
+        InputDispatcher::get()->mouseScrollCallback({static_cast<float>(x), static_cast<float>(y)});
     });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        InputDispatcher::instance()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} *
-                                                      WindowManager::instance()->m_curPointsToPixels);
+        InputDispatcher::get()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} *
+                                                 WindowManager::get()->m_curPointsToPixels);
     });
 
     glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) {
-        InputDispatcher::instance()->mouseBtnCallback(button, action, mods);
+        InputDispatcher::get()->mouseBtnCallback(button, action, mods);
     });
 
     setDefaultWindowIcon();
 
-    AppManager::instance()->m_winSize = sizeInPoints;
-    AppManager::instance()->m_pointsToPixels = sizeInPoints / sizeInPixels;
+    AppManager::get()->m_winSize = sizeInPoints;
+    AppManager::get()->m_pointsToPixels = sizeInPoints / sizeInPixels;
 }
 
 void WindowManager::setWindowIcon(const std::string& iconPath) {
-    auto fullPath = FileManager::instance()->fullPathForFile(iconPath);
+    auto fullPath = FileManager::get()->fullPathForFile(iconPath);
     int w, h, bpp;
     auto data = stbi_load(fullPath.string().c_str(), &w, &h, &bpp, 0);
     if (!data) {

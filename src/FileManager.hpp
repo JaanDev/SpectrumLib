@@ -7,7 +7,7 @@ NS_SPECTRUM_BEGIN
 
 class FileManager {
   public:
-    static FileManager* instance();
+    static FileManager* get();
     FileManager();
 
     std::filesystem::path fullPathForFile(const std::string& name);

@@ -4,9 +4,9 @@
 
 NS_SPECTRUM_BEGIN
 
-InputDispatcher* InputDispatcher::instance() {
-    static auto instance = std::make_unique<InputDispatcher>();
-    return instance.get();
+InputDispatcher* InputDispatcher::get() {
+    static auto instance = InputDispatcher();
+    return &instance;
 }
 
 InputDispatcher::InputDispatcher()
@@ -123,7 +123,7 @@ void InputDispatcher::mousePosCallback(const Vec2f& pos) {
 }
 
 void InputDispatcher::mouseBtnCallback(int button, int action, int mods) {
-    auto mousePos = WindowManager::instance()->getMousePos();
+    auto mousePos = WindowManager::get()->getMousePos();
 
     for (auto node : m_mouseEvents) {
         auto nodeRect = node->getRect();

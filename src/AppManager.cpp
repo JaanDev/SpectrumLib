@@ -14,9 +14,9 @@
 
 NS_SPECTRUM_BEGIN
 
-AppManager* AppManager::instance() {
-    static auto instance = std::make_unique<AppManager>();
-    return instance.get();
+AppManager* AppManager::get() {
+    static auto instance = AppManager();
+    return &instance;
 }
 
 AppManager::AppManager()
@@ -32,11 +32,11 @@ void AppManager::run() {
     }
     hasRun = true;
 
-    ShaderManager::instance();
+    ShaderManager::get();
 
     m_isRunning = true;
 
-    auto win = WindowManager::instance()->getGLFWWindow();
+    auto win = WindowManager::get()->getGLFWWindow();
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -73,8 +73,8 @@ void AppManager::run() {
 
         // 1. process all the stuff
 
-        ActionManager::instance()->update(m_deltaTime);
-        Scheduler::instance()->update(m_deltaTime);
+        ActionManager::get()->update(m_deltaTime);
+        Scheduler::get()->update(m_deltaTime);
 
         Col3f currentColor = {0.f, 0.f, 0.f};
         if (m_curScene) {
@@ -152,7 +152,7 @@ void AppManager::resume() {
 
 void AppManager::end() {
     m_isRunning = false;
-    glfwSetWindowShouldClose(WindowManager::instance()->getGLFWWindow(), true);
+    glfwSetWindowShouldClose(WindowManager::get()->getGLFWWindow(), true);
 }
 
 double AppManager::getTime() {
@@ -163,12 +163,12 @@ void AppManager::setContentScale(float scale) {}
 
 void AppManager::setCursorVisible(bool visible) {
     m_isCursorVisible = visible;
-    glfwSetInputMode(WindowManager::instance()->getGLFWWindow(), GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(WindowManager::get()->getGLFWWindow(), GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
 }
 
 void AppManager::setCursorLocked(bool locked) {
     m_isCursorLocked = locked;
-    glfwSetInputMode(WindowManager::instance()->getGLFWWindow(), GLFW_CURSOR, locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(WindowManager::get()->getGLFWWindow(), GLFW_CURSOR, locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void AppManager::openURL(const std::string& url) {
@@ -206,12 +206,12 @@ void AppManager::goToScene(int step) {
 }
 
 std::string AppManager::getClipboardText() {
-    auto str = glfwGetClipboardString(WindowManager::instance()->getGLFWWindow());
+    auto str = glfwGetClipboardString(WindowManager::get()->getGLFWWindow());
     return str ? str : "";
 }
 
 void AppManager::setClipboardText(const std::string& text) {
-    glfwSetClipboardString(WindowManager::instance()->getGLFWWindow(), text.c_str());
+    glfwSetClipboardString(WindowManager::get()->getGLFWWindow(), text.c_str());
 }
 
 Vec2f AppManager::pointsToPixels(const Vec2f& pointPos) {

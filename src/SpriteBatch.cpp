@@ -98,7 +98,7 @@ void SpriteBatch::rebuild() {
 }
 
 void SpriteBatch::init() {
-    m_shader = ShaderManager::instance()->getShader("sprite-shader");
+    m_shader = ShaderManager::get()->getShader("sprite-shader");
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
 

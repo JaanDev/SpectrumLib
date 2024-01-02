@@ -10,7 +10,7 @@ NS_SPECTRUM_BEGIN
 
 class ShaderManager {
   public:
-    static ShaderManager* instance();
+    static ShaderManager* get();
     ShaderManager();
 
     std::shared_ptr<Shader> getShader(const std::string& id) const;

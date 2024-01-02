@@ -9,14 +9,14 @@
 
 NS_SPECTRUM_BEGIN
 
-FontManager* FontManager::instance() {
-    static auto instance = std::make_unique<FontManager>();
-    return instance.get();
+FontManager* FontManager::get() {
+    static auto instance = FontManager();
+    return &instance;
 }
 
 void FontManager::loadFont(const std::string& path, const std::string& id, float lineHeight,
                            const std::vector<FontRange>& ranges) {
-    auto absPath = FileManager::instance()->fullPathForFile(path);
+    auto absPath = FileManager::get()->fullPathForFile(path);
     if (!std::filesystem::exists(absPath)) {
         logE("Failed to load file {}!", absPath.string());
         return;
@@ -114,7 +114,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 
     std::unordered_map<unsigned int, Glyph> glyphs;
 
-    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+    auto ratio = AppManager::get()->getPointsToPixelsRatio();
 
     for (auto i = 0u; i < ranges.size(); i++) {
         for (auto j = 0u; j < ttRanges[i].num_chars; j++) {
@@ -141,7 +141,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
                         .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
                         .glyphs = glyphs,
                         .shaderName = "ttf-shader"};
-    
+
     for (auto i = 0u; i < ranges.size(); i++) {
         delete[] ttRanges[i].chardata_for_range;
     }
@@ -153,13 +153,13 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 }
 
 void FontManager::loadBitmapFont(const std::string& path, const std::string& id) {
-    auto absPath = FileManager::instance()->fullPathForFile(path);
+    auto absPath = FileManager::get()->fullPathForFile(path);
     if (!std::filesystem::exists(absPath)) {
         logE("Failed to load a texture from file {}", absPath.string());
         return;
     }
 
-    auto ratio = AppManager::instance()->getPointsToPixelsRatio();
+    auto ratio = AppManager::get()->getPointsToPixelsRatio();
 
     Font font;
     font.shaderName = "sprite-shader";

@@ -7,7 +7,7 @@ TextureFrame::TextureFrame(std::shared_ptr<Texture> texture, Recti rect, bool ro
     : m_texture(texture), m_rect(rect), m_rotated(rotated) {}
 
 Sizef TextureFrame::getSize() {
-    return AppManager::instance()->pixelsToSize({(float)m_rect.w, (float)m_rect.h});
+    return AppManager::get()->pixelsToSize({(float)m_rect.w, (float)m_rect.h});
 }
 
 NS_SPECTRUM_END

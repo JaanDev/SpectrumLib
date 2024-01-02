@@ -4,9 +4,9 @@
 
 NS_SPECTRUM_BEGIN
 
-ShaderManager* ShaderManager::instance() {
-    static auto inst = std::make_unique<ShaderManager>();
-    return inst.get();
+ShaderManager* ShaderManager::get() {
+    static auto instance = ShaderManager();
+    return &instance;
 }
 
 ShaderManager::ShaderManager() : m_shaders({}) {

@@ -5,9 +5,9 @@
 
 NS_SPECTRUM_BEGIN
 
-FileManager* FileManager::instance() {
-    static auto instance = std::make_unique<FileManager>();
-    return instance.get();
+FileManager* FileManager::get() {
+    static auto instance = FileManager();
+    return &instance;
 }
 
 FileManager::FileManager() {

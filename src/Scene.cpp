@@ -5,7 +5,7 @@
 NS_SPECTRUM_BEGIN
 
 Scene::Scene() : Node(), m_bgColor({0.f, 0.f, 0.f}) {
-    auto winSize = AppManager::instance()->getWinSize();
+    auto winSize = AppManager::get()->getWinSize();
     setBoundingBox(winSize);
     setPos(winSize / 2.f);
 }

@@ -2,9 +2,9 @@
 
 NS_SPECTRUM_BEGIN
 
-AnimationManager* AnimationManager::instance() {
-    static auto instance = std::make_unique<AnimationManager>();
-    return instance.get();
+AnimationManager* AnimationManager::get() {
+    static auto instance = AnimationManager();
+    return &instance;
 }
 
 AnimationManager::AnimationManager() : m_anims({}) {}

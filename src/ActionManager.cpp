@@ -4,9 +4,9 @@
 
 NS_SPECTRUM_BEGIN
 
-ActionManager* ActionManager::instance() {
-    static auto instance = std::make_unique<ActionManager>();
-    return instance.get();
+ActionManager* ActionManager::get() {
+    static auto instance = ActionManager();
+    return &instance;
 }
 
 ActionManager::ActionManager() : m_actions({}) {}

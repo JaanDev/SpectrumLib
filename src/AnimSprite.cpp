@@ -7,7 +7,7 @@ NS_SPECTRUM_BEGIN
 AnimSprite::AnimSprite() : Sprite(std::shared_ptr<Texture>(nullptr)), m_curAnim(nullptr) {}
 
 void AnimSprite::runAnim(const std::string& id) {
-    m_curAnim = AnimationManager::instance()->getAnim(id);
+    m_curAnim = AnimationManager::get()->getAnim(id);
 }
 
 void AnimSprite::runAnim(std::shared_ptr<Animation> anim) {

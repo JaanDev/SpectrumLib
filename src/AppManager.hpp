@@ -13,7 +13,7 @@ class AppManager {
     friend class WindowManager;
 
   public:
-    static AppManager* instance();
+    static AppManager* get();
     AppManager();
 
     void run();

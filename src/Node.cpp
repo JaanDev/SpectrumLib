@@ -94,11 +94,11 @@ void Node::setAnchorPoint(const Vec2f& anchor) {
 
 void Node::runAction(std::shared_ptr<Action> action) {
     action->setNode(this);
-    ActionManager::instance()->addAction(action);
+    ActionManager::get()->addAction(action);
 }
 
 void Node::removeAllActions() {
-    ActionManager::instance()->removeActionsForNode(this);
+    ActionManager::get()->removeActionsForNode(this);
 }
 
 void Node::update(float dt) {

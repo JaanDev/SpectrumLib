@@ -7,7 +7,7 @@ NS_SPECTRUM_BEGIN
 
 class WindowManager {
   public:
-    static WindowManager* instance();
+    static WindowManager* get();
     WindowManager();
     ~WindowManager();
 

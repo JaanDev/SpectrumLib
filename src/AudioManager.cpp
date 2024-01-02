@@ -4,9 +4,9 @@
 
 NS_SPECTRUM_BEGIN
 
-AudioManager* AudioManager::instance() {
-    static auto instance = std::make_unique<AudioManager>();
-    return instance.get();
+AudioManager* AudioManager::get() {
+    static auto instance = AudioManager();
+    return &instance;
 }
 
 void AudioManager::playSample(const std::string& sample, uint32_t repeats) {}

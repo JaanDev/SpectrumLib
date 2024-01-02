@@ -9,7 +9,7 @@ NS_SPECTRUM_BEGIN
 
 class AnimationManager {
   public:
-    static AnimationManager* instance();
+    static AnimationManager* get();
     AnimationManager();
 
     void addAnim(std::shared_ptr<Animation> anim, const std::string& id);

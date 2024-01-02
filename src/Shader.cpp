@@ -15,8 +15,8 @@ Shader::~Shader() {
 }
 
 bool Shader::loadFromFile(const std::string& vertexPath, const std::string& fragmentPath) {
-    auto vertexFullPath = FileManager::instance()->fullPathForFile(vertexPath);
-    auto fragFullPath = FileManager::instance()->fullPathForFile(fragmentPath);
+    auto vertexFullPath = FileManager::get()->fullPathForFile(vertexPath);
+    auto fragFullPath = FileManager::get()->fullPathForFile(fragmentPath);
 
     std::ifstream vertStream(vertexFullPath, std::ios::in);
     if (!vertStream) {
@@ -98,7 +98,7 @@ bool Shader::loadFromString(std::string_view vertexShaderSrc, std::string_view f
 
 void Shader::use() {
     glUseProgram(m_shaderProgram);
-    glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &AppManager::instance()->getMatrix()[0][0]);
+    glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &AppManager::get()->getMatrix()[0][0]);
 }
 
 NS_SPECTRUM_END
