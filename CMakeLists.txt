@@ -23,47 +23,36 @@ CPMAddPackage(
     NAME rapidjson
     GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
     GIT_TAG master
-    OPTIONS "RAPIDJSON_BUILD_DOC OFF" "RAPIDJSON_BUILD_EXAMPLES OFF" "RAPIDJSON_BUILD_TESTS OFF"
+    DOWNLOAD_ONLY YES
 )
 CPMAddPackage(
     NAME stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
     GIT_TAG master
+    DOWNLOAD_ONLY YES
 )
 CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
-
-# setOption(RAPIDJSON_BUILD_DOC OFF BOOL)
-# setOption(RAPIDJSON_BUILD_EXAMPLES OFF BOOL)
-# setOption(RAPIDJSON_BUILD_TESTS OFF BOOL)
-
-# add_subdirectory(external/glfw)
-# add_subdirectory(external/fmt)
-# add_subdirectory(external/glm)
-# add_subdirectory(external/rapidjson)
-# add_subdirectory(external/utfcpp)
 
 file(GLOB SOURCES
     src/*.cpp
     external/glad/src/gl.c
-    external/stb/*.c
+    ${stb_SOURCE_DIR}/*.c
 )
 
 set(SPECTRUM_LIB_TYPE STATIC)
 if (${SPECTRUM_SHARED_LIBRARY})
     set(SPECTRUM_LIB_TYPE SHARED)
 endif()
-
+message(STATUS "HELP ME PLEASE ${rapidjson_SOURCE_DIR}")
 message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
 add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm RapidJSON utf8cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm utf8cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include
-    external/rapidjson/include
-)
-target_include_directories(${PROJECT_NAME} PRIVATE
-    external/stb
+    ${rapidjson_SOURCE_DIR}/include
+    ${stb_SOURCE_DIR}
 )
 if (${SPECTRUM_LIB_TYPE} MATCHES SHARED)
     target_compile_definitions(${PROJECT_NAME} PRIVATE SPECTRUM_SHARED)
