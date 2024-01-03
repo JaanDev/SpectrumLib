@@ -10,15 +10,37 @@ endfunction()
 option(SPECTRUM_SHARED_LIBRARY "Build a shared library for SpectrumLib" OFF)
 option(SPECTRUM_BUILD_EXAMPLES "Build examples for SpectrumLib" OFF)
 
-setOption(RAPIDJSON_BUILD_DOC OFF BOOL)
-setOption(RAPIDJSON_BUILD_EXAMPLES OFF BOOL)
-setOption(RAPIDJSON_BUILD_TESTS OFF BOOL)
+setOption(CPM_USE_LOCAL_PACKAGES ON BOOL)
+include(cmake/CPM.cmake)
+CPMAddPackage("gh:glfw/glfw#3.3.9")
+CPMAddPackage("gh:fmtlib/fmt#10.2.0")
+CPMAddPackage(
+    NAME glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG master
+)
+CPMAddPackage(
+    NAME rapidjson
+    GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+    GIT_TAG master
+    OPTIONS "RAPIDJSON_BUILD_DOC OFF" "RAPIDJSON_BUILD_EXAMPLES OFF" "RAPIDJSON_BUILD_TESTS OFF"
+)
+CPMAddPackage(
+    NAME stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+)
+CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 
-add_subdirectory(external/glfw)
-add_subdirectory(external/fmt)
-add_subdirectory(external/glm)
-add_subdirectory(external/rapidjson)
-add_subdirectory(external/utfcpp)
+# setOption(RAPIDJSON_BUILD_DOC OFF BOOL)
+# setOption(RAPIDJSON_BUILD_EXAMPLES OFF BOOL)
+# setOption(RAPIDJSON_BUILD_TESTS OFF BOOL)
+
+# add_subdirectory(external/glfw)
+# add_subdirectory(external/fmt)
+# add_subdirectory(external/glm)
+# add_subdirectory(external/rapidjson)
+# add_subdirectory(external/utfcpp)
 
 file(GLOB SOURCES
     src/*.cpp
