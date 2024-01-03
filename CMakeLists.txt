@@ -13,7 +13,6 @@ option(SPECTRUM_BUILD_EXAMPLES "Build examples for SpectrumLib" OFF)
 setOption(CPM_USE_LOCAL_PACKAGES ON BOOL)
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:glfw/glfw#3.3.9")
-CPMAddPackage("gh:fmtlib/fmt#10.2.0")
 CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 CPMAddPackage(
     NAME glm
@@ -47,7 +46,6 @@ endif()
 message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
 add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm utf8cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include

@@ -1,6 +1,6 @@
 #include "Animation.hpp"
 
-#include <fmt/format.h>
+#include <format>
 #include "TextureManager.hpp"
 #include "logger.hpp"
 
@@ -15,7 +15,7 @@ Animation::Animation(float frameTime, int timesToRun, const std::string& formatS
       m_isFinished(false) {
 
     for (auto i = startNum; i <= endNum; i++) {
-        auto texName = fmt::format(fmt::runtime(formatStr), i);
+        auto texName = std::vformat(formatStr, std::make_format_args(i));
         auto tex = TextureManager::get()->getTexture(texName);
         if (tex) {
             m_textures.push_back(tex);
