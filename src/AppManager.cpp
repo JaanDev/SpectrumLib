@@ -11,6 +11,7 @@
 #include "ActionManager.hpp"
 #include "ShaderManager.hpp"
 #include "Scheduler.hpp"
+#include "AudioManager.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -33,6 +34,7 @@ void AppManager::run() {
     hasRun = true;
 
     ShaderManager::get();
+    AudioManager::get();
 
     m_isRunning = true;
 
