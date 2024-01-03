@@ -53,6 +53,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     external/glad/include
     ${rapidjson_SOURCE_DIR}/include
     ${stb_SOURCE_DIR}
+    external/miniaud
 )
 if (${SPECTRUM_LIB_TYPE} MATCHES SHARED)
     target_compile_definitions(${PROJECT_NAME} PRIVATE SPECTRUM_SHARED)
