@@ -8,6 +8,7 @@
 #define NS_SPECTRUM_END }
 
 #include "types.hpp"
+#include "MiniFunction.hpp"
 
 NS_SPECTRUM_BEGIN
 

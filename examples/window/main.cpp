@@ -1,65 +1,42 @@
 #include <Spectrum.hpp>
 
 #include "logger.hpp"
+#include "MiniFunction.hpp"
 
 using namespace spl;
 #define create std::make_shared
+#define ptr std::shared_ptr
 
 class MyScene : public Scene {
   public:
-    MyScene() : Scene(), m_val(0.f) {
+    MyScene() : Scene() {
         printf("My scene created\n");
 
         setBGColor({1.0f, 1.0f, 1.0f});
 
-        InputDispatcher::get()->registerKeyEvents(this);
-    }
+        int x = 10;
 
-    virtual void onKeyEvent(int key, int scancode, int action, int mods) override {
-        if (action == GLFW_PRESS) {
-            switch (key) {
-            case GLFW_KEY_R: {
-                logD("hello world");
-                auto& joystick = InputDispatcher::get()->getJoystick(0);
-                logD("present {}", joystick.isPresent());
-                logD("is gamepad {}", joystick.isGamepad());
-                if (joystick.isPresent()) {
-                    auto jname = joystick.getName();
-                    logD("name {}", jname);
-                    auto jguid = joystick.getGUID();
-                    logD("GUID {}", jguid);
-                    // auto mapping = 
-                }
-                if (joystick.isGamepad()) {
-                    logD("!!!IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD IS GAMEPAD!!!");
-                }
+        MiniFunction<void(int, int)> fcn = [&x](int a, float b) -> void {
+            logD("a {} b {:.2f} x {}", a, b, x);
+        };
 
-                int count;
-                const float* axes = glfwGetJoystickAxes(0, &count);
-                logD("count {}", count);
-                for (auto i = 0u; i < count; i++) {
-                    logD("{}", axes[i]);
-                }
+        fcn(10, 15);
+        x = 47;
+        fcn(1, 2);
 
-                // int count;
-                const unsigned char* buttons = glfwGetJoystickButtons(0, &count);
-                logD("count {}", count);
-                for (auto i = 0u; i < count; i++) {
-                    logD("{}", buttons[i]);
-                }
-            } break;
-            default:
-                break;
+        logD("{} vs {}", sizeof(MiniFunction<void(int, float)>), sizeof(std::function<void(int, float)>));
+
+        WindowManager::get()->setOnCloseCallback([]() {
+            logD("ON CLOSE");
+            return true;
+        });
+
+        WindowManager::get()->setFilesDroppedCallback([](std::vector<std::string> files) {
+            for (const auto& name : files) {
+                logD("{}", name);
             }
-        }
+        });
     }
-
-    virtual void update(float dt) override {
-        //
-    }
-
-  private:
-    float m_val;
 };
 
 int main() {

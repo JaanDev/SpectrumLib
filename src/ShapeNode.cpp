@@ -6,7 +6,7 @@ ShapeNode::ShapeNode() : m_col({255, 255, 255, 255}), m_drawCallback(nullptr) {}
 
 void ShapeNode::draw() {}
 
-void ShapeNode::setDrawCallback(std::function<void()> callback) {}
+void ShapeNode::setDrawCallback(MiniFunction<void()> callback) {}
 
 void ShapeNode::setColor(const Col4u& col) {}
 void ShapeNode::drawCircle(const Vec2f& pos, float radius) {}

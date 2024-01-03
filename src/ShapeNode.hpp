@@ -10,7 +10,7 @@ class ShapeNode : public Node {
     ShapeNode();
     virtual void draw() override;
 
-    void setDrawCallback(std::function<void()> callback);
+    void setDrawCallback(MiniFunction<void()> callback);
 
     void setColor(const Col4u& col);
 
@@ -23,7 +23,7 @@ class ShapeNode : public Node {
 
   protected:
     Col4u m_col;
-    std::function<void()> m_drawCallback;
+    MiniFunction<void()> m_drawCallback;
 };
 
 NS_SPECTRUM_END

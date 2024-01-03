@@ -17,7 +17,7 @@ class WindowManager {
     void setWindowIcon(const std::string& iconPath);
 
     // bool() => возвращает true если окно закрывать, false если не закрывать
-    inline void setOnCloseCallback(std::function<bool()> callback) { m_closeCallback = callback; }
+    inline void setOnCloseCallback(MiniFunction<bool()> callback) { m_closeCallback = callback; }
 
     void setFullscreen(bool fullscreen);
     inline bool getFullscreen() const { return m_isFullscreen; }
@@ -38,7 +38,7 @@ class WindowManager {
 
     void setWindowTitle(const std::string& title);
 
-    inline void setFilesDroppedCallback(std::function<void(std::vector<std::string>)> callback) {
+    inline void setFilesDroppedCallback(MiniFunction<void(std::vector<std::string>)> callback) {
         m_filesDroppedCallback = callback;
     }
 
@@ -46,8 +46,8 @@ class WindowManager {
     void setDefaultWindowIcon();
 
     GLFWwindow* m_windowHandle;
-    std::function<bool()> m_closeCallback;
-    std::function<void(std::vector<std::string>)> m_filesDroppedCallback;
+    MiniFunction<bool()> m_closeCallback;
+    MiniFunction<void(std::vector<std::string>)> m_filesDroppedCallback;
     Sizei m_fsWinSize; // for fullscreen
     Vec2i m_fsWinPos;  // for fullscreen
     Vec2f m_curPointsToPixels;

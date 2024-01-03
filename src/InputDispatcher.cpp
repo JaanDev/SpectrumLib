@@ -74,19 +74,19 @@ void InputDispatcher::unregisterAllTextEvents() {
     m_textEvents.clear();
 }
 
-void InputDispatcher::addPassiveMouseListener(std::function<void(MouseEventType evtType, const Vec2f& mousePos)> callback) {
+void InputDispatcher::addPassiveMouseListener(MiniFunction<void(MouseEventType evtType, const Vec2f& mousePos)> callback) {
     m_mouseCb = callback;
 }
 
-void InputDispatcher::addPassiveMouseScrollListener(std::function<void(const Vec2f& delta)> callback) {
+void InputDispatcher::addPassiveMouseScrollListener(MiniFunction<void(const Vec2f& delta)> callback) {
     m_mouseScrollCb = callback;
 }
 
-void InputDispatcher::addPassiveKeyListener(std::function<void(int key, int scancode, int action, int mods)> callback) {
+void InputDispatcher::addPassiveKeyListener(MiniFunction<void(int key, int scancode, int action, int mods)> callback) {
     m_keyCb = callback;
 }
 
-void InputDispatcher::addPassiveTextListener(std::function<void(unsigned int codepoint)> callback) {
+void InputDispatcher::addPassiveTextListener(MiniFunction<void(unsigned int codepoint)> callback) {
     m_textCb = callback;
 }
 
