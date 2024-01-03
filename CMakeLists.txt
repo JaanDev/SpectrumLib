@@ -14,24 +14,24 @@ setOption(CPM_USE_LOCAL_PACKAGES ON BOOL)
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:glfw/glfw#3.3.9")
 CPMAddPackage("gh:fmtlib/fmt#10.2.0")
+CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 CPMAddPackage(
     NAME glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG master
+    GIT_TAG b06b775c1c80af51a1183c0e167f9de3b2351a79
 )
 CPMAddPackage(
     NAME rapidjson
     GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
-    GIT_TAG master
+    GIT_TAG 6089180ecb704cb2b136777798fa1be303618975
     DOWNLOAD_ONLY YES
 )
 CPMAddPackage(
     NAME stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
-    GIT_TAG master
+    GIT_TAG f4a71b13373436a2866c5d68f8f80ac6f0bc1ffe
     DOWNLOAD_ONLY YES
 )
-CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 
 file(GLOB SOURCES
     src/*.cpp
@@ -43,7 +43,7 @@ set(SPECTRUM_LIB_TYPE STATIC)
 if (${SPECTRUM_SHARED_LIBRARY})
     set(SPECTRUM_LIB_TYPE SHARED)
 endif()
-message(STATUS "HELP ME PLEASE ${rapidjson_SOURCE_DIR}")
+
 message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
 add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm utf8cpp)
@@ -55,6 +55,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${stb_SOURCE_DIR}
     external/miniaud
 )
+
 if (${SPECTRUM_LIB_TYPE} MATCHES SHARED)
     target_compile_definitions(${PROJECT_NAME} PRIVATE SPECTRUM_SHARED)
 endif()
