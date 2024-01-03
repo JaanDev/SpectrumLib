@@ -8,7 +8,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ShaderManager {
+class SPL_API ShaderManager {
   public:
     static ShaderManager* get();
     ShaderManager();

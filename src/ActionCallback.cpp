@@ -2,7 +2,7 @@
 
 NS_SPECTRUM_BEGIN
 
-ActionCallback::ActionCallback(std::function<void(Node*)> callback) : Action(EasingType::Linear, 0.f, 1), m_callback(callback) {}
+ActionCallback::ActionCallback(MiniFunction<void(Node*)> callback) : Action(EasingType::Linear, 0.f, 1), m_callback(callback) {}
 
 void ActionCallback::update(float dt) {
     if (m_isFinished)

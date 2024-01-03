@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionMoveTo : public Action {
+class SPL_API ActionMoveTo : public Action {
   public:
     ActionMoveTo(EasingType easing, float duration, int repeat, const Vec2f& startPos, const Vec2f& endPos);
 

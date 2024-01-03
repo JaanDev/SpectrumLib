@@ -59,11 +59,7 @@ void Label::rebuild() {
     Sizef box = {0, m_font.base};
     Vec2f pos = {0, m_font.base};
 
-    logD("line h {}", m_font.lineHeight);
-
     for (const auto& line : lines) {
-        logD("- {}", line);
-
         pos.x = 0;
         int lineQuadCount = 0;
 

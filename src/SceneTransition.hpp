@@ -4,7 +4,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class SceneTransition : public Scene {
+class SPL_API SceneTransition : public Scene {
   public:
     SceneTransition(std::shared_ptr<Scene> scene, float duration);
 

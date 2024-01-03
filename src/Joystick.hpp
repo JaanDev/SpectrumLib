@@ -4,7 +4,18 @@
 
 NS_SPECTRUM_BEGIN
 
-class Joystick {
+class SPL_API Gamepad {
+  public:
+    Gamepad(int id);
+
+    std::string getName();
+    void getState(GLFWgamepadstate& state);
+
+  private:
+    int m_id;
+};
+
+class SPL_API Joystick {
   public:
     Joystick(int id);
     Joystick();
@@ -16,9 +27,11 @@ class Joystick {
     std::string getGUID();
 
     bool isGamepad();
+    Gamepad& getGamepad();
 
   private:
     int m_id;
+    Gamepad m_gamepad;
 };
 
 NS_SPECTRUM_END

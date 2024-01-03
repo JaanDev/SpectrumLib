@@ -13,7 +13,7 @@ struct BatchQuad {
     Rectf texCoords;
 };
 
-class SpriteBatch : public Node {
+class SPL_API SpriteBatch : public Node {
   public:
     SpriteBatch(std::shared_ptr<Texture> tex);
     SpriteBatch();

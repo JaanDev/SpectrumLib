@@ -7,7 +7,14 @@
 #define NS_SPECTRUM_BEGIN namespace spl {
 #define NS_SPECTRUM_END }
 
+#if defined(SPECTRUM_SHARED) && defined(_WIN32)
+#define SPL_API __declspec(dllexport)
+#else
+#define SPL_API
+#endif
+
 #include "types.hpp"
+#include "MiniFunction.hpp"
 
 NS_SPECTRUM_BEGIN
 

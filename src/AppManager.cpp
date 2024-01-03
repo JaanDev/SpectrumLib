@@ -82,7 +82,7 @@ void AppManager::run() {
         if (m_curScene) {
             currentColor = m_curScene->getBGColor();
 
-            std::function<void(Node*)> updateNodes;
+            MiniFunction<void(Node*)> updateNodes;
             updateNodes = [this, &updateNodes](Node* node) {
                 node->update(this->m_deltaTime);
                 for (auto child : node->getChildren()) {
@@ -99,7 +99,7 @@ void AppManager::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (m_curScene) {
-            std::function<void(Node*)> drawNodes;
+            MiniFunction<void(Node*)> drawNodes;
             drawNodes = [this, &drawNodes](Node* node) {
                 if (!node->isVisible())
                     return;

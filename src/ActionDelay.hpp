@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionDelay : public Action {
+class SPL_API ActionDelay : public Action {
   public:
     ActionDelay(float time);
 

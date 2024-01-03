@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class FileManager {
+class SPL_API FileManager {
   public:
     static FileManager* get();
     FileManager();

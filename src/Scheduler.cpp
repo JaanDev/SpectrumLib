@@ -13,7 +13,7 @@ Scheduler* Scheduler::get() {
 Scheduler::Scheduler()
     : m_nextTimerID(0), m_timers({}), m_AFKInterval(0.f), m_AFKCallback(nullptr), m_AFKTime(0.f), m_isAFK(false) {}
 
-unsigned int Scheduler::schedule(float interval, int timesRepeat, std::function<void()> callback) {
+unsigned int Scheduler::schedule(float interval, int timesRepeat, MiniFunction<void()> callback) {
     m_timers.push_back({interval, timesRepeat, callback, m_nextTimerID, interval});
     // TODO: return m_nextTimerID++?
     m_nextTimerID++;
@@ -71,7 +71,7 @@ void Scheduler::update(float dt) {
     }
 }
 
-void Scheduler::setAFKCallback(std::function<void()> callback) {
+void Scheduler::setAFKCallback(MiniFunction<void()> callback) {
     m_AFKCallback = callback;
 }
 

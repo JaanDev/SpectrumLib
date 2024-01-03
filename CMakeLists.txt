@@ -1,17 +1,46 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(SpectrumLib VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 
-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+function(setOption name value type)
+    set(${name} ${value} CACHE ${type} "" FORCE)
+endfunction()
 
+option(SPECTRUM_SHARED_LIBRARY "Build a shared library for SpectrumLib" OFF)
+option(SPECTRUM_BUILD_EXAMPLES "Build examples for SpectrumLib" OFF)
 
+setOption(CPM_USE_LOCAL_PACKAGES ON BOOL)
+include(cmake/CPM.cmake)
+CPMAddPackage("gh:glfw/glfw#3.3.9")
+CPMAddPackage("gh:fmtlib/fmt#10.2.0")
+CPMAddPackage(
+    NAME glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG master
+)
+CPMAddPackage(
+    NAME rapidjson
+    GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+    GIT_TAG master
+    OPTIONS "RAPIDJSON_BUILD_DOC OFF" "RAPIDJSON_BUILD_EXAMPLES OFF" "RAPIDJSON_BUILD_TESTS OFF"
+)
+CPMAddPackage(
+    NAME stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+)
+CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 
-add_subdirectory(external/glfw)
-add_subdirectory(external/fmt)
-add_subdirectory(external/glm)
-add_subdirectory(external/rapidjson)
-add_subdirectory(external/utfcpp)
+# setOption(RAPIDJSON_BUILD_DOC OFF BOOL)
+# setOption(RAPIDJSON_BUILD_EXAMPLES OFF BOOL)
+# setOption(RAPIDJSON_BUILD_TESTS OFF BOOL)
+
+# add_subdirectory(external/glfw)
+# add_subdirectory(external/fmt)
+# add_subdirectory(external/glm)
+# add_subdirectory(external/rapidjson)
+# add_subdirectory(external/utfcpp)
 
 file(GLOB SOURCES
     src/*.cpp
@@ -19,7 +48,13 @@ file(GLOB SOURCES
     external/stb/*.c
 )
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+set(SPECTRUM_LIB_TYPE STATIC)
+if (${SPECTRUM_SHARED_LIBRARY})
+    set(SPECTRUM_LIB_TYPE SHARED)
+endif()
+
+message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
+add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm RapidJSON utf8cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -32,5 +67,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_include_directories(${PROJECT_NAME} PRIVATE
     external/stb
 )
+if (${SPECTRUM_LIB_TYPE} MATCHES SHARED)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE SPECTRUM_SHARED)
+endif()
 
-add_subdirectory(examples/window)
+if (${SPECTRUM_BUILD_EXAMPLES} OR ${CMAKE_CURRENT_SOURCE_DIR} MATCHES ${CMAKE_SOURCE_DIR})
+    message(STATUS "SPL: Building examples")
+    add_subdirectory(examples)
+else()
+    message(STATUS "SPL: Not building examples")
+endif()

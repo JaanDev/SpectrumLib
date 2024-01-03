@@ -7,7 +7,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class AnimationManager {
+class SPL_API AnimationManager {
   public:
     static AnimationManager* get();
     AnimationManager();

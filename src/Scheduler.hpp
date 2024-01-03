@@ -7,26 +7,26 @@ NS_SPECTRUM_BEGIN
 struct Timer {
     float interval;
     int repeatLeft;
-    std::function<void()> callback;
+    MiniFunction<void()> callback;
     unsigned int id;
     float timeLeft;
 };
 
-class Scheduler {
+class SPL_API Scheduler {
   public:
     static Scheduler* get();
     Scheduler();
 
     // returns the timer id which can be used to unschedule it
     // timesRepeat = -1 => infinite repeat
-    unsigned int schedule(float interval, int timesRepeat, std::function<void()> callback);
+    unsigned int schedule(float interval, int timesRepeat, MiniFunction<void()> callback);
     void unschedule(unsigned int id);
     void unscheduleAll();
 
     // internal
     void update(float dt);
 
-    void setAFKCallback(std::function<void()> callback);
+    void setAFKCallback(MiniFunction<void()> callback);
     inline float getAFKInterval() const { return m_AFKInterval; }
     void setAFKInterval(float interval);
 
@@ -35,7 +35,7 @@ class Scheduler {
     std::vector<Timer> m_timers;
     float m_AFKInterval;
     float m_AFKTime; // current time user is afk
-    std::function<void()> m_AFKCallback;
+    MiniFunction<void()> m_AFKCallback;
     bool m_isAFK;
 };
 

@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionTintTo : public Action {
+class SPL_API ActionTintTo : public Action {
   public:
     ActionTintTo(EasingType easing, float duration, int repeat, const Col3u& startCol, const Col3u& endCol);
 

@@ -4,7 +4,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Scene : public Node {
+class SPL_API Scene : public Node {
   public:
     Scene();
 

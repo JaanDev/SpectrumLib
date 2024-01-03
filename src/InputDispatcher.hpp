@@ -8,7 +8,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class InputDispatcher {
+class SPL_API InputDispatcher {
     friend class WindowManager;
 
   public:
@@ -30,10 +30,10 @@ class InputDispatcher {
     void unregisterAllKeyEvents();
     void unregisterAllTextEvents();
 
-    void addPassiveMouseListener(std::function<void(MouseEventType evtType, const Vec2f& mousePos)> callback);
-    void addPassiveMouseScrollListener(std::function<void(const Vec2f& delta)> callback);
-    void addPassiveKeyListener(std::function<void(int key, int scancode, int action, int mods)> callback);
-    void addPassiveTextListener(std::function<void(unsigned int codepoint)> callback);
+    void addPassiveMouseListener(MiniFunction<void(MouseEventType evtType, const Vec2f& mousePos)> callback);
+    void addPassiveMouseScrollListener(MiniFunction<void(const Vec2f& delta)> callback);
+    void addPassiveKeyListener(MiniFunction<void(int key, int scancode, int action, int mods)> callback);
+    void addPassiveTextListener(MiniFunction<void(unsigned int codepoint)> callback);
 
     Joystick& getJoystick(int id);
 
@@ -48,10 +48,10 @@ class InputDispatcher {
     std::vector<Node*> m_mouseScrollEvents;
     std::vector<Node*> m_keyEvents;
     std::vector<Node*> m_textEvents;
-    std::function<void(MouseEventType evtType, const Vec2f& mousePos)> m_mouseCb;
-    std::function<void(const Vec2f& delta)> m_mouseScrollCb;
-    std::function<void(int key, int scancode, int action, int mods)> m_keyCb;
-    std::function<void(unsigned int codepoint)> m_textCb;
+    MiniFunction<void(MouseEventType evtType, const Vec2f& mousePos)> m_mouseCb;
+    MiniFunction<void(const Vec2f& delta)> m_mouseScrollCb;
+    MiniFunction<void(int key, int scancode, int action, int mods)> m_keyCb;
+    MiniFunction<void(unsigned int codepoint)> m_textCb;
     std::array<Joystick, GLFW_JOYSTICK_LAST + 1> m_joysticks;
 };
 

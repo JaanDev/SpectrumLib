@@ -7,7 +7,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Animation {
+class SPL_API Animation {
   public:
     // frameTime = 1.0 / fps
     Animation(float frameTime, int timesToRun, std::vector<std::shared_ptr<Texture>> textures);

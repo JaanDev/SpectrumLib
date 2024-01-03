@@ -9,7 +9,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class AppManager {
+class SPL_API AppManager {
     friend class WindowManager;
 
   public:
