@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class WindowManager {
+class SPL_API WindowManager {
   public:
     static WindowManager* get();
     WindowManager();

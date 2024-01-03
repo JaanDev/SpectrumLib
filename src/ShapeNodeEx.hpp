@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ShapeNodeEx : public Node {
+class SPL_API ShapeNodeEx : public Node {
   public:
     ShapeNodeEx();
 

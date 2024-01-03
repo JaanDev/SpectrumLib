@@ -6,7 +6,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class TextureFrame {
+class SPL_API TextureFrame {
   public:
     TextureFrame(std::shared_ptr<Texture> texture, Recti rect, bool rotated);
 

@@ -4,7 +4,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Gamepad {
+class SPL_API Gamepad {
   public:
     Gamepad(int id);
 
@@ -15,7 +15,7 @@ class Gamepad {
     int m_id;
 };
 
-class Joystick {
+class SPL_API Joystick {
   public:
     Joystick(int id);
     Joystick();

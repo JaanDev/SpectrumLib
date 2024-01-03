@@ -8,7 +8,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class InputDispatcher {
+class SPL_API InputDispatcher {
     friend class WindowManager;
 
   public:

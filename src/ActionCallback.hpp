@@ -4,7 +4,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionCallback : public Action {
+class SPL_API ActionCallback : public Action {
   public:
     ActionCallback(MiniFunction<void(Node*)> callback);
 

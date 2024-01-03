@@ -7,7 +7,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Label : public SpriteBatch {
+class SPL_API Label : public SpriteBatch {
   public:
     // fontID это то, что указывали при загрузке в FontManager
     Label(const std::string& text, const std::string& fontID, TextAlignment alignment = TextAlignment::Left,

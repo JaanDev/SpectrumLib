@@ -12,7 +12,7 @@ struct Timer {
     float timeLeft;
 };
 
-class Scheduler {
+class SPL_API Scheduler {
   public:
     static Scheduler* get();
     Scheduler();

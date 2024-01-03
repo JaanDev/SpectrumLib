@@ -4,7 +4,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Action {
+class SPL_API Action {
 
   public:
     Action() {};

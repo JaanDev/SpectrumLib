@@ -12,7 +12,7 @@ struct BlendFunc {
     GLenum dst;
 };
 
-class Sprite : public Node {
+class SPL_API Sprite : public Node {
   public:
     Sprite(const std::string& path);
     Sprite(std::shared_ptr<Texture> texture);

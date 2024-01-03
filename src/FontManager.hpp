@@ -273,7 +273,7 @@ struct Font {
     const char* shaderName;
 };
 
-class FontManager {
+class SPL_API FontManager {
   public:
     static FontManager* get();
 

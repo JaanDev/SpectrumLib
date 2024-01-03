@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionRotateTo : public Action {
+class SPL_API ActionRotateTo : public Action {
   public:
     ActionRotateTo(EasingType easing, float duration, int repeat, float startRot, float endRot);
 

@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ShapeNode : public Node {
+class SPL_API ShapeNode : public Node {
   public:
     ShapeNode();
     virtual void draw() override;

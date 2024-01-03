@@ -8,7 +8,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class TextureManager {
+class SPL_API TextureManager {
   public:
     static TextureManager* get();
     TextureManager();

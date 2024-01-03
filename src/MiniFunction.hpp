@@ -9,10 +9,10 @@
 NS_SPECTRUM_BEGIN
 
 template <class FunctionType>
-class MiniFunction;
+class SPL_API MiniFunction;
 
 template <class Ret, class... Args>
-class MiniFunctionStateBase {
+class SPL_API MiniFunctionStateBase {
   public:
     virtual ~MiniFunctionStateBase() = default;
     virtual Ret call(Args... args) const = 0;
@@ -20,7 +20,7 @@ class MiniFunctionStateBase {
 };
 
 template <class Type, class Ret, class... Args>
-class MiniFunctionState final : public MiniFunctionStateBase<Ret, Args...> {
+class SPL_API MiniFunctionState final : public MiniFunctionStateBase<Ret, Args...> {
   public:
     Type m_func;
 
@@ -32,7 +32,7 @@ class MiniFunctionState final : public MiniFunctionStateBase<Ret, Args...> {
 };
 
 template <class Type, class Ret, class... Args>
-class MiniFunctionStatePointer final : public MiniFunctionStateBase<Ret, Args...> {
+class SPL_API MiniFunctionStatePointer final : public MiniFunctionStateBase<Ret, Args...> {
   public:
     Type m_func;
 
@@ -44,7 +44,7 @@ class MiniFunctionStatePointer final : public MiniFunctionStateBase<Ret, Args...
 };
 
 template <class Type, class Ret, class Class, class... Args>
-class MiniFunctionStateMemberPointer final : public MiniFunctionStateBase<Ret, Class, Args...> {
+class SPL_API MiniFunctionStateMemberPointer final : public MiniFunctionStateBase<Ret, Class, Args...> {
   public:
     Type m_func;
 

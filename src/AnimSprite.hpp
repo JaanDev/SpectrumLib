@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class AnimSprite : public Sprite {
+class SPL_API AnimSprite : public Sprite {
   public:
     AnimSprite();
 

@@ -6,7 +6,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionManager {
+class SPL_API ActionManager {
   public:
     static ActionManager* get();
     ActionManager();

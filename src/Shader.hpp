@@ -5,7 +5,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class Shader {
+class SPL_API Shader {
   public:
     Shader();
     ~Shader();

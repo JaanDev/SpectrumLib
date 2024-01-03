@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionScaleTo : public Action {
+class SPL_API ActionScaleTo : public Action {
   public:
     ActionScaleTo(EasingType easing, float duration, int repeat, float startScale, float endScale);
 

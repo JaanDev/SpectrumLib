@@ -7,9 +7,9 @@
 
 NS_SPECTRUM_BEGIN
 
-class Action;
+class SPL_API Action;
 
-class Node {
+class SPL_API Node {
   public:
     Node();
 

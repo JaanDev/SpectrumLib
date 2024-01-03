@@ -11,7 +11,7 @@ struct TexParams {
     GLuint wrapT;
 };
 
-class Texture {
+class SPL_API Texture {
   public:
     // from file
     Texture(const std::string& path);

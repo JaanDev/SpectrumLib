@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-class ActionSequence : public Action {
+class SPL_API ActionSequence : public Action {
   public:
     ActionSequence(std::vector<std::shared_ptr<Action>> actions, int repeat);
 

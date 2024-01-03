@@ -26,7 +26,7 @@ struct Channel {
     uint32_t repeats;
 };
 
-class AudioManager {
+class SPL_API AudioManager {
   public:
     static AudioManager* get();
 
