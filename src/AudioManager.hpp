@@ -4,6 +4,9 @@
 #include <array>
 #include "utils.hpp"
 
+#include "miniaudio.h"
+
+
 NS_SPECTRUM_BEGIN
 
 struct Sample {
@@ -29,6 +32,8 @@ struct Channel {
 class SPL_API AudioManager {
   public:
     static AudioManager* get();
+    AudioManager();
+    ~AudioManager();
 
     void playSample(const std::string& sample, uint32_t repeats);
     void playSample(const std::string& sample, uint8_t channel, uint32_t repeats);
@@ -88,6 +93,9 @@ class SPL_API AudioManager {
     std::vector<Sample> m_loadedSamples;
     float m_generalVolume;
     float m_generalBalance;
+
+    ma_device_config m_deviceConfig;
+    ma_device m_device;
 };
 
 NS_SPECTRUM_END

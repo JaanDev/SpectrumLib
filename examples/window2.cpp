@@ -8,7 +8,7 @@ class MyScene : public Scene {
     MyScene() : Scene() {
         printf("My scene created\n");
         
-        setBGColor({1, 1, 1});
+        setBGColorU({255, 255, 255});
     }
 };
 

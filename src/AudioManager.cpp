@@ -1,4 +1,7 @@
+#define MINIAUDIO_IMPLEMENTATION
+
 #include "AudioManager.hpp"
+#include "logger.hpp"
 
 #include <memory>
 
@@ -7,6 +10,29 @@ NS_SPECTRUM_BEGIN
 AudioManager* AudioManager::get() {
     static auto instance = AudioManager();
     return &instance;
+}
+
+AudioManager::AudioManager() {
+    m_deviceConfig = ma_device_config_init(ma_device_type_playback);
+    m_deviceConfig.playback.format = ma_format_f32;
+    m_deviceConfig.playback.channels = m_channels.size(); // Не уверен
+    m_deviceConfig.sampleRate = 48000;
+
+    if(ma_device_init(NULL, &m_deviceConfig, &m_device) != MA_SUCCESS) {
+        logE("Failed to init audio device config!");
+        return;
+    }
+
+    if(ma_device_start(&m_device) != MA_SUCCESS) {
+        logE("Failed to start audio device!");
+        return;
+    }
+
+    logD("Successfully initialized audio device {}", m_device.playback.name);
+}
+
+AudioManager::~AudioManager() {
+    ma_device_uninit(&m_device);
 }
 
 void AudioManager::playSample(const std::string& sample, uint32_t repeats) {}
