@@ -1,5 +1,5 @@
 # TODO
-- [ ] joystick support
+- [x] joystick support
 - [ ] render textures
 - [ ] particles
 - [ ] skew

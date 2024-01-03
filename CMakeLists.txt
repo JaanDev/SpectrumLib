@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(SpectrumLib VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 
-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+function(setOption name value type)
+    set(${name} ${value} CACHE ${type} "" FORCE)
+endfunction()
+
+setOption(RAPIDJSON_BUILD_DOC OFF BOOL)
+setOption(RAPIDJSON_BUILD_EXAMPLES OFF BOOL)
+setOption(RAPIDJSON_BUILD_TESTS OFF BOOL)
 
 add_subdirectory(external/glfw)
 add_subdirectory(external/fmt)
@@ -24,10 +30,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     src
     external/glad/include
     external/rapidjson/include
-    external/SDL_GameControllerDB
 )
 target_include_directories(${PROJECT_NAME} PRIVATE
     external/stb
 )
 
-add_subdirectory(examples/window)
+message(STATUS "SPL: Building examples")
+add_subdirectory(examples)
