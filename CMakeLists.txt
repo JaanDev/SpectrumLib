@@ -31,6 +31,12 @@ CPMAddPackage(
     GIT_TAG f4a71b13373436a2866c5d68f8f80ac6f0bc1ffe
     DOWNLOAD_ONLY YES
 )
+CPMAddPackage(
+    NAME miniaudio
+    GIT_REPOSITORY https://github.com/mackron/miniaudio.git
+    GIT_TAG 0.11.21
+    DOWNLOAD_ONLY YES
+)
 
 file(GLOB SOURCES
     src/*.cpp
@@ -51,7 +57,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     external/glad/include
     ${rapidjson_SOURCE_DIR}/include
     ${stb_SOURCE_DIR}
-    external/miniaud
+    ${miniaudio_SOURCE_DIR}
 )
 
 if (${SPECTRUM_LIB_TYPE} MATCHES SHARED)
