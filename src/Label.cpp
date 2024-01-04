@@ -121,38 +121,60 @@ void Label::rebuild() {
 std::vector<std::string> Label::separateText() {
     std::vector<std::string> ret;
 
-    auto ratio = AppManager::get()->getPointsToPixelsRatio();
+    if (m_maxWidth != 0.f) {
+        auto ratio = AppManager::get()->getPointsToPixelsRatio();
 
-    std::string current;
-    float currentWidth = 0.f;
-    auto it = m_text.begin();
-    auto end = m_text.end();
-    while (it != m_text.end()) {
-        auto cp = utf8::next(it, end);
+        std::string current;
+        float currentWidth = 0.f;
+        auto it = m_text.begin();
+        auto end = m_text.end();
+        while (it != m_text.end()) {
+            auto cp = utf8::next(it, end);
 
-        if (cp == '\n') {
-            ret.push_back(current);
-            current.clear();
-            currentWidth = 0.f;
-            continue;
+            if (cp == '\n') {
+                ret.push_back(current);
+                current.clear();
+                currentWidth = 0.f;
+                continue;
+            }
+
+            if (!m_font.glyphs.contains(cp))
+                continue;
+
+            const auto& glyph = m_font.glyphs[cp];
+            if (m_maxWidth > 0.f && currentWidth + glyph.textureRect.w > m_maxWidth) {
+                // logD("yay!! {}", current);
+                ret.push_back(current);
+                current.clear();
+                currentWidth = 0.f;
+            }
+
+            currentWidth += glyph.xOffset + glyph.xAdvance;
+            utf8::append(cp, current);
         }
 
-        if (!m_font.glyphs.contains(cp))
-            continue;
+        ret.push_back(current);
+    } else if (m_text.find('\n') != std::string::npos) {
+        std::string current;
+        
+        auto it = m_text.begin();
+        auto end = m_text.end();
+        while (it != m_text.end()) {
+            auto cp = utf8::next(it, end);
 
-        const auto& glyph = m_font.glyphs[cp];
-        if (m_maxWidth > 0.f && currentWidth + glyph.textureRect.w > m_maxWidth) {
-            // logD("yay!! {}", current);
-            ret.push_back(current);
-            current.clear();
-            currentWidth = 0.f;
+            if (cp == '\n') {
+                ret.push_back(current);
+                current.clear();
+                continue;
+            }
+
+            utf8::append(cp, current);
         }
 
-        currentWidth += glyph.xOffset + glyph.xAdvance;
-        utf8::append(cp, current);
+        ret.push_back(current);
+    } else {
+        ret.push_back(m_text);
     }
-
-    ret.push_back(current);
 
     return ret;
 }

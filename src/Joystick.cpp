@@ -2,9 +2,9 @@
 
 NS_SPECTRUM_BEGIN
 
-Joystick::Joystick(int id) : m_id(id), m_gamepad(id) {}
+Joystick::Joystick(int id) : m_id(id) {}
 
-Joystick::Joystick() : Joystick(0) {}
+Joystick::Joystick() : Joystick(-1) {}
 
 bool Joystick::isPresent() {
     return glfwJoystickPresent(m_id);
@@ -24,18 +24,12 @@ bool Joystick::isGamepad() {
     return glfwJoystickIsGamepad(m_id);
 }
 
-Gamepad& Joystick::getGamepad() {
-    return m_gamepad;
-}
-
-Gamepad::Gamepad(int id) : m_id(id) {}
-
-std::string Gamepad::getName() {
+std::string Joystick::getGamepadName() {
     auto name = glfwGetGamepadName(m_id);
     return name == nullptr ? "" : name;
 }
 
-void Gamepad::getState(GLFWgamepadstate& state) {
+void Joystick::getGamepadState(GLFWgamepadstate& state) {
     glfwGetGamepadState(m_id, &state);
 }
 
