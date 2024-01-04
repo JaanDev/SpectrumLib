@@ -8,8 +8,8 @@ ActionSequence::ActionSequence(std::vector<std::shared_ptr<Action>> actions, int
     m_isFinished = false;
 }
 
-ActionSequence::ActionSequence(std::initializer_list<std::shared_ptr<Action>> actions, int repeat) 
-    : m_actions{actions}, m_currentAction(0) {
+ActionSequence::ActionSequence(std::initializer_list<std::shared_ptr<Action>> actions, int repeat)
+    : m_actions {actions}, m_currentAction(0) {
     m_timesLeft = repeat;
     m_isFinished = false;
 }

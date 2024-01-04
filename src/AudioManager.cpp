@@ -18,12 +18,12 @@ AudioManager::AudioManager() {
     m_deviceConfig.playback.channels = m_channels.size(); // Не уверен
     m_deviceConfig.sampleRate = 48000;
 
-    if(ma_device_init(NULL, &m_deviceConfig, &m_device) != MA_SUCCESS) {
+    if (ma_device_init(NULL, &m_deviceConfig, &m_device) != MA_SUCCESS) {
         logE("Failed to init audio device config!");
         return;
     }
 
-    if(ma_device_start(&m_device) != MA_SUCCESS) {
+    if (ma_device_start(&m_device) != MA_SUCCESS) {
         logE("Failed to start audio device!");
         return;
     }

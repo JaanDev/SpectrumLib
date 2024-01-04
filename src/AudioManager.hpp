@@ -6,7 +6,6 @@
 
 #include "miniaudio.h"
 
-
 NS_SPECTRUM_BEGIN
 
 struct Sample {

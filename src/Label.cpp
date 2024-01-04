@@ -156,7 +156,7 @@ std::vector<std::string> Label::separateText() {
         ret.push_back(current);
     } else if (m_text.find('\n') != std::string::npos) {
         std::string current;
-        
+
         auto it = m_text.begin();
         auto end = m_text.end();
         while (it != m_text.end()) {
