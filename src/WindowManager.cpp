@@ -80,11 +80,6 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwGetWindowSize(m_windowHandle, &w, &h);
     m_curPointsToPixels = sizeInPoints / Vec2i {w, h};
 
-    glfwSetWindowSizeCallback(m_windowHandle, [](GLFWwindow* win, int w, int h) {
-        glViewport(0, 0, w, h);
-        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize() / Vec2i {w, h};
-    });
-
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
         auto wmgr = WindowManager::get();
         if (wmgr->m_closeCallback) {
@@ -123,6 +118,11 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) {
         InputDispatcher::get()->mouseBtnCallback(button, action, mods);
+    });
+
+    glfwSetFramebufferSizeCallback(m_windowHandle, [](GLFWwindow* window, int w, int h) {
+        glViewport(0, 0, w, h);
+        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize() / Vec2i {w, h};
     });
 
     setDefaultWindowIcon();

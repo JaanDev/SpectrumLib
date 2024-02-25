@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+#include "math.h"
 #include "logger.hpp"
 
 NS_SPECTRUM_BEGIN

@@ -7,8 +7,12 @@ class MyScene : public Scene {
   public:
     MyScene() : Scene() {
         printf("My scene created\n");
-        
+
         setBGColorU({255, 255, 255});
+
+        auto spr = make_shared<Sprite>("assets/alphaSprite.png");
+        spr->setPos({100, 100});
+        addChild(spr);
     }
 };
 

@@ -7,9 +7,7 @@ using std::make_shared, std::shared_ptr;
 
 class MyScene : public Scene {
   public:
-    MyScene() : Scene() {
-        printf("My scene created\n");
-    }
+    MyScene() : Scene() { printf("My scene created\n"); }
 };
 
 int main() {

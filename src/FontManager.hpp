@@ -1,9 +1,10 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
+#include <filesystem>
+#include <vector>
 #include "utils.hpp"
 #include "Texture.hpp"
-#include <filesystem>
 
 NS_SPECTRUM_BEGIN
 

@@ -95,7 +95,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     atlasH += padding;
 
     uint8_t* pixels = new uint8_t[atlasW * atlasH];
-    memset(pixels, NULL, atlasW * atlasH);
+    memset(pixels, 0, atlasW * atlasH);
 
     stbrp_context someCtx = {.width = atlasW, .height = atlasH, .x = 0, .y = 0, .bottom_y = 0};
     stbtt_pack_context packCtx {.user_allocator_context = nullptr,
@@ -171,7 +171,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             continue;
 
         if (line.find("common") != std::string::npos) {
-            int varsParsed = sscanf_s(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
+            int varsParsed = sscanf(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
             if (varsParsed < 2) {
                 logE("Can't parse common line in file {}", absPath.string());
                 return;
@@ -185,7 +185,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             line.erase(0, it);
             char* filename = new char[129];
 
-            int varsParsed = sscanf_s(line.c_str(), "file=\"%128[^\"]\"", filename);
+            int varsParsed = sscanf(line.c_str(), "file=\"%128[^\"]\"", filename);
             if (varsParsed < 1) {
                 logE("Can't parse page line in file {}", absPath.string());
                 return;
@@ -199,7 +199,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
 
         if (line.find("chars count") != std::string::npos) {
             int charscount;
-            int varsParsed = sscanf_s(line.c_str(), "chars count=%i", &charscount);
+            int varsParsed = sscanf(line.c_str(), "chars count=%i", &charscount);
 
             if (varsParsed < 1)
                 logW("Can't parse chars count {}", absPath.string());
@@ -212,9 +212,9 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             unsigned int id;
             Glyph glyph;
 
-            int varsParsed = sscanf_s(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f",
-                                      &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w, &glyph.textureRect.h,
-                                      &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
+            int varsParsed = sscanf(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f",
+                                    &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w, &glyph.textureRect.h,
+                                    &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
 
             if (varsParsed < 8) {
                 logW("Can't parse char id {} in file {}", id, absPath.string());

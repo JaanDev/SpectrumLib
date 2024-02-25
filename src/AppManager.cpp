@@ -177,7 +177,7 @@ void AppManager::openURL(const std::string& url) {
 #ifdef _WIN32
     ShellExecute(0, 0, url.c_str(), 0, 0, SW_SHOW);
 #elif defined(__linux__)
-    system(fmt::format("xdg-open \"{}\"", url).c_str());
+    system(std::format("xdg-open \"{}\"", url).c_str());
 #else
     logW("AppManager::openURL is not implemented on your platform!");
 #endif

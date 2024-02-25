@@ -12,23 +12,28 @@ option(SPECTRUM_BUILD_EXAMPLES "Build examples for SpectrumLib" OFF)
 
 setOption(CPM_USE_LOCAL_PACKAGES ON BOOL)
 include(cmake/CPM.cmake)
-CPMAddPackage("gh:glfw/glfw#3.3.9")
+
+CPMAddPackage(
+    NAME glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG 3.4
+)
 CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 CPMAddPackage(
     NAME glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG b06b775c1c80af51a1183c0e167f9de3b2351a79
+    GIT_TAG 1.0.0
 )
 CPMAddPackage(
     NAME rapidjson
     GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
-    GIT_TAG 6089180ecb704cb2b136777798fa1be303618975
+    GIT_TAG 3f73edae00aba5b0112a80b4d41e6f1ff7d92a3d
     DOWNLOAD_ONLY YES
 )
 CPMAddPackage(
     NAME stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
-    GIT_TAG f4a71b13373436a2866c5d68f8f80ac6f0bc1ffe
+    GIT_TAG ae721c50eaf761660b4f90cc590453cdb0c2acd0
     DOWNLOAD_ONLY YES
 )
 CPMAddPackage(
@@ -51,6 +56,7 @@ endif()
 
 message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
 add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm utf8cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src
