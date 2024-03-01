@@ -11,53 +11,52 @@ struct Vec2 {
     T x;
     T y;
 
-    template <typename T2>
-    Vec2<T> operator+(const Vec2<T2>& other) const {
+    Vec2<T> operator+(const Vec2<T>& other) const {
         return {x + other.x, y + other.y};
     }
-    template <typename T2>
-    Vec2<T> operator-(const Vec2<T2>& other) const {
+    
+    Vec2<T> operator-(const Vec2<T>& other) const {
         return {x - other.x, y - other.y};
     }
-    template <typename T2>
-    Vec2<T> operator*(const Vec2<T2>& other) const {
+    
+    Vec2<T> operator*(const Vec2<T>& other) const {
         return {x * other.x, y * other.y};
     }
-    template <typename T2>
-    Vec2<T> operator/(const Vec2<T2>& other) const {
+    
+    Vec2<T> operator/(const Vec2<T>& other) const {
         return {x / other.x, y / other.y};
     }
-    template <typename T2>
-    Vec2<T> operator*(T2 other) const {
+    
+    Vec2<T> operator*(T other) const {
         return {x * other, y * other};
     }
-    template <typename T2>
-    Vec2<T> operator/(T2 other) const {
+    
+    Vec2<T> operator/(T other) const {
         return {x / other, y / other};
     }
 
-    template <typename T2>
-    void operator+=(const Vec2<T2>& other) {
+    
+    void operator+=(const Vec2<T>& other) {
         *this = *this + other;
     }
-    template <typename T2>
-    void operator-=(const Vec2<T2>& other) {
+    
+    void operator-=(const Vec2<T>& other) {
         *this = *this - other;
     }
-    template <typename T2>
-    void operator*=(const Vec2<T2>& other) {
+    
+    void operator*=(const Vec2<T>& other) {
         *this = *this * other;
     }
-    template <typename T2>
-    void operator/=(const Vec2<T2>& other) {
+    
+    void operator/=(const Vec2<T>& other) {
         *this = *this / other;
     }
-    template <typename T2>
-    void operator*=(T2 other) {
+    
+    void operator*=(T other) {
         *this = *this * other;
     }
-    template <typename T2>
-    void operator/=(T2 other) {
+    
+    void operator/=(T other) {
         *this = *this / other;
     }
 
@@ -76,28 +75,28 @@ struct Size {
     T w;
     T h;
 
-    template <typename T2>
-    Size<T> operator*(T2 other) const {
+    
+    Size<T> operator*(T other) const {
         return {static_cast<T>(w * other), static_cast<T>(h * other)};
     }
-    template <typename T2>
-    Size<T> operator/(T2 other) const {
+    
+    Size<T> operator/(T other) const {
         return {static_cast<T>(w / other), static_cast<T>(h / other)};
     }
-    template <typename T2>
-    Size<T> operator*(Size<T2> other) const {
+    
+    Size<T> operator*(Size<T> other) const {
         return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)};
     }
-    template <typename T2>
-    Size<T> operator/(Size<T2> other) const {
+    
+    Size<T> operator/(Size<T> other) const {
         return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)};
     }
-    template <typename T2>
-    Size<T> operator*(Vec2<T2> other) const {
+    
+    Size<T> operator*(Vec2<T> other) const {
         return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)};
     }
-    template <typename T2>
-    Size<T> operator/(Vec2<T2> other) const {
+    
+    Size<T> operator/(Vec2<T> other) const {
         return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)};
     }
     void operator*=(T other) { *this = *this * other; }
@@ -145,12 +144,12 @@ struct Col3 {
     Col3<T> operator/(const Col3<T>& other) {
         return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)};
     }
-    template <typename T2>
-    Col3<T> operator*(T2 other) {
+    
+    Col3<T> operator*(T other) {
         return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)};
     }
-    template <typename T2>
-    Col3<T> operator/(T2 other) {
+    
+    Col3<T> operator/(T other) {
         return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)};
     }
 

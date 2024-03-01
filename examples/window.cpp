@@ -15,7 +15,7 @@ int main() {
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
 
     auto appMgr = AppManager::get();
-    appMgr->setTargetFrameTime(1 / 5000.0f);
+    appMgr->setTargetFrameTime(1 / 60.0f);
     appMgr->pushScene(make_shared<MyScene>());
     appMgr->run();
 

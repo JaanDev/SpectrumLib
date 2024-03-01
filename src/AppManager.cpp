@@ -63,7 +63,7 @@ void AppManager::run() {
 
         fpsTime += realDT;
         if (fpsTime >= 1.0f) {
-            logD("{} FPS ({:.4f} ms/frame) {}", fps, 1000.f / fps, frameStartTime);
+            logD("{} FPS ({:.4f} ms/frame)", fps, 1000.f / fps);
             m_fps = fps;
             fps = 0;
             fpsTime = 0.f;
@@ -76,13 +76,13 @@ void AppManager::run() {
             std::this_thread::sleep_for(std::chrono::microseconds(10));
             continue;
         }
+
         frameTime -= m_targetFrameTime;
 
         glfwPollEvents();
 
         if (!m_isRunning) {
             glfwSwapBuffers(win);
-            // lastFrameTime = getTime();
             continue;
         }
 
