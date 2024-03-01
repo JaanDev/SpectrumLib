@@ -72,7 +72,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     logD("Vendor:         {}", (char*)glGetString(GL_VENDOR));
 
     setFullscreen(fullscreen);
-    glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
+    // glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
 
     glfwSwapInterval(m_isVsync);
 

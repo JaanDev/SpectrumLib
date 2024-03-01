@@ -42,34 +42,47 @@ void AppManager::run() {
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
-    auto getTime = [startTime]() {
-        return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
-    };
+    // auto getTime = [startTime]() {
+    //     return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+    // };
 
-    double lastFrameTime = 0.;
+    auto getTime = glfwGetTime;
+
+    double lastFrameTime = getTime();
     int fps = 0;
     float fpsTime = 0.f;
+    float frameTime = 0.f; // for maintaining fps
 
     auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
     m_matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
-        m_deltaTime = static_cast<float>((frameStartTime - lastFrameTime) * m_timeScale);
+        auto realDT = frameStartTime - lastFrameTime;
+        m_deltaTime = static_cast<float>(realDT) * m_timeScale;
 
-        fpsTime += static_cast<float>(frameStartTime - lastFrameTime);
+        fpsTime += realDT;
         if (fpsTime >= 1.0f) {
-            logD("{} FPS ({:.4f} ms/frame)", fps, 1000.0 / fps);
+            logD("{} FPS ({:.4f} ms/frame) {}", fps, 1000.f / fps, frameStartTime);
             m_fps = fps;
             fps = 0;
             fpsTime = 0.f;
         }
 
+        lastFrameTime = frameStartTime;
+
+        frameTime += realDT;
+        if (frameTime < m_targetFrameTime) {
+            std::this_thread::sleep_for(std::chrono::microseconds(10));
+            continue;
+        }
+        frameTime -= m_targetFrameTime;
+
         glfwPollEvents();
 
         if (!m_isRunning) {
             glfwSwapBuffers(win);
-            lastFrameTime = getTime();
+            // lastFrameTime = getTime();
             continue;
         }
 
@@ -128,15 +141,6 @@ void AppManager::run() {
         }
 
         glfwSwapBuffers(win);
-
-        // 3. wait to maintain target FPS if needed
-
-        // auto timeToWait = frameStartTime + m_targetFrameTime - getTime();
-        // if (timeToWait > 0.f) {
-        //     std::this_thread::sleep_for(std::chrono::duration<double>(timeToWait));
-        // }
-
-        lastFrameTime = frameStartTime;
 
         fps++;
     }
