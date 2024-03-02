@@ -22,7 +22,7 @@ CPMAddPackage("gh:nemtrif/utfcpp#v4.0.5")
 CPMAddPackage(
     NAME glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG 1.0.0
+    GIT_TAG 1.0.1
 )
 CPMAddPackage(
     NAME rapidjson
@@ -56,7 +56,7 @@ endif()
 
 message(STATUS "SPL: Building ${SPECTRUM_LIB_TYPE} library")
 add_library(${PROJECT_NAME} ${SPECTRUM_LIB_TYPE} ${SOURCES})
-target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL)
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glm utf8cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC
     src

@@ -166,12 +166,18 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
     std::ifstream stream(absPath);
     std::string line;
 
+#ifdef _WIN32
+#define scan_func sscanf_s
+#else
+#define scan_func sscanf
+#endif
+
     while (std::getline(stream, line)) {
         if (line.find("info") != std::string::npos)
             continue;
 
         if (line.find("common") != std::string::npos) {
-            int varsParsed = sscanf(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
+            int varsParsed = scan_func(line.c_str(), "common lineHeight=%f base=%f", &font.lineHeight, &font.base);
             if (varsParsed < 2) {
                 logE("Can't parse common line in file {}", absPath.string());
                 return;
@@ -185,7 +191,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             line.erase(0, it);
             char* filename = new char[129];
 
-            int varsParsed = sscanf(line.c_str(), "file=\"%128[^\"]\"", filename);
+            int varsParsed = scan_func(line.c_str(), "file=\"%128[^\"]\"", filename);
             if (varsParsed < 1) {
                 logE("Can't parse page line in file {}", absPath.string());
                 return;
@@ -199,7 +205,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
 
         if (line.find("chars count") != std::string::npos) {
             int charscount;
-            int varsParsed = sscanf(line.c_str(), "chars count=%i", &charscount);
+            int varsParsed = scan_func(line.c_str(), "chars count=%i", &charscount);
 
             if (varsParsed < 1)
                 logW("Can't parse chars count {}", absPath.string());
@@ -212,9 +218,9 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             unsigned int id;
             Glyph glyph;
 
-            int varsParsed = sscanf(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f",
-                                    &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w, &glyph.textureRect.h,
-                                    &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
+            int varsParsed = scan_func(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f",
+                                       &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w,
+                                       &glyph.textureRect.h, &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
 
             if (varsParsed < 8) {
                 logW("Can't parse char id {} in file {}", id, absPath.string());
