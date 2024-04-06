@@ -5,13 +5,10 @@ UseTab: Never
 AllowShortIfStatementsOnASingleLine: false
 UseCRLF: false
 AlignArrayOfStructures: None
-# AlignArrayOfStructures: Left
-# AlignConsecutiveAssignments: Consecutive
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
-# AllowShortFunctionsOnASingleLine: None
 AllowShortFunctionsOnASingleLine: Inline
 AlwaysBreakTemplateDeclarations: Yes
 PointerAlignment: Left
