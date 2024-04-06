@@ -97,7 +97,8 @@ void Label::rebuild() {
             auto lineOffset = lineWidth / 2.f;
             auto quadLen = m_quads.size();
             for (auto i = 0u; i < lineQuadCount; i++) {
-                m_quads[quadLen - 1 - i].rect.x -= lineOffset;
+                m_quads[quadLen - 1 - i].rect.x -= lineWidth / 2.f;
+                // m_quads[quadLen - 1 - i].rect.x -= lineOffset;
             }
         } else if (m_textAlignment == TextAlignment::Right) {
             auto quadLen = m_quads.size();
@@ -113,6 +114,10 @@ void Label::rebuild() {
         for (auto& quad : m_quads) {
             quad.rect.x += box.w;
         }
+    } else if (m_textAlignment == TextAlignment::Center) {
+        for (auto& quad : m_quads) {
+            quad.rect.x += box.w / 2.f;
+        }
     }
 
     setBoundingBox(box);
@@ -121,7 +126,7 @@ void Label::rebuild() {
 std::vector<std::string> Label::separateText() {
     std::vector<std::string> ret;
 
-    if (m_maxWidth != 0.f) {
+    if (m_maxWidth > 0.f) {
         auto ratio = AppManager::get()->getPointsToPixelsRatio();
 
         std::string current;
@@ -142,8 +147,7 @@ std::vector<std::string> Label::separateText() {
                 continue;
 
             const auto& glyph = m_font.glyphs[cp];
-            if (m_maxWidth > 0.f && currentWidth + glyph.textureRect.w > m_maxWidth) {
-                // logD("yay!! {}", current);
+            if (currentWidth + glyph.textureRect.w > m_maxWidth && current.length() > 0) {
                 ret.push_back(current);
                 current.clear();
                 currentWidth = 0.f;

@@ -11,7 +11,7 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "Hello Spectrum!", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "Hello Spectrum! [window]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
 
     auto appMgr = AppManager::get();

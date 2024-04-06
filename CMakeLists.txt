@@ -27,7 +27,7 @@ CPMAddPackage(
 CPMAddPackage(
     NAME rapidjson
     GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
-    GIT_TAG 3f73edae00aba5b0112a80b4d41e6f1ff7d92a3d
+    GIT_TAG 5ec44fb9206695e5293f610b0a46d21851d0c966
     DOWNLOAD_ONLY YES
 )
 CPMAddPackage(

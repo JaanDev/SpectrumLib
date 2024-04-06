@@ -11,54 +11,29 @@ struct Vec2 {
     T x;
     T y;
 
-    Vec2<T> operator+(const Vec2<T>& other) const {
-        return {x + other.x, y + other.y};
-    }
-    
-    Vec2<T> operator-(const Vec2<T>& other) const {
-        return {x - other.x, y - other.y};
-    }
-    
-    Vec2<T> operator*(const Vec2<T>& other) const {
-        return {x * other.x, y * other.y};
-    }
-    
-    Vec2<T> operator/(const Vec2<T>& other) const {
-        return {x / other.x, y / other.y};
-    }
-    
-    Vec2<T> operator*(T other) const {
-        return {x * other, y * other};
-    }
-    
-    Vec2<T> operator/(T other) const {
-        return {x / other, y / other};
-    }
+    Vec2<T> operator+(const Vec2<T>& other) const { return {x + other.x, y + other.y}; }
 
-    
-    void operator+=(const Vec2<T>& other) {
-        *this = *this + other;
-    }
-    
-    void operator-=(const Vec2<T>& other) {
-        *this = *this - other;
-    }
-    
-    void operator*=(const Vec2<T>& other) {
-        *this = *this * other;
-    }
-    
-    void operator/=(const Vec2<T>& other) {
-        *this = *this / other;
-    }
-    
-    void operator*=(T other) {
-        *this = *this * other;
-    }
-    
-    void operator/=(T other) {
-        *this = *this / other;
-    }
+    Vec2<T> operator-(const Vec2<T>& other) const { return {x - other.x, y - other.y}; }
+
+    Vec2<T> operator*(const Vec2<T>& other) const { return {x * other.x, y * other.y}; }
+
+    Vec2<T> operator/(const Vec2<T>& other) const { return {x / other.x, y / other.y}; }
+
+    Vec2<T> operator*(T other) const { return {x * other, y * other}; }
+
+    Vec2<T> operator/(T other) const { return {x / other, y / other}; }
+
+    void operator+=(const Vec2<T>& other) { *this = *this + other; }
+
+    void operator-=(const Vec2<T>& other) { *this = *this - other; }
+
+    void operator*=(const Vec2<T>& other) { *this = *this * other; }
+
+    void operator/=(const Vec2<T>& other) { *this = *this / other; }
+
+    void operator*=(T other) { *this = *this * other; }
+
+    void operator/=(T other) { *this = *this / other; }
 
     float distance(const Vec2<T>& other) const { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
 
@@ -75,30 +50,17 @@ struct Size {
     T w;
     T h;
 
-    
-    Size<T> operator*(T other) const {
-        return {static_cast<T>(w * other), static_cast<T>(h * other)};
-    }
-    
-    Size<T> operator/(T other) const {
-        return {static_cast<T>(w / other), static_cast<T>(h / other)};
-    }
-    
-    Size<T> operator*(Size<T> other) const {
-        return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)};
-    }
-    
-    Size<T> operator/(Size<T> other) const {
-        return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)};
-    }
-    
-    Size<T> operator*(Vec2<T> other) const {
-        return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)};
-    }
-    
-    Size<T> operator/(Vec2<T> other) const {
-        return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)};
-    }
+    Size<T> operator*(T other) const { return {static_cast<T>(w * other), static_cast<T>(h * other)}; }
+
+    Size<T> operator/(T other) const { return {static_cast<T>(w / other), static_cast<T>(h / other)}; }
+
+    Size<T> operator*(Size<T> other) const { return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)}; }
+
+    Size<T> operator/(Size<T> other) const { return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)}; }
+
+    Size<T> operator*(Vec2<T> other) const { return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)}; }
+
+    Size<T> operator/(Vec2<T> other) const { return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)}; }
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 
@@ -144,14 +106,10 @@ struct Col3 {
     Col3<T> operator/(const Col3<T>& other) {
         return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)};
     }
-    
-    Col3<T> operator*(T other) {
-        return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)};
-    }
-    
-    Col3<T> operator/(T other) {
-        return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)};
-    }
+
+    Col3<T> operator*(T other) { return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)}; }
+
+    Col3<T> operator/(T other) { return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)}; }
 
     void operator+=(const Col3<T>& other) { *this = *this + other; }
     void operator-=(const Col3<T>& other) { *this = *this - other; }
