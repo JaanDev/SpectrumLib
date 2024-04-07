@@ -8,8 +8,7 @@ NS_SPECTRUM_BEGIN
 
 Sprite::Sprite(const std::string& path)
     : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0),
-      m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
-    m_texture = std::make_shared<Texture>(path);
+      m_texture(std::make_shared<Texture>(path)) {
     m_boundingBox = m_texture->getSize();
 
     init();
@@ -17,7 +16,7 @@ Sprite::Sprite(const std::string& path)
 
 Sprite::Sprite(std::shared_ptr<Texture> texture)
     : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}),
-      m_texture(texture), m_vao(0), m_texCoords({0.0f, 0.0f, 1.0f, 1.0f}) {
+      m_texture(texture), m_vao(0) {
     m_boundingBox = m_texture->getSize();
 
     init();
@@ -25,15 +24,8 @@ Sprite::Sprite(std::shared_ptr<Texture> texture)
 
 Sprite::Sprite(std::shared_ptr<TextureFrame> frame)
     : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_frame(frame),
-      m_vao(0) {
-
-    m_texture = frame->getTexture();
+      m_vao(0), m_texture(frame->getTexture()) {
     m_boundingBox = frame->getSize();
-
-    auto rect = frame->getRect();
-    auto size = frame->getTexture()->getSizeInPixels();
-
-    m_texCoords = {(float)rect.x / size.w, (float)rect.y / size.h, (float)rect.w / size.w, (float)rect.h / size.h};
 
     init();
 }
@@ -75,18 +67,15 @@ void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     m_texture = frame->getTexture();
     m_boundingBox = frame->getSize();
 
-    const auto& rect = frame->getRect();
-    const auto& size = m_texture->getSizeInPixels();
-
-    m_texCoords = {(float)rect.x / size.w, (float)rect.y / size.h, (float)rect.w / size.w, (float)rect.h / size.h};
+    const auto& texCoords = frame->getTexCoords();
 
     // clang-format off
     const float vertices[] = {
-        // positions                               texCoords
-        0.0f,            0.0f,            0.0f,    m_texCoords.x,                 m_texCoords.y,
-        0.0f,            m_boundingBox.h, 0.0f,    m_texCoords.x,                 m_texCoords.y + m_texCoords.h,
-        m_boundingBox.w, 0.0f,            0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y,
-        m_boundingBox.w, m_boundingBox.h, 0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y + m_texCoords.h,
+        // positions                            texCoords
+        0.0f,            0.0f,            0.0f, texCoords[0].x, texCoords[0].y,
+        0.0f,            m_boundingBox.h, 0.0f, texCoords[1].x, texCoords[1].y,
+        m_boundingBox.w, 0.0f,            0.0f, texCoords[2].x, texCoords[2].y,
+        m_boundingBox.w, m_boundingBox.h, 0.0f, texCoords[3].x, texCoords[3].y
     };
     // clang-format on
 
@@ -124,13 +113,18 @@ void Sprite::setShader(std::shared_ptr<Shader> shader) {
 }
 
 void Sprite::makeVBO() {
+    std::array<Vec2f, 4> texCoords = {Vec2f {0, 0}, Vec2f {0, 1}, Vec2f {1, 0}, Vec2f {1, 1}};
+    if (m_frame) {
+        texCoords = m_frame->getTexCoords();
+    }
+
     // clang-format off
     const float vertices[] = {
-        // positions                               texCoords
-        0.0f,            0.0f,            0.0f,    m_texCoords.x,                 m_texCoords.y,
-        0.0f,            m_boundingBox.h, 0.0f,    m_texCoords.x,                 m_texCoords.y + m_texCoords.h,
-        m_boundingBox.w, 0.0f,            0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y,
-        m_boundingBox.w, m_boundingBox.h, 0.0f,    m_texCoords.x + m_texCoords.w, m_texCoords.y + m_texCoords.h,
+        // positions                            texCoords
+        0.0f,            0.0f,            0.0f, texCoords[0].x, texCoords[0].y,
+        0.0f,            m_boundingBox.h, 0.0f, texCoords[1].x, texCoords[1].y,
+        m_boundingBox.w, 0.0f,            0.0f, texCoords[2].x, texCoords[2].y,
+        m_boundingBox.w, m_boundingBox.h, 0.0f, texCoords[3].x, texCoords[3].y
     };
 
     const unsigned int indices[] = {

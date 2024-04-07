@@ -1,0 +1,43 @@
+{
+    "metadata": {
+        "texture-filename": "spritesheet.png"
+    },
+    "frames": {
+        "image 1.png": {
+            "rect": [
+                2,
+                2,
+                150,
+                150
+            ],
+            "rotated": false
+        },
+        "pixelart.png": {
+            "rect": [
+                156,
+                2,
+                24,
+                24
+            ],
+            "rotated": false
+        },
+        "opengl.png": {
+            "rect": [
+                2,
+                156,
+                341,
+                148
+            ],
+            "rotated": false
+        },
+        "mem.png": {
+            "rect": [
+                2,
+                308,
+                322,
+                125
+            ],
+            "rotated": true
+        }
+    }
+}

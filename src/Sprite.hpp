@@ -43,7 +43,6 @@ class SPL_API Sprite : public Node {
     std::shared_ptr<Texture> m_texture;
     std::shared_ptr<TextureFrame> m_frame;
     Col3u m_color;
-    Rectf m_texCoords;
     std::shared_ptr<Shader> m_shader;
     BlendFunc m_blendFunc;
     GLuint m_vao;

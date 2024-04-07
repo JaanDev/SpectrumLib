@@ -5,10 +5,10 @@
 NS_SPECTRUM_BEGIN
 
 struct TexParams {
-    GLuint minFilter; // minification filter
-    GLuint magFilter; // magnification filter
-    GLuint wrapS;
-    GLuint wrapT;
+    GLuint minFilter = GL_LINEAR_MIPMAP_LINEAR; // minification filter
+    GLuint magFilter = GL_LINEAR;               // magnification filter
+    GLuint wrapS = GL_REPEAT;                   // wrap x
+    GLuint wrapT = GL_REPEAT;                   // wrap y
 };
 
 class SPL_API Texture {

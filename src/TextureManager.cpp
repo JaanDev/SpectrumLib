@@ -1,4 +1,5 @@
 #include "TextureManager.hpp"
+
 #include "FileManager.hpp"
 #include <memory>
 #include <rapidjson/document.h>
@@ -41,7 +42,7 @@ void TextureManager::addTexture(const std::string& name, std::shared_ptr<Texture
 }
 
 void TextureManager::loadSpriteSheet(const std::string& path) {
-    std::fstream stream(path);
+    std::fstream stream(FileManager::get()->fullPathForFile(path));
     std::ostringstream osstream;
     osstream << stream.rdbuf();
     std::string json(osstream.str());
@@ -52,8 +53,8 @@ void TextureManager::loadSpriteSheet(const std::string& path) {
     auto texture = getTexture(doc["metadata"]["texture-filename"].GetString());
 
     for (auto& pair : doc["frames"].GetObj()) {
-        Recti rect = {pair.value["rect"].GetArray()[0].GetInt(), pair.value["rect"].GetArray()[1].GetInt(),
-                      pair.value["rect"].GetArray()[2].GetInt(), pair.value["rect"].GetArray()[3].GetInt()};
+        Rectf rect = {pair.value["rect"].GetArray()[0].GetFloat(), pair.value["rect"].GetArray()[1].GetFloat(),
+                      pair.value["rect"].GetArray()[2].GetFloat(), pair.value["rect"].GetArray()[3].GetFloat()};
 
         m_frames[pair.name.GetString()] = std::make_shared<TextureFrame>(texture, rect, pair.value["rotated"].GetBool());
     }

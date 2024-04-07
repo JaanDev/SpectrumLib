@@ -78,7 +78,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     int w, h;
     glfwGetWindowSize(m_windowHandle, &w, &h);
-    m_curPointsToPixels = sizeInPoints / Vec2f {(float)w, (float)h};
+    m_curPointsToPixels = sizeInPoints.toVec() / Vec2f {(float)w, (float)h};
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
         auto wmgr = WindowManager::get();
@@ -122,13 +122,13 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
     glfwSetFramebufferSizeCallback(m_windowHandle, [](GLFWwindow* window, int w, int h) {
         glViewport(0, 0, w, h);
-        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize() / Vec2f {(float)w, (float)h};
+        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize().toVec() / Vec2f {(float)w, (float)h};
     });
 
     setDefaultWindowIcon();
 
     AppManager::get()->m_winSize = sizeInPoints;
-    AppManager::get()->m_pointsToPixels = sizeInPoints / sizeInPixels.to<float>();
+    AppManager::get()->m_pointsToPixels = (sizeInPoints / sizeInPixels.to<float>()).toVec();
 }
 
 void WindowManager::setWindowIcon(const std::string& iconPath) {

@@ -8,65 +8,54 @@ struct Size;
 
 template <typename T>
 struct Vec2 {
+    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Vec2");
+
     T x;
     T y;
 
     Vec2<T> operator+(const Vec2<T>& other) const { return {x + other.x, y + other.y}; }
-
     Vec2<T> operator-(const Vec2<T>& other) const { return {x - other.x, y - other.y}; }
-
     Vec2<T> operator*(const Vec2<T>& other) const { return {x * other.x, y * other.y}; }
-
     Vec2<T> operator/(const Vec2<T>& other) const { return {x / other.x, y / other.y}; }
-
     Vec2<T> operator*(T other) const { return {x * other, y * other}; }
-
     Vec2<T> operator/(T other) const { return {x / other, y / other}; }
-
     void operator+=(const Vec2<T>& other) { *this = *this + other; }
-
     void operator-=(const Vec2<T>& other) { *this = *this - other; }
-
     void operator*=(const Vec2<T>& other) { *this = *this * other; }
-
     void operator/=(const Vec2<T>& other) { *this = *this / other; }
-
     void operator*=(T other) { *this = *this * other; }
-
     void operator/=(T other) { *this = *this / other; }
 
     float distance(const Vec2<T>& other) const { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
 
-    operator Size<T>() const { return {x, y}; }
+    // operator Size<T>() const { return {x, y}; }
 
-    template <typename T2>
-    inline Vec2<T2> to() const {
-        return {static_cast<T2>(x), static_cast<T2>(y)};
-    }
+    // template <typename T2>
+    // inline Vec2<T2> to() const {
+    //     return {static_cast<T2>(x), static_cast<T2>(y)};
+    // }
 };
 
 template <typename T>
 struct Size {
+    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Size");
+
     T w;
     T h;
 
     Size<T> operator*(T other) const { return {static_cast<T>(w * other), static_cast<T>(h * other)}; }
-
     Size<T> operator/(T other) const { return {static_cast<T>(w / other), static_cast<T>(h / other)}; }
-
-    Size<T> operator*(Size<T> other) const { return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)}; }
-
-    Size<T> operator/(Size<T> other) const { return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)}; }
-
-    Size<T> operator*(Vec2<T> other) const { return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)}; }
-
-    Size<T> operator/(Vec2<T> other) const { return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)}; }
+    Size<T> operator*(const Size<T>& other) const { return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)}; }
+    Size<T> operator/(const Size<T>& other) const { return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)}; }
+    Size<T> operator*(const Vec2<T>& other) const { return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)}; }
+    Size<T> operator/(const Vec2<T>& other) const { return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)}; }
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 
     T getArea() const { return w * h; }
 
-    operator Vec2<T>() const { return {w, h}; }
+    // operator Vec2<T>() const { return {w, h}; }
+    inline Vec2<T> toVec() const { return {w, h}; }
 
     template <typename T2>
     inline Size<T2> to() const {
@@ -76,6 +65,8 @@ struct Size {
 
 template <typename T>
 struct Rect {
+    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Rect");
+
     T x;
     T y;
     T w;
@@ -86,10 +77,17 @@ struct Rect {
     }
 
     bool contains(const Vec2<T>& other) const { return other.x >= x && other.x <= x + w && other.y >= y && other.y <= y + h; }
+
+    template <typename T2>
+    inline Rect<T2> to() const {
+        return {static_cast<T2>(x), static_cast<T2>(y), static_cast<T2>(w), static_cast<T2>(h)};
+    }
 };
 
 template <typename T>
 struct Col3 {
+    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Col3");
+
     T r;
     T g;
     T b;
@@ -106,11 +104,8 @@ struct Col3 {
     Col3<T> operator/(const Col3<T>& other) {
         return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)};
     }
-
     Col3<T> operator*(T other) { return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)}; }
-
     Col3<T> operator/(T other) { return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)}; }
-
     void operator+=(const Col3<T>& other) { *this = *this + other; }
     void operator-=(const Col3<T>& other) { *this = *this - other; }
     void operator*=(const Col3<T>& other) { *this = *this * other; }
@@ -121,6 +116,8 @@ struct Col3 {
 
 template <typename T>
 struct Col4 {
+    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Col4");
+
     T r;
     T g;
     T b;
