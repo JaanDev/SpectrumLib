@@ -15,6 +15,8 @@ void AnimSprite::runAnim(std::shared_ptr<Animation> anim) {
 }
 
 void AnimSprite::update(float dt) {
+    Node::update(dt);
+
     if (m_curAnim)
         m_curAnim->update(dt);
 }
