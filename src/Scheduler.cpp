@@ -15,9 +15,7 @@ Scheduler::Scheduler()
 
 unsigned int Scheduler::schedule(float interval, int timesRepeat, MiniFunction<void()> callback) {
     m_timers.push_back({interval, timesRepeat, callback, m_nextTimerID, interval});
-    // TODO: return m_nextTimerID++?
-    m_nextTimerID++;
-    return m_nextTimerID - 1;
+    return m_nextTimerID++;
 }
 
 void Scheduler::unschedule(unsigned int id) {

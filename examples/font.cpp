@@ -47,7 +47,7 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "Hello Spectrum! [font]", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [font]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();

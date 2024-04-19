@@ -37,7 +37,7 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "Hello Spectrum! [spritesheet]", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [spritesheet]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();

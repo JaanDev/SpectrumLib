@@ -12,10 +12,7 @@ ActionManager* ActionManager::get() {
 ActionManager::ActionManager() : m_actions({}) {}
 
 void ActionManager::update(float dt) {
-    for (auto it = m_actions.begin();;) {
-        if (it == m_actions.end())
-            break;
-
+    for (auto it = m_actions.begin(); it != m_actions.end();) {
         bool go = true;
 
         auto action = *it;
