@@ -6,36 +6,68 @@
 
 NS_SPECTRUM_BEGIN
 
-Sprite::Sprite(const std::string& path)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0),
-      m_texture(std::make_shared<Texture>(path)) {
-    m_boundingBox = m_texture->getSize();
+// Sprite::Sprite(const std::string& path) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_frame(nullptr),
+// m_colUniform(0) {
+//     auto tex = std::make_shared<Texture>(path);
+//     if (tex) {
+//         m_boundingBox = tex->getSize();
+//         m_frame = std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false);
+//     }
 
-    init();
+//     init();
+// }
+
+// Sprite::Sprite(std::shared_ptr<Texture> texture) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_frame(nullptr),
+// m_colUniform(0) {
+
+//     init();
+// }
+
+// Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_frame(frame),
+// m_colUniform(0) {
+//     m_boundingBox = frame->getSize();
+
+//     init();
+// }
+
+std::shared_ptr<Sprite> Sprite::create() {
+    return std::make_shared<Sprite>();
 }
 
-Sprite::Sprite(std::shared_ptr<Texture> texture)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}),
-      m_texture(texture), m_vao(0) {
-    m_boundingBox = m_texture->getSize();
+std::shared_ptr<Sprite> Sprite::create(const std::string& texturePath) {
+    auto tex = std::make_shared<Texture>(texturePath);
 
-    init();
+    if (!tex)
+        return nullptr;
+
+    return std::make_shared<Sprite>(std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false));
 }
 
-Sprite::Sprite(std::shared_ptr<TextureFrame> frame)
-    : Node(), m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_frame(frame),
-      m_vao(0), m_texture(frame->getTexture()) {
+std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<Texture> texture) {
+    if (!texture)
+        return nullptr;
+
+    return std::make_shared<Sprite>(std::make_shared<TextureFrame>(texture, Rectf {0, 0, (float)texture->getSizeInPixels().w, (float)texture->getSizeInPixels().h}, false));
+}
+
+std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<TextureFrame> frame) {
+    if (!frame)
+        return nullptr;
+
+    return std::make_shared<Sprite>(frame);
+}
+
+Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : Sprite() {
+    m_frame = frame;
     m_boundingBox = frame->getSize();
 
-    init();
-}
-
-void Sprite::init() {
-    m_shader = ShaderManager::get()->getShader("sprite-shader");
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+
     makeVBO();
 }
+
+Sprite::Sprite() : m_frame(nullptr), m_color({255, 255, 255}), m_shader(ShaderManager::get()->getShader("sprite-shader")), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
 
 Sprite::~Sprite() {
     glDeleteVertexArrays(1, &m_vao);
@@ -44,7 +76,6 @@ Sprite::~Sprite() {
 }
 
 void Sprite::setTexture(std::shared_ptr<Texture> tex) {
-    m_texture = tex;
     m_boundingBox = tex->getSize();
 
     // clang-format off
@@ -64,7 +95,6 @@ void Sprite::setTexture(std::shared_ptr<Texture> tex) {
 
 void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     m_frame = frame;
-    m_texture = frame->getTexture();
     m_boundingBox = frame->getSize();
 
     const auto& texCoords = frame->getTexCoords();
@@ -89,13 +119,16 @@ void Sprite::setBlendFunc(const BlendFunc& func) {
 }
 
 void Sprite::draw() {
+    if (!m_frame || !m_shader)
+        return;
+
     m_shader->use();
 
     glEnable(GL_BLEND);
     glBlendFunc(m_blendFunc.src, m_blendFunc.dst);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());
+    glBindTexture(GL_TEXTURE_2D, m_frame->getTexture()->getTextureID());
 
     glUniform3f(m_colUniform, m_color.r / 255.f, m_color.g / 255.f, m_color.b / 255.f);
 
@@ -113,10 +146,7 @@ void Sprite::setShader(std::shared_ptr<Shader> shader) {
 }
 
 void Sprite::makeVBO() {
-    std::array<Vec2f, 4> texCoords = {Vec2f {0, 0}, Vec2f {0, 1}, Vec2f {1, 0}, Vec2f {1, 1}};
-    if (m_frame) {
-        texCoords = m_frame->getTexCoords();
-    }
+    const auto& texCoords = m_frame->getTexCoords();
 
     // clang-format off
     const float vertices[] = {

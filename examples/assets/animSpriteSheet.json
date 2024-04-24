@@ -1,0 +1,223 @@
+{
+    "metadata": {
+        "texture-filename": "animSpriteSheet.png"
+    },
+    "frames": {
+        "Idle_Back1.png": {
+            "rect": [
+                2,
+                2,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Back2.png": {
+            "rect": [
+                38,
+                2,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Back3.png": {
+            "rect": [
+                74,
+                2,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Back4.png": {
+            "rect": [
+                110,
+                2,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Back5.png": {
+            "rect": [
+                146,
+                2,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Back6.png": {
+            "rect": [
+                2,
+                38,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front1.png": {
+            "rect": [
+                38,
+                38,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front2.png": {
+            "rect": [
+                74,
+                38,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front3.png": {
+            "rect": [
+                110,
+                38,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front4.png": {
+            "rect": [
+                146,
+                38,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front5.png": {
+            "rect": [
+                2,
+                74,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Front6.png": {
+            "rect": [
+                38,
+                74,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left1.png": {
+            "rect": [
+                74,
+                74,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left2.png": {
+            "rect": [
+                110,
+                74,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left3.png": {
+            "rect": [
+                146,
+                74,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left4.png": {
+            "rect": [
+                2,
+                110,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left5.png": {
+            "rect": [
+                38,
+                110,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Left6.png": {
+            "rect": [
+                74,
+                110,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth1.png": {
+            "rect": [
+                110,
+                110,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth2.png": {
+            "rect": [
+                146,
+                110,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth3.png": {
+            "rect": [
+                2,
+                146,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth4.png": {
+            "rect": [
+                38,
+                146,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth5.png": {
+            "rect": [
+                74,
+                146,
+                32,
+                32
+            ],
+            "rotated": false
+        },
+        "Idle_Rigth6.png": {
+            "rect": [
+                110,
+                146,
+                32,
+                32
+            ],
+            "rotated": false
+        }
+    }
+}

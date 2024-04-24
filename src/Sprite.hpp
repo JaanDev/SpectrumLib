@@ -14,14 +14,21 @@ struct BlendFunc {
 
 class SPL_API Sprite : public Node {
   public:
-    Sprite(const std::string& path);
-    Sprite(std::shared_ptr<Texture> texture);
+    // Sprite(const std::string& path);
+    // Sprite(std::shared_ptr<Texture> texture);
+    // Sprite(std::shared_ptr<TextureFrame> frame);
+
+    static std::shared_ptr<Sprite> create();
+    static std::shared_ptr<Sprite> create(const std::string& texturePath);
+    static std::shared_ptr<Sprite> create(std::shared_ptr<Texture> texture);
+    static std::shared_ptr<Sprite> create(std::shared_ptr<TextureFrame> frame);
+
     Sprite(std::shared_ptr<TextureFrame> frame);
+    Sprite();
     ~Sprite();
 
     void setTexture(std::shared_ptr<Texture> tex);
     void setTextureFrame(std::shared_ptr<TextureFrame> frame);
-    inline std::shared_ptr<Texture> getTexture() const { return m_texture; }
     inline std::shared_ptr<TextureFrame> getTextureFrame() const { return m_frame; };
 
     inline Col3u getColor() const { return m_color; }
@@ -30,7 +37,7 @@ class SPL_API Sprite : public Node {
     void setBlendFunc(const BlendFunc& func);
     inline const BlendFunc& getBlendFunc() const { return m_blendFunc; }
 
-    // оверрайдаем draw чтобы отрисовать текстуру
+    // override draw to render a texture
     virtual void draw() override;
 
     inline std::shared_ptr<Shader> getShader() const { return m_shader; }
@@ -38,9 +45,7 @@ class SPL_API Sprite : public Node {
 
   protected:
     void makeVBO();
-    void init();
 
-    std::shared_ptr<Texture> m_texture;
     std::shared_ptr<TextureFrame> m_frame;
     Col3u m_color;
     std::shared_ptr<Shader> m_shader;
