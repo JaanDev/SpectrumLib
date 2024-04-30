@@ -79,7 +79,7 @@ void AppManager::run() {
 
         m_deltaTime = frameTime * m_timeScale;
 
-        frameTime -= m_targetFrameTime;
+        frameTime = fmodf(frameTime, m_targetFrameTime);
 
         glfwPollEvents();
 

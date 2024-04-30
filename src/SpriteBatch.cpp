@@ -54,10 +54,6 @@ void SpriteBatch::draw() {
     glDisable(GL_BLEND);
 }
 
-void SpriteBatch::setOpacity(float opacity) {
-    m_opacity = opacity;
-}
-
 void SpriteBatch::addRect(const BatchQuad& rect) {
     m_quads.push_back(rect);
     m_shouldRebuild = true;

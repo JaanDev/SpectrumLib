@@ -16,6 +16,7 @@ class SPL_API Shader {
     void use();
 
     inline GLuint getShaderProgram() const { return m_shaderProgram; }
+    inline GLuint getUniformLocation(const char* name) const { return glGetUniformLocation(m_shaderProgram, name); }
 
   private:
     GLuint m_shaderProgram;

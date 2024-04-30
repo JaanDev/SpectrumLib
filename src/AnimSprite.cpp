@@ -13,6 +13,7 @@ void AnimSprite::runAnim(const std::string& id) {
 
 void AnimSprite::runAnim(std::shared_ptr<Animation> anim) {
     m_curAnim = anim;
+    setTextureFrame(anim->getFrame());
 }
 
 void AnimSprite::update(float dt) {
@@ -29,7 +30,7 @@ void AnimSprite::draw() {
     if (m_curAnim->isNewFrame()) {
         setTextureFrame(m_curAnim->getFrame());
     }
-    
+
     Sprite::draw();
 }
 

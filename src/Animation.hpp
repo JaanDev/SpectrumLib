@@ -15,7 +15,7 @@ class SPL_API Animation {
     Animation(float frameTime, int timesToRun, std::vector<std::shared_ptr<TextureFrame>> frames);
 
     void update(float dt);
-    inline std::shared_ptr<TextureFrame> getFrame() const { return m_frames[m_curFrame]; };
+    inline std::shared_ptr<TextureFrame> getFrame() const { return m_curFrame >= 0 && m_curFrame < m_frameCount ? m_frames[m_curFrame] : nullptr; };
     void goToFrame(int frame);
 
     inline void pause() { m_isPlaying = false; }
@@ -25,6 +25,8 @@ class SPL_API Animation {
     inline bool isFinished() const { return m_isFinished; }
     inline int getCurrentFrame() const { return m_curFrame; }
     inline bool isNewFrame() const { return m_isNewFrame; }
+
+    std::shared_ptr<Texture> getTexture() const;
 
   protected:
     std::vector<std::shared_ptr<TextureFrame>> m_frames;

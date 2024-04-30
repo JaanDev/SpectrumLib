@@ -14,16 +14,12 @@ struct BlendFunc {
 
 class SPL_API Sprite : public Node {
   public:
-    // Sprite(const std::string& path);
-    // Sprite(std::shared_ptr<Texture> texture);
-    // Sprite(std::shared_ptr<TextureFrame> frame);
-
     static std::shared_ptr<Sprite> create();
     static std::shared_ptr<Sprite> create(const std::string& texturePath);
     static std::shared_ptr<Sprite> create(std::shared_ptr<Texture> texture);
     static std::shared_ptr<Sprite> create(std::shared_ptr<TextureFrame> frame);
 
-    Sprite(std::shared_ptr<TextureFrame> frame);
+    // Sprite(std::shared_ptr<TextureFrame> frame);
     Sprite();
     ~Sprite();
 
@@ -45,10 +41,11 @@ class SPL_API Sprite : public Node {
     // 0 to 1
     inline float getOpacity() const { return m_opacity; }
     // 0 to 1
-    void setOpacity(float opacity);
+    inline void setOpacity(float opacity) { m_opacity = opacity; };
 
   protected:
-    void makeVBO();
+    // void makeVBO();
+    void setupBuffers();
 
     std::shared_ptr<TextureFrame> m_frame;
     std::shared_ptr<Shader> m_shader;

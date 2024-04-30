@@ -39,7 +39,7 @@ class SPL_API SpriteBatch : public Node {
     // 0 to 1
     inline float getOpacity() const { return m_opacity; }
     // 0 to 1
-    void setOpacity(float opacity);
+    inline void setOpacity(float opacity) { m_opacity = opacity; };
 
   private:
     void rebuild();
