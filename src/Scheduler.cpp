@@ -10,8 +10,7 @@ Scheduler* Scheduler::get() {
     return &instance;
 }
 
-Scheduler::Scheduler()
-    : m_nextTimerID(0), m_timers({}), m_AFKInterval(0.f), m_AFKCallback(nullptr), m_AFKTime(0.f), m_isAFK(false) {}
+Scheduler::Scheduler() : m_nextTimerID(0), m_timers({}), m_AFKInterval(0.f), m_AFKCallback(nullptr), m_AFKTime(0.f), m_isAFK(false) {}
 
 unsigned int Scheduler::schedule(float interval, int timesRepeat, MiniFunction<void()> callback) {
     m_timers.push_back({interval, timesRepeat, callback, m_nextTimerID, interval});

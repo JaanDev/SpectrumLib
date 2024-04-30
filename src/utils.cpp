@@ -11,8 +11,7 @@ namespace utils {
     }
 
     uint32_t Col3fToInt(const Col3f& col) {
-        return Col3uToInt(
-            {static_cast<uint8_t>(col.r * 255.f), static_cast<uint8_t>(col.g * 255.f), static_cast<uint8_t>(col.b * 255.f)});
+        return Col3uToInt({static_cast<uint8_t>(col.r * 255.f), static_cast<uint8_t>(col.g * 255.f), static_cast<uint8_t>(col.b * 255.f)});
     }
 
     uint32_t Col4uToInt(const Col4u& col) {
@@ -20,8 +19,7 @@ namespace utils {
     }
 
     uint32_t Col4fToInt(const Col4f& col) {
-        return Col4uToInt({static_cast<uint8_t>(col.r * 255.f), static_cast<uint8_t>(col.g * 255.f),
-                           static_cast<uint8_t>(col.b * 255.f), static_cast<uint8_t>(col.a * 255.f)});
+        return Col4uToInt({static_cast<uint8_t>(col.r * 255.f), static_cast<uint8_t>(col.g * 255.f), static_cast<uint8_t>(col.b * 255.f), static_cast<uint8_t>(col.a * 255.f)});
     }
 
     Col3u IntToCol3u(uint32_t col) {
@@ -101,17 +99,13 @@ namespace utils {
         case EasingType::EaseOutBack:
             return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
         case EasingType::EaseInOutBack:
-            return x < 0.5 ? (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
-                           : (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+            return x < 0.5 ? (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
         case EasingType::EaseInElastic:
             return x == 0 ? 0 : x == 1 ? 1 : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
         case EasingType::EaseOutElastic:
             return x == 0 ? 0 : x == 1 ? 1 : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
         case EasingType::EaseInOutElastic:
-            return x == 0    ? 0
-                   : x == 1  ? 1
-                   : x < 0.5 ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2
-                             : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
+            return x == 0 ? 0 : x == 1 ? 1 : x < 0.5 ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2 : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
         case EasingType::EaseInBounce:
             return 1 - calcEasing(EasingType::EaseOutBounce, 1 - x);
         case EasingType::EaseOutBounce: {
@@ -129,8 +123,7 @@ namespace utils {
             }
         } break;
         case EasingType::EaseInOutBounce:
-            return x < 0.5 ? (1 - calcEasing(EasingType::EaseOutBounce, 1 - 2 * x)) / 2
-                           : (1 + calcEasing(EasingType::EaseOutBounce, 2 * x - 1)) / 2;
+            return x < 0.5 ? (1 - calcEasing(EasingType::EaseOutBounce, 1 - 2 * x)) / 2 : (1 + calcEasing(EasingType::EaseOutBounce, 2 * x - 1)) / 2;
         default:
             logW("Unknown easing type!");
             return x;

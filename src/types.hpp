@@ -72,9 +72,7 @@ struct Rect {
     T w;
     T h;
 
-    bool doesIntersect(const Rect<T>& other) const {
-        return x < other.x + other.w && x + w > other.x && y > other.y + other.h && y + h < other.y;
-    }
+    bool doesIntersect(const Rect<T>& other) const { return x < other.x + other.w && x + w > other.x && y > other.y + other.h && y + h < other.y; }
 
     bool contains(const Vec2<T>& other) const { return other.x >= x && other.x <= x + w && other.y >= y && other.y <= y + h; }
 
@@ -92,18 +90,10 @@ struct Col3 {
     T g;
     T b;
 
-    Col3<T> operator+(const Col3<T>& other) {
-        return {static_cast<T>(r + other.r), static_cast<T>(g + other.g), static_cast<T>(b + other.b)};
-    }
-    Col3<T> operator-(const Col3<T>& other) {
-        return {static_cast<T>(r - other.r), static_cast<T>(g - other.g), static_cast<T>(b - other.b)};
-    }
-    Col3<T> operator*(const Col3<T>& other) {
-        return {static_cast<T>(r * other.r), static_cast<T>(g * other.g), static_cast<T>(b * other.b)};
-    }
-    Col3<T> operator/(const Col3<T>& other) {
-        return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)};
-    }
+    Col3<T> operator+(const Col3<T>& other) { return {static_cast<T>(r + other.r), static_cast<T>(g + other.g), static_cast<T>(b + other.b)}; }
+    Col3<T> operator-(const Col3<T>& other) { return {static_cast<T>(r - other.r), static_cast<T>(g - other.g), static_cast<T>(b - other.b)}; }
+    Col3<T> operator*(const Col3<T>& other) { return {static_cast<T>(r * other.r), static_cast<T>(g * other.g), static_cast<T>(b * other.b)}; }
+    Col3<T> operator/(const Col3<T>& other) { return {static_cast<T>(r / other.r), static_cast<T>(g / other.g), static_cast<T>(b / other.b)}; }
     Col3<T> operator*(T other) { return {static_cast<T>(r * other), static_cast<T>(g * other), static_cast<T>(b * other)}; }
     Col3<T> operator/(T other) { return {static_cast<T>(r / other), static_cast<T>(g / other), static_cast<T>(b / other)}; }
     void operator+=(const Col3<T>& other) { *this = *this + other; }

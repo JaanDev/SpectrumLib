@@ -2,8 +2,7 @@
 
 NS_SPECTRUM_BEGIN
 
-ActionRotateTo::ActionRotateTo(EasingType easing, float duration, int repeat, float startRot, float endRot)
-    : Action(easing, duration, repeat), m_startRot(startRot), m_endRot(endRot) {}
+ActionRotateTo::ActionRotateTo(EasingType easing, float duration, int repeat, float startRot, float endRot) : Action(easing, duration, repeat), m_startRot(startRot), m_endRot(endRot) {}
 
 void ActionRotateTo::update(float dt) {
     Action::update(dt);

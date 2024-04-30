@@ -11,7 +11,7 @@ class MyScene : public Scene {
         printf("My scene created\n");
 
         setBGColorU({255, 255, 255});
-        
+
         auto spr = make_shared<AnimSprite>();
 
         TextureManager::get()->loadSpriteSheet("animSpriteSheet.json");
@@ -29,8 +29,7 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [animsprite]", false,
-                                       WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [animsprite]", false, WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();
     appMgr->setTargetFrameTime(1 / 60.0f);

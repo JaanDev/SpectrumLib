@@ -38,8 +38,7 @@ Texture::Texture(const std::string& path) : m_format(0), m_size({0, 0}), m_textu
 
 Texture::Texture(uint8_t* data, unsigned int dataLen) : m_format(0), m_size({0, 0}), m_textureID(0) {
     if (!data || dataLen == 0) {
-        logE("Failed to load a texture from memory (invalid input: data = 0x{:08X}, dataLen = 0x{:08X})", (uintptr_t)data,
-             dataLen);
+        logE("Failed to load a texture from memory (invalid input: data = 0x{:08X}, dataLen = 0x{:08X})", (uintptr_t)data, dataLen);
         return;
     }
 
@@ -66,8 +65,7 @@ Texture::Texture(uint8_t* data, unsigned int dataLen) : m_format(0), m_size({0, 
 
 Texture::Texture(uint8_t* data, Sizei size, int format) : m_format(0), m_size(size), m_textureID(0) {
     if (!data || (m_size.w * m_size.h) == 0) {
-        logE("Failed to load a texture from memory (invalid input: data = 0x{:08X}, dataLen = 0x{:08X})", (uintptr_t)data,
-             (m_size.w * m_size.h));
+        logE("Failed to load a texture from memory (invalid input: data = 0x{:08X}, dataLen = 0x{:08X})", (uintptr_t)data, (m_size.w * m_size.h));
         return;
     }
 

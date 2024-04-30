@@ -11,8 +11,7 @@ class SPL_API WindowManager {
     WindowManager();
     ~WindowManager();
 
-    void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
-                      WindowFlags windowFlags = WindowFlags::Default);
+    void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::Default);
 
     void setWindowIcon(const std::string& iconPath);
 
@@ -38,9 +37,7 @@ class SPL_API WindowManager {
 
     void setWindowTitle(const std::string& title);
 
-    inline void setFilesDroppedCallback(MiniFunction<void(std::vector<std::string>)> callback) {
-        m_filesDroppedCallback = callback;
-    }
+    inline void setFilesDroppedCallback(MiniFunction<void(std::vector<std::string>)> callback) { m_filesDroppedCallback = callback; }
 
   private:
     void setDefaultWindowIcon();

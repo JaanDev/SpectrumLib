@@ -7,11 +7,9 @@ TextureFrame::TextureFrame(std::shared_ptr<Texture> texture, const Rectf& rect, 
     m_size = AppManager::get()->pixelsToSize(rotated ? Sizef {rect.h, rect.w} : Sizef {rect.w, rect.h});
 
     if (rotated)
-        m_texCoords = {Vec2f {rect.x + rect.w, rect.y}, Vec2f {rect.x, rect.y}, Vec2f {rect.x + rect.w, rect.y + rect.h},
-                       Vec2f {rect.x, rect.y + rect.h}};
+        m_texCoords = {Vec2f {rect.x + rect.w, rect.y}, Vec2f {rect.x, rect.y}, Vec2f {rect.x + rect.w, rect.y + rect.h}, Vec2f {rect.x, rect.y + rect.h}};
     else
-        m_texCoords = {Vec2f {rect.x, rect.y}, Vec2f {rect.x, rect.y + rect.h}, Vec2f {rect.x + rect.w, rect.y},
-                       Vec2f {rect.x + rect.w, rect.y + rect.h}};
+        m_texCoords = {Vec2f {rect.x, rect.y}, Vec2f {rect.x, rect.y + rect.h}, Vec2f {rect.x + rect.w, rect.y}, Vec2f {rect.x + rect.w, rect.y + rect.h}};
 
     auto texSize = texture->getSizeInPixels();
 

@@ -68,7 +68,9 @@ Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : Sprite() {
     makeVBO();
 }
 
-Sprite::Sprite() : m_frame(nullptr), m_opacity(1.0f), m_color({255, 255, 255}), m_opacityUniform(0), m_shader(ShaderManager::get()->getShader("sprite-shader")), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
+Sprite::Sprite()
+    : m_frame(nullptr), m_opacity(1.0f), m_color({255, 255, 255}), m_opacityUniform(0), m_shader(ShaderManager::get()->getShader("sprite-shader")), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}),
+      m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
 
 Sprite::~Sprite() {
     glDeleteVertexArrays(1, &m_vao);

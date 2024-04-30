@@ -3,9 +3,8 @@
 NS_SPECTRUM_BEGIN
 
 ShapeNodeEx::ShapeNodeEx()
-    : m_shapeType(spl::ShapeType::None), m_fillType(spl::FillType::None), m_ellipseRadius({0.f, 0.f}), m_texture(nullptr),
-      m_lineWidth(1.f), m_lineCol({255, 255, 255, 255}), m_gradientStartCol({255, 255, 255, 255}),
-      m_gradientEndCol({255, 255, 255, 255}), m_gradientStartPos({0.f, 0.f}), m_gradientEndPos({1.f, 1.f}), m_polygonPoints({}) {}
+    : m_shapeType(spl::ShapeType::None), m_fillType(spl::FillType::None), m_ellipseRadius({0.f, 0.f}), m_texture(nullptr), m_lineWidth(1.f), m_lineCol({255, 255, 255, 255}),
+      m_gradientStartCol({255, 255, 255, 255}), m_gradientEndCol({255, 255, 255, 255}), m_gradientStartPos({0.f, 0.f}), m_gradientEndPos({1.f, 1.f}), m_polygonPoints({}) {}
 
 void ShapeNodeEx::draw() {}
 

@@ -21,9 +21,8 @@ AppManager* AppManager::get() {
 }
 
 AppManager::AppManager()
-    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0),
-      m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f),
-      m_curScene(nullptr) {}
+    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0), m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false),
+      m_timeScale(1.f), m_targetFrameTime(1.f / 60.f), m_curScene(nullptr) {}
 
 void AppManager::run() {
     static bool hasRun = false;

@@ -3,8 +3,7 @@
 NS_SPECTRUM_BEGIN
 
 Action::Action(EasingType easing, float duration, int repeat)
-    : m_timesLeft(repeat), m_totalTimes(repeat), m_duration(duration), m_runTime(0.f), m_progress(0.f), m_node(nullptr),
-      m_easingType(easing), m_isFinished(false) {}
+    : m_timesLeft(repeat), m_totalTimes(repeat), m_duration(duration), m_runTime(0.f), m_progress(0.f), m_node(nullptr), m_easingType(easing), m_isFinished(false) {}
 
 void Action::update(float dt) {
     if (m_isFinished)
