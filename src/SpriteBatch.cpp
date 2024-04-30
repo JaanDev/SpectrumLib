@@ -7,11 +7,14 @@
 NS_SPECTRUM_BEGIN
 
 SpriteBatch::SpriteBatch(std::shared_ptr<Texture> tex)
-    : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0), m_opacityUniform(0), m_opacity(1.0f) {
+    : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0),
+      m_opacityUniform(0), m_opacity(1.0f) {
     init();
 }
 
-SpriteBatch::SpriteBatch() : m_quads({}), m_texture(nullptr), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0), m_opacityUniform(0), m_opacity(1.0f) {
+SpriteBatch::SpriteBatch()
+    : m_quads({}), m_texture(nullptr), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0),
+      m_opacityUniform(0), m_opacity(1.0f) {
     init();
 }
 

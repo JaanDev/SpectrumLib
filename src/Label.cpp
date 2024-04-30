@@ -13,7 +13,8 @@ Label::Label(const std::string& text, const std::string& fontID, TextAlignment a
     rebuild();
 }
 
-Label::Label(const std::string& text, const Font& font, TextAlignment alignment, float maxWidth) : m_text(text), m_fontID(""), m_font(font), m_textAlignment(alignment), m_maxWidth(maxWidth) {
+Label::Label(const std::string& text, const Font& font, TextAlignment alignment, float maxWidth)
+    : m_text(text), m_fontID(""), m_font(font), m_textAlignment(alignment), m_maxWidth(maxWidth) {
     m_texture = m_font.fontAtlas;
     rebuild();
 }
@@ -71,14 +72,17 @@ void Label::rebuild() {
 
             const auto& glyph = m_font.glyphs[cp];
 
-            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio.x, (float)glyph.textureRect.h * ratio.y};
+            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio.x,
+                               (float)glyph.textureRect.h * ratio.y};
 
             if (auto y2 = glyphRect.y + glyphRect.h; y2 > box.h)
                 box.h = y2;
 
-            addRect(BatchQuad {
-                .rect = glyphRect,
-                .texCoords = {.x = glyph.textureRect.x / (float)size.w, .y = glyph.textureRect.y / (float)size.h, .w = glyph.textureRect.w / (float)size.w, .h = glyph.textureRect.h / (float)size.h}});
+            addRect(BatchQuad {.rect = glyphRect,
+                               .texCoords = {.x = glyph.textureRect.x / (float)size.w,
+                                             .y = glyph.textureRect.y / (float)size.h,
+                                             .w = glyph.textureRect.w / (float)size.w,
+                                             .h = glyph.textureRect.h / (float)size.h}});
 
             pos.x += glyph.xAdvance;
             if (pos.x > box.w)

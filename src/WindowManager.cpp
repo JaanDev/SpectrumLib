@@ -15,14 +15,17 @@ WindowManager* WindowManager::get() {
     return &instance;
 }
 
-WindowManager::WindowManager() : m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
+WindowManager::WindowManager()
+    : m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}),
+      m_fsWinSize({0, 0}) {}
 
 WindowManager::~WindowManager() {
     glfwDestroyWindow(m_windowHandle);
     glfwTerminate();
 }
 
-void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags) {
+void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
+                                 WindowFlags windowFlags) {
     static bool createdWindow = false;
     if (createdWindow) {
         logW("WindowManager::createWindow has already been called, not creating a window");
@@ -88,7 +91,9 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         }
     });
 
-    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) { InputDispatcher::get()->keyCallback(key, scancode, action, mods); });
+    glfwSetKeyCallback(m_windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        InputDispatcher::get()->keyCallback(key, scancode, action, mods);
+    });
 
     glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::get()->charCallback(codepoint); });
 
@@ -105,13 +110,17 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         }
     });
 
-    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) { InputDispatcher::get()->mouseScrollCallback({static_cast<float>(x), static_cast<float>(y)}); });
-
-    glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        InputDispatcher::get()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} * WindowManager::get()->m_curPointsToPixels);
+    glfwSetScrollCallback(m_windowHandle, [](GLFWwindow* win, double x, double y) {
+        InputDispatcher::get()->mouseScrollCallback({static_cast<float>(x), static_cast<float>(y)});
     });
 
-    glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) { InputDispatcher::get()->mouseBtnCallback(button, action, mods); });
+    glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
+        InputDispatcher::get()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} *
+                                                 WindowManager::get()->m_curPointsToPixels);
+    });
+
+    glfwSetMouseButtonCallback(
+        m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) { InputDispatcher::get()->mouseBtnCallback(button, action, mods); });
 
     glfwSetFramebufferSizeCallback(m_windowHandle, [](GLFWwindow* window, int w, int h) {
         glViewport(0, 0, w, h);

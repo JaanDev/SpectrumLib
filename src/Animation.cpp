@@ -75,6 +75,7 @@ void Animation::goToFrame(int frame) {
 }
 
 Animation::Animation(float frameTime, int timesToRun, std::vector<std::shared_ptr<TextureFrame>> frames)
-    : m_timeDelay(frameTime), m_timesLeft(timesToRun), m_frames(frames), m_timeRun(0.f), m_frameCount(frames.size()), m_curFrame(0), m_isPlaying(true), m_isFinished(false) {}
+    : m_timeDelay(frameTime), m_timesLeft(timesToRun), m_frames(frames), m_timeRun(0.f), m_frameCount(frames.size()), m_curFrame(0),
+      m_isPlaying(true), m_isFinished(false) {}
 
 NS_SPECTRUM_END

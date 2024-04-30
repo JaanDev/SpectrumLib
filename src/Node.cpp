@@ -10,8 +10,8 @@
 NS_SPECTRUM_BEGIN
 
 Node::Node()
-    : m_pos({0.f, 0.f}), m_boundingBox({0, 0}), m_anchorPoint({.5f, .5f}), m_scale({1.f, 1.f}), m_rotation(0.f), m_objectLimit(UINT_MAX), m_zOrder(0), m_tag(""), m_children({}), m_parent(nullptr),
-      m_visible(true), m_matrix(glm::mat4(1.0f)), m_shouldCalcMtx(false), m_isMouseOver(false) {}
+    : m_pos({0.f, 0.f}), m_boundingBox({0, 0}), m_anchorPoint({.5f, .5f}), m_scale({1.f, 1.f}), m_rotation(0.f), m_objectLimit(UINT_MAX), m_zOrder(0),
+      m_tag(""), m_children({}), m_parent(nullptr), m_visible(true), m_matrix(glm::mat4(1.0f)), m_shouldCalcMtx(false), m_isMouseOver(false) {}
 
 void Node::setPos(const Vec2f& pos) {
     m_pos = pos;

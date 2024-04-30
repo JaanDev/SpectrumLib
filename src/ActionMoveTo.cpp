@@ -2,7 +2,8 @@
 
 NS_SPECTRUM_BEGIN
 
-ActionMoveTo::ActionMoveTo(EasingType easing, float duration, int repeat, const Vec2f& startPos, const Vec2f& endPos) : Action(easing, duration, repeat), m_startPos(startPos), m_endPos(endPos) {}
+ActionMoveTo::ActionMoveTo(EasingType easing, float duration, int repeat, const Vec2f& startPos, const Vec2f& endPos)
+    : Action(easing, duration, repeat), m_startPos(startPos), m_endPos(endPos) {}
 
 void ActionMoveTo::update(float dt) {
     Action::update(dt);

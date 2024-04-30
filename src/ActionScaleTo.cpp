@@ -2,7 +2,8 @@
 
 NS_SPECTRUM_BEGIN
 
-ActionScaleTo::ActionScaleTo(EasingType easing, float duration, int repeat, float startScale, float endScale) : Action(easing, duration, repeat), m_startScale(startScale), m_endScale(endScale) {}
+ActionScaleTo::ActionScaleTo(EasingType easing, float duration, int repeat, float startScale, float endScale)
+    : Action(easing, duration, repeat), m_startScale(startScale), m_endScale(endScale) {}
 
 void ActionScaleTo::update(float dt) {
     Action::update(dt);

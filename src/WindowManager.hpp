@@ -11,7 +11,8 @@ class SPL_API WindowManager {
     WindowManager();
     ~WindowManager();
 
-    void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen, WindowFlags windowFlags = WindowFlags::Default);
+    void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
+                      WindowFlags windowFlags = WindowFlags::Default);
 
     void setWindowIcon(const std::string& iconPath);
 

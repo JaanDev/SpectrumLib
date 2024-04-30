@@ -31,7 +31,8 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", false, WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", false,
+                                       WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();
     appMgr->setTargetFrameTime(1 / 60.0f);

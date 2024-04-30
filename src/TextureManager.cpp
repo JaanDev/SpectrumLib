@@ -53,8 +53,8 @@ void TextureManager::loadSpriteSheet(const std::string& path) {
     auto texture = getTexture(doc["metadata"]["texture-filename"].GetString());
 
     for (auto& pair : doc["frames"].GetObj()) {
-        Rectf rect = {pair.value["rect"].GetArray()[0].GetFloat(), pair.value["rect"].GetArray()[1].GetFloat(), pair.value["rect"].GetArray()[2].GetFloat(),
-                      pair.value["rect"].GetArray()[3].GetFloat()};
+        Rectf rect = {pair.value["rect"].GetArray()[0].GetFloat(), pair.value["rect"].GetArray()[1].GetFloat(),
+                      pair.value["rect"].GetArray()[2].GetFloat(), pair.value["rect"].GetArray()[3].GetFloat()};
 
         m_frames[pair.name.GetString()] = std::make_shared<TextureFrame>(texture, rect, pair.value["rotated"].GetBool());
     }

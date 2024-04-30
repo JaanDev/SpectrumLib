@@ -56,7 +56,8 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         memset(chars, 0, numChars * sizeof(stbtt_packedchar)); // this is done to prevent random values for characters that are
                                                                // not present in the font but still used by the user
 
-        ttRanges[i] = stbtt_pack_range {.font_size = lineHeight, .first_unicode_codepoint_in_range = range.startCP, .num_chars = numChars, .chardata_for_range = chars};
+        ttRanges[i] = stbtt_pack_range {
+            .font_size = lineHeight, .first_unicode_codepoint_in_range = range.startCP, .num_chars = numChars, .chardata_for_range = chars};
     }
 
     stbtt_pack_context packCtx1 = {.padding = padding, .skip_missing = 1, .h_oversample = 1, .v_oversample = 1};
@@ -116,8 +117,10 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
         for (auto j = 0u; j < ttRanges[i].num_chars; j++) {
             const auto& chr = ttRanges[i].chardata_for_range[j];
 
-            glyphs[ttRanges[i].first_unicode_codepoint_in_range + j] =
-                Glyph {.textureRect = Recti {chr.x0, chr.y0, chr.x1 - chr.x0, chr.y1 - chr.y0}, .xOffset = chr.xoff * ratio.x, .yOffset = chr.yoff * ratio.y, .xAdvance = chr.xadvance * ratio.x};
+            glyphs[ttRanges[i].first_unicode_codepoint_in_range + j] = Glyph {.textureRect = Recti {chr.x0, chr.y0, chr.x1 - chr.x0, chr.y1 - chr.y0},
+                                                                              .xOffset = chr.xoff * ratio.x,
+                                                                              .yOffset = chr.yoff * ratio.y,
+                                                                              .xAdvance = chr.xadvance * ratio.x};
         }
     }
 
@@ -211,8 +214,9 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
             unsigned int id;
             Glyph glyph;
 
-            int varsParsed = scan_func(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f", &id, &glyph.textureRect.x, &glyph.textureRect.y, &glyph.textureRect.w,
-                                       &glyph.textureRect.h, &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
+            int varsParsed =
+                scan_func(line.c_str(), "char id=%i x=%i y=%i width=%i height=%i xoffset=%f yoffset=%f xadvance=%f", &id, &glyph.textureRect.x,
+                          &glyph.textureRect.y, &glyph.textureRect.w, &glyph.textureRect.h, &glyph.xOffset, &glyph.yOffset, &glyph.xAdvance);
 
             if (varsParsed < 8) {
                 logW("Can't parse char id {} in file {}", id, absPath.string());

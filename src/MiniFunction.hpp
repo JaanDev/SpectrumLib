@@ -85,7 +85,8 @@ class MiniFunction<Ret(Args...)> {
     MiniFunction(Callable&& func) : m_state(new MiniFunctionState<std::decay_t<Callable>, Ret, Args...>(std::forward<Callable>(func))) {}
 
     template <class FunctionPointer>
-        requires(!MiniFunctionCallable<FunctionPointer, Ret, Args...> && std::is_pointer_v<FunctionPointer> && std::is_function_v<std::remove_pointer_t<FunctionPointer>>)
+        requires(!MiniFunctionCallable<FunctionPointer, Ret, Args...> && std::is_pointer_v<FunctionPointer> &&
+                 std::is_function_v<std::remove_pointer_t<FunctionPointer>>)
     MiniFunction(FunctionPointer func) : m_state(new MiniFunctionStatePointer<FunctionPointer, Ret, Args...>(func)) {}
 
     template <class MemberFunctionPointer>

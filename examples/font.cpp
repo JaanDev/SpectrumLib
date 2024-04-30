@@ -11,7 +11,8 @@ class MyScene : public Scene {
         setBGColorU({120, 220, 240});
 
         FontManager::get()->loadFont("DiaryOfAn8BitMage-lYDD.ttf", "testfont", 32, {FontRange::BasicLatin, FontRange::Cyrillic});
-        FontManager::get()->loadFont("XiaoXinChaoKu.ttf", "testfont2", 48, {FontRange::BasicLatin, FontRange::Cyrillic, FontRange::CjkUnifiedIdeographs, {0x3002, 0x3002}}); // 0x3002 is 。
+        FontManager::get()->loadFont("XiaoXinChaoKu.ttf", "testfont2", 48,
+                                     {FontRange::BasicLatin, FontRange::Cyrillic, FontRange::CjkUnifiedIdeographs, {0x3002, 0x3002}}); // 0x3002 is 。
         FontManager::get()->loadBitmapFont("pusab.fnt", "bitmap-font");
 
         auto label1 = make_shared<Label>("Hello Spectrum!", "testfont");
@@ -46,7 +47,8 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [font]", false, WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [font]", false,
+                                       WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();
     appMgr->setTargetFrameTime(1 / 60.0f);
