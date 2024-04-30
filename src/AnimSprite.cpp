@@ -1,6 +1,7 @@
 #include "AnimSprite.hpp"
 
 #include "AnimationManager.hpp"
+#include "logger.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -25,7 +26,11 @@ void AnimSprite::draw() {
     if (!m_curAnim)
         return;
 
-    m_frame = m_curAnim->getFrame();
+    if (m_curAnim->isNewFrame()) {
+        // m_frame = m_curAnim->getFrame();
+        setTextureFrame(m_curAnim->getFrame());
+        // logD("hiii");
+    }
     Sprite::draw();
 }
 

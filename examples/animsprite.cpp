@@ -16,11 +16,15 @@ class MyScene : public Scene {
 
         TextureManager::get()->loadSpriteSheet("animSpriteSheet.json");
 
-        auto animIdleFront = Animation::createWithFrameNames(1 / 15.0f, -1, "Idle_Front{}.png", 1, 6);
+        // auto sheetspr = Sprite::create(TextureManager::get()->getTexture("animSpriteSheet.png"));
+        // sheetspr->setAnchorPoint({0, 0});
+        // addChild(sheetspr);
+
+        auto animIdleFront = Animation::createWithFrameNames(15.0f / 60.0f, -1, "Idle_Front{}.png", 1, 6);
 
         spr->runAnim(animIdleFront);
         spr->setScale(10.f);
-        spr->setPos((AppManager::get()->getWinSize() / 2.f).toVec());
+        spr->setPos({100, 100});
 
         addChild(spr);
 

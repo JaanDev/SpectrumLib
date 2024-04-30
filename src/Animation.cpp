@@ -49,11 +49,30 @@ std::shared_ptr<Animation> Animation::createWithFrameNames(float frameTime, int 
 }
 
 void Animation::update(float dt) {
+    m_isNewFrame = false;
+
     if (m_isFinished || !m_isPlaying || m_frameCount == 0)
         return;
 
+    // m_timeRun += dt;
+    // auto oldCurFrame = m_curFrame;
+    // m_curFrame = static_cast<int>(floorf(m_timeRun / m_timeDelay));
+
+    // if (m_curFrame != oldCurFrame) {
+    //     m_isNewFrame = true;
+    //     logD("{} -> {}", oldCurFrame, m_curFrame);
+    // }
+
     m_timeRun += dt;
-    m_curFrame = static_cast<int>(m_timeRun / m_timeDelay);
+
+    // logD("{}\t{}\t{}\t{}\t{}", m_timeDelay, m_timeRun, dt, 1.0f / dt, m_curFrame);
+    
+    if (m_timeRun >= m_timeDelay) {
+        m_timeRun -= m_timeDelay;
+        m_curFrame++;
+        m_isNewFrame = true;
+        // logD("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!new frame");
+    }
 
     if (m_curFrame >= m_frameCount) {
         if (m_timesLeft != -1)
@@ -64,7 +83,7 @@ void Animation::update(float dt) {
             m_isFinished = true;
         } else {
             m_curFrame = 0;
-            m_timeRun = 0.f;
+            // m_timeRun = 0.f;
         }
     }
 }
@@ -76,6 +95,6 @@ void Animation::goToFrame(int frame) {
 
 Animation::Animation(float frameTime, int timesToRun, std::vector<std::shared_ptr<TextureFrame>> frames)
     : m_timeDelay(frameTime), m_timesLeft(timesToRun), m_frames(frames), m_timeRun(0.f), m_frameCount(frames.size()), m_curFrame(0),
-      m_isPlaying(true), m_isFinished(false) {}
+      m_isPlaying(true), m_isFinished(false), m_isNewFrame(false) {}
 
 NS_SPECTRUM_END

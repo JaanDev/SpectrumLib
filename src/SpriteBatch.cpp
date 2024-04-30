@@ -46,8 +46,10 @@ void SpriteBatch::draw() {
     glUniform1f(m_opacityUniform, m_opacity);
 
     glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glDisable(GL_BLEND);
 }
@@ -65,6 +67,7 @@ void SpriteBatch::setShader(std::shared_ptr<Shader> shader) {
     m_shader = shader;
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
 }
 
 void SpriteBatch::rebuild() {

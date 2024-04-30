@@ -24,6 +24,7 @@ class SPL_API Animation {
 
     inline bool isFinished() const { return m_isFinished; }
     inline int getCurrentFrame() const { return m_curFrame; }
+    inline bool isNewFrame() const { return m_isNewFrame; }
 
   protected:
     std::vector<std::shared_ptr<TextureFrame>> m_frames;
@@ -34,6 +35,7 @@ class SPL_API Animation {
     int m_curFrame;
     bool m_isPlaying;
     bool m_isFinished;
+    bool m_isNewFrame;
 };
 
 NS_SPECTRUM_END

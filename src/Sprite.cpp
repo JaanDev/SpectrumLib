@@ -6,30 +6,6 @@
 
 NS_SPECTRUM_BEGIN
 
-// Sprite::Sprite(const std::string& path) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}),
-// m_vao(0), m_vbo(0), m_ebo(0), m_frame(nullptr), m_colUniform(0) {
-//     auto tex = std::make_shared<Texture>(path);
-//     if (tex) {
-//         m_boundingBox = tex->getSize();
-//         m_frame = std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false);
-//     }
-
-//     init();
-// }
-
-// Sprite::Sprite(std::shared_ptr<Texture> texture) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA,
-// GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_frame(nullptr), m_colUniform(0) {
-
-//     init();
-// }
-
-// Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : m_color({255, 255, 255}), m_shader(nullptr), m_blendFunc({GL_SRC_ALPHA,
-// GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_frame(frame), m_colUniform(0) {
-//     m_boundingBox = frame->getSize();
-
-//     init();
-// }
-
 std::shared_ptr<Sprite> Sprite::create() {
     return std::make_shared<Sprite>();
 }
@@ -61,7 +37,7 @@ std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<TextureFrame> frame) {
 
 Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : Sprite() {
     m_frame = frame;
-    m_boundingBox = frame->getSize();
+    setBoundingBox(frame->getSize());
 
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
@@ -71,8 +47,40 @@ Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : Sprite() {
 }
 
 Sprite::Sprite()
-    : m_frame(nullptr), m_opacity(1.0f), m_color({255, 255, 255}), m_opacityUniform(0), m_shader(ShaderManager::get()->getShader("sprite-shader")),
-      m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
+    : m_frame(nullptr), m_opacity(1.0f), m_color({255, 255, 255}), m_opacityUniform(0), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0),
+      m_vbo(0), m_ebo(0), m_colUniform(0) {
+
+    m_shader = ShaderManager::get()->getShader("sprite-shader");
+    glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
+    m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
+
+    unsigned int VBO, VAO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+    // position attribute
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // texture coord attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    m_vao = VAO;
+    m_vbo = VBO;
+    m_ebo = EBO;
+}
 
 Sprite::~Sprite() {
     glDeleteVertexArrays(1, &m_vao);
@@ -80,42 +88,40 @@ Sprite::~Sprite() {
     glDeleteBuffers(1, &m_ebo);
 }
 
-void Sprite::setTexture(std::shared_ptr<Texture> tex) {
-    m_boundingBox = tex->getSize();
-
-    // clang-format off
-    const float vertices[] = {
-        // positions                               texCoords
-        0.0f,            0.0f,            0.0f,    0.0f, 0.0f,
-        0.0f,            m_boundingBox.h, 0.0f,    0.0f, 1.0f,
-        m_boundingBox.w, 0.0f,            0.0f,    1.0f, 0.0f,
-        m_boundingBox.w, m_boundingBox.h, 0.0f,    1.0f, 1.0f,
-    };
-    // clang-format on
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
 void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
+    if (!frame)
+        return;
+
     m_frame = frame;
-    m_boundingBox = frame->getSize();
+    setBoundingBox(frame->getSize());
+
+    logD("BB {} {}", m_boundingBox.w, m_boundingBox.h);
 
     const auto& texCoords = frame->getTexCoords();
 
+    // printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+
+    // for (auto ijkl : texCoords) {
+    //     logD("! {} {}", ijkl.x, ijkl.y);
+    // }
+
+    // logD("");
+
+    // printf("?????????????????????????????????\n");
+
     // clang-format off
     const float vertices[] = {
-        // positions                            texCoords
-        0.0f,            0.0f,            0.0f, texCoords[0].x, texCoords[0].y,
-        0.0f,            m_boundingBox.h, 0.0f, texCoords[1].x, texCoords[1].y,
-        m_boundingBox.w, 0.0f,            0.0f, texCoords[2].x, texCoords[2].y,
-        m_boundingBox.w, m_boundingBox.h, 0.0f, texCoords[3].x, texCoords[3].y
+        // positions                      texCoords
+        0.0f,            0.0f,            texCoords[0].x, texCoords[0].y,
+        0.0f,            m_boundingBox.h, texCoords[1].x, texCoords[1].y,
+        m_boundingBox.w, 0.0f,            texCoords[2].x, texCoords[2].y,
+        m_boundingBox.w, m_boundingBox.h, texCoords[3].x, texCoords[3].y
     };
     // clang-format on
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -155,6 +161,7 @@ void Sprite::setShader(std::shared_ptr<Shader> shader) {
     m_shader = shader;
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
 }
 
 void Sprite::makeVBO() {

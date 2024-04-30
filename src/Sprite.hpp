@@ -27,7 +27,6 @@ class SPL_API Sprite : public Node {
     Sprite();
     ~Sprite();
 
-    void setTexture(std::shared_ptr<Texture> tex);
     void setTextureFrame(std::shared_ptr<TextureFrame> frame);
     inline std::shared_ptr<TextureFrame> getTextureFrame() const { return m_frame; };
 
