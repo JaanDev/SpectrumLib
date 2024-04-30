@@ -36,6 +36,11 @@ class SPL_API SpriteBatch : public Node {
 
     inline void setShouldRebuild(bool val) { m_shouldRebuild = val; }
 
+    // 0 to 1
+    inline float getOpacity() const { return m_opacity; }
+    // 0 to 1
+    void setOpacity(float opacity);
+
   private:
     void rebuild();
     void init();
@@ -49,7 +54,9 @@ class SPL_API SpriteBatch : public Node {
     GLuint m_vbo;
     GLuint m_ebo;
     GLuint m_colUniform;
+    GLuint m_opacityUniform;
     unsigned int m_indicesSize;
+    float m_opacity;
     bool m_shouldRebuild;
 };
 

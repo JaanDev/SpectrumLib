@@ -43,17 +43,24 @@ class SPL_API Sprite : public Node {
     inline std::shared_ptr<Shader> getShader() const { return m_shader; }
     void setShader(std::shared_ptr<Shader> shader);
 
+    // 0 to 1
+    inline float getOpacity() const { return m_opacity; }
+    // 0 to 1
+    void setOpacity(float opacity);
+
   protected:
     void makeVBO();
 
     std::shared_ptr<TextureFrame> m_frame;
-    Col3u m_color;
     std::shared_ptr<Shader> m_shader;
+    Col3u m_color;
+    float m_opacity;
     BlendFunc m_blendFunc;
     GLuint m_vao;
     GLuint m_vbo;
     GLuint m_ebo;
     GLuint m_colUniform;
+    GLuint m_opacityUniform;
 };
 
 NS_SPECTRUM_END

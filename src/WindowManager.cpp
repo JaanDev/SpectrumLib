@@ -56,6 +56,10 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
 #undef APPLY_WIN_HINT
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     m_windowHandle = glfwCreateWindow(sizeInPixels.w, sizeInPixels.h, title.c_str(), nullptr, nullptr);
     if (!m_windowHandle) {
         logE("Failed to create a window!");

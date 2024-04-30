@@ -63,11 +63,12 @@ Sprite::Sprite(std::shared_ptr<TextureFrame> frame) : Sprite() {
 
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
 
     makeVBO();
 }
 
-Sprite::Sprite() : m_frame(nullptr), m_color({255, 255, 255}), m_shader(ShaderManager::get()->getShader("sprite-shader")), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
+Sprite::Sprite() : m_frame(nullptr), m_opacity(1.0f), m_color({255, 255, 255}), m_opacityUniform(0), m_shader(ShaderManager::get()->getShader("sprite-shader")), m_blendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA}), m_vao(0), m_vbo(0), m_ebo(0), m_colUniform(0) {}
 
 Sprite::~Sprite() {
     glDeleteVertexArrays(1, &m_vao);
@@ -131,12 +132,19 @@ void Sprite::draw() {
     glBindTexture(GL_TEXTURE_2D, m_frame->getTexture()->getTextureID());
 
     glUniform3f(m_colUniform, m_color.r / 255.f, m_color.g / 255.f, m_color.b / 255.f);
+    glUniform1f(m_opacityUniform, m_opacity);
 
     glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glDisable(GL_BLEND);
+}
+
+void Sprite::setOpacity(float opacity) {
+    m_opacity = opacity;
 }
 
 void Sprite::setShader(std::shared_ptr<Shader> shader) {
@@ -150,11 +158,11 @@ void Sprite::makeVBO() {
 
     // clang-format off
     const float vertices[] = {
-        // positions                            texCoords
-        0.0f,            0.0f,            0.0f, texCoords[0].x, texCoords[0].y,
-        0.0f,            m_boundingBox.h, 0.0f, texCoords[1].x, texCoords[1].y,
-        m_boundingBox.w, 0.0f,            0.0f, texCoords[2].x, texCoords[2].y,
-        m_boundingBox.w, m_boundingBox.h, 0.0f, texCoords[3].x, texCoords[3].y
+        // positions                      texCoords
+        0.0f,            0.0f,            texCoords[0].x, texCoords[0].y,
+        0.0f,            m_boundingBox.h, texCoords[1].x, texCoords[1].y,
+        m_boundingBox.w, 0.0f,            texCoords[2].x, texCoords[2].y,
+        m_boundingBox.w, m_boundingBox.h, texCoords[3].x, texCoords[3].y
     };
 
     const unsigned int indices[] = {
@@ -176,10 +184,10 @@ void Sprite::makeVBO() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);

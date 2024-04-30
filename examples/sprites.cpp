@@ -26,6 +26,7 @@ class MyScene : public Scene {
         spr3->setAnchorPoint({0, 0});
         spr3->setRotation(30);
         spr2->addChild(spr3);
+        spr3->setOpacity(0.5f);
     }
 };
 

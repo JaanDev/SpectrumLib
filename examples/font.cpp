@@ -26,6 +26,7 @@ class MyScene : public Scene {
         label2->setPos({AppManager::get()->getWinSize().w / 2.f, 60});
         label2->setAnchorPoint({0.5f, 0.f});
         addChild(label2);
+        label2->setOpacity(0.5f);
 
         auto label3 = make_shared<Label>("Привет мир!", "testfont");
         label3->setColor({30, 30, 30});
@@ -43,6 +44,7 @@ class MyScene : public Scene {
         label5->setAnchorPoint({0.5f, 0.f});
         label5->setScale(.4f);
         addChild(label5);
+        label5->setOpacity(0.5f);
     }
 };
 
