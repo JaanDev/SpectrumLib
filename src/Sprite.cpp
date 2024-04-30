@@ -95,19 +95,7 @@ void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     m_frame = frame;
     setBoundingBox(frame->getSize());
 
-    logD("BB {} {}", m_boundingBox.w, m_boundingBox.h);
-
     const auto& texCoords = frame->getTexCoords();
-
-    // printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-
-    // for (auto ijkl : texCoords) {
-    //     logD("! {} {}", ijkl.x, ijkl.y);
-    // }
-
-    // logD("");
-
-    // printf("?????????????????????????????????\n");
 
     // clang-format off
     const float vertices[] = {
@@ -117,12 +105,19 @@ void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
         m_boundingBox.w, 0.0f,            texCoords[2].x, texCoords[2].y,
         m_boundingBox.w, m_boundingBox.h, texCoords[3].x, texCoords[3].y
     };
+
+    const unsigned int indices[] = {
+        0, 1, 2, 3
+    };
     // clang-format on
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Sprite::setBlendFunc(const BlendFunc& func) {

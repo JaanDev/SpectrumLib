@@ -27,10 +27,9 @@ void AnimSprite::draw() {
         return;
 
     if (m_curAnim->isNewFrame()) {
-        // m_frame = m_curAnim->getFrame();
         setTextureFrame(m_curAnim->getFrame());
-        // logD("hiii");
     }
+    
     Sprite::draw();
 }
 

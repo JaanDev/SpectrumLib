@@ -30,8 +30,8 @@ uniform vec3 col;
 uniform float opacity;
 
 void main() {
-    // gl_FragColor = texture(tex, texCoord) * vec4(col, opacity);
-    gl_FragColor = vec4(1,0,0,1);
+    gl_FragColor = texture(tex, texCoord) * vec4(col, opacity);
+    // gl_FragColor = vec4(1,0,0,1);
 }
 )";
 

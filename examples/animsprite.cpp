@@ -12,23 +12,16 @@ class MyScene : public Scene {
 
         setBGColorU({255, 255, 255});
 
-        auto spr = make_shared<AnimSprite>();
-
         TextureManager::get()->loadSpriteSheet("animSpriteSheet.json");
 
-        // auto sheetspr = Sprite::create(TextureManager::get()->getTexture("animSpriteSheet.png"));
-        // sheetspr->setAnchorPoint({0, 0});
-        // addChild(sheetspr);
+        auto animIdleFront = Animation::createWithFrameNames(10.0f / 60.0f, -1, "Idle_Front{}.png", 1, 6);
 
-        auto animIdleFront = Animation::createWithFrameNames(15.0f / 60.0f, -1, "Idle_Front{}.png", 1, 6);
-
+        auto spr = make_shared<AnimSprite>();
         spr->runAnim(animIdleFront);
-        spr->setScale(10.f);
-        spr->setPos({100, 100});
+        spr->setScale(5.f);
+        spr->setPos(AppManager::get()->getWinSize().toVec() / 2.0f);
 
         addChild(spr);
-
-        printf("ok\n");
     }
 };
 
