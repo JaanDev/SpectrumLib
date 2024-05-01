@@ -19,7 +19,7 @@ class MyScene : public Scene {
         std::array<Vec2f, 4> sprPos = {Vec2f {200, 200}, Vec2f {100, 150}, Vec2f {200, 100}, Vec2f {300, 150}};
 
         for (auto i = 0; i < 4; i++) {
-            auto anim = Animation::createWithFrameNames(1.0f / 5.0f, -1, animNames[i], 1, 6); // 5 fps
+            auto anim = Animation::createWithFrameNames(1.0f / 10.0f, -1, animNames[i], 1, 6); // 10 fps
             anim->getTexture()->setTexParams({.magFilter = GL_NEAREST});
 
             auto spr = make_shared<AnimSprite>();

@@ -47,7 +47,7 @@ void AppManager::run() {
 
     auto getTime = glfwGetTime;
 
-    double lastFrameTime = getTime();
+    float lastFrameTime = static_cast<float>(getTime());
     int fps = 0;
     float fpsTime = 0.f;
     float frameTime = 0.f; // for maintaining fps
@@ -56,7 +56,7 @@ void AppManager::run() {
     m_matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
-        auto frameStartTime = getTime();
+        auto frameStartTime = static_cast<float>(getTime());
         auto realDT = frameStartTime - lastFrameTime;
 
         fpsTime += realDT;
@@ -75,7 +75,8 @@ void AppManager::run() {
             continue;
         }
 
-        m_deltaTime = frameTime * m_timeScale;
+        auto _dt = frameTime * m_timeScale;
+        m_deltaTime = _dt;
 
         frameTime = fmodf(frameTime, m_targetFrameTime);
 
@@ -96,8 +97,8 @@ void AppManager::run() {
             currentColor = m_curScene->getBGColor();
 
             MiniFunction<void(Node*)> updateNodes;
-            updateNodes = [this, &updateNodes](Node* node) {
-                node->update(this->m_deltaTime);
+            updateNodes = [_dt, &updateNodes](Node* node) {
+                node->update(_dt);
 
                 for (auto child : node->getChildren()) {
                     updateNodes(child.get());

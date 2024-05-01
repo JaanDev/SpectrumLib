@@ -67,7 +67,7 @@ class SPL_API AppManager {
     const glm::mat4& getMatrix() const;
 
   private:
-    double m_targetFrameTime;
+    float m_targetFrameTime;
     float m_timeScale;
     int m_fps;
     float m_deltaTime;
