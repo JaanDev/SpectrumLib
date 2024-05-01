@@ -58,8 +58,6 @@ void AppManager::run() {
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = getTime();
         auto realDT = frameStartTime - lastFrameTime;
-        // m_deltaTime = static_cast<float>(realDT) * m_timeScale;
-        // logD("{}\t{}\t{}", realDT, m_deltaTime, 1.0f / m_deltaTime);
 
         fpsTime += realDT;
         if (fpsTime >= 1.0f) {

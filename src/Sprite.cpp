@@ -10,14 +10,18 @@ std::shared_ptr<Sprite> Sprite::create() {
     return std::make_shared<Sprite>();
 }
 
-std::shared_ptr<Sprite> Sprite::create(const std::string& texturePath) {
-    auto tex = std::make_shared<Texture>(texturePath);
+std::shared_ptr<Sprite> Sprite::createWithTexName(const std::string& texturePath) {
+    auto tex = TextureManager::get()->getTexture(texturePath);
 
     if (!tex)
         return nullptr;
 
     return Sprite::create(
         std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false));
+}
+
+std::shared_ptr<Sprite> Sprite::createWithFrameName(const std::string& frameName) {
+    return Sprite::create(TextureManager::get()->getTextureFrame(frameName));
 }
 
 std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<Texture> texture) {

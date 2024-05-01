@@ -12,7 +12,7 @@ class MyScene : public Scene {
 
         auto tex = std::make_shared<Texture>("test.png");
 
-        auto spr = Sprite::create("alphaSprite.png");
+        auto spr = Sprite::createWithTexName("alphaSprite.png");
         spr->setPos({100, 100});
         addChild(spr);
 
@@ -22,7 +22,7 @@ class MyScene : public Scene {
         spr2->setRotation(45);
         addChild(spr2);
 
-        auto spr3 = Sprite::create("test2.png");
+        auto spr3 = Sprite::createWithTexName("test2.png");
         spr3->setAnchorPoint({0, 0});
         spr3->setRotation(30);
         spr2->addChild(spr3);

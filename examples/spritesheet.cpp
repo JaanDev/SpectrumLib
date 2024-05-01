@@ -10,29 +10,29 @@ class MyScene : public Scene {
 
         setBGColorU({240, 240, 240});
 
-        // TextureManager::get()->loadSpriteSheet("spritesheet.json");
+        TextureManager::get()->loadSpriteSheet("spritesheet.json");
 
-        // auto s1 = make_shared<Sprite>(TextureManager::get()->getTextureFrame("image 1.png"));
-        // s1->setPos({10, 10});
-        // s1->setAnchorPoint({0, 0});
-        // addChild(s1);
+        auto s1 = Sprite::createWithFrameName("image 1.png");
+        s1->setPos({10, 10});
+        s1->setAnchorPoint({0, 0});
+        addChild(s1);
 
-        // auto s2 = make_shared<Sprite>(TextureManager::get()->getTextureFrame("mem.png"));
-        // s2->setPos({390, 290});
-        // s2->setAnchorPoint({1, 1});
-        // addChild(s2);
+        auto s2 = Sprite::createWithFrameName("mem.png");
+        s2->setPos({390, 290});
+        s2->setAnchorPoint({1, 1});
+        addChild(s2);
 
-        // auto s3 = make_shared<Sprite>(TextureManager::get()->getTextureFrame("opengl.png"));
-        // s3->setPos({390, 10});
-        // s3->setAnchorPoint({1, 0});
-        // addChild(s3);
+        auto s3 = Sprite::createWithFrameName("opengl.png");
+        s3->setPos({390, 10});
+        s3->setAnchorPoint({1, 0});
+        addChild(s3);
 
-        // auto s4 = make_shared<Sprite>(TextureManager::get()->getTextureFrame("pixelart.png"));
-        // s4->setPos({10, 290});
-        // s4->setAnchorPoint({0, 1});
-        // s4->setScale(10);
-        // s4->getTextureFrame()->getTexture()->setTexParams({.magFilter = GL_NEAREST});
-        // addChild(s4);
+        auto s4 = Sprite::createWithFrameName("pixelart.png");
+        s4->setPos({10, 290});
+        s4->setAnchorPoint({0, 1});
+        s4->setScale(10);
+        s4->getTextureFrame()->getTexture()->setTexParams({.magFilter = GL_NEAREST});
+        addChild(s4);
     }
 };
 

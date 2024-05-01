@@ -9,7 +9,7 @@ class MyScene : public Scene {
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [window]", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [actions]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
 
     auto appMgr = AppManager::get();

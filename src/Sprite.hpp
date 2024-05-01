@@ -15,7 +15,8 @@ struct BlendFunc {
 class SPL_API Sprite : public Node {
   public:
     static std::shared_ptr<Sprite> create();
-    static std::shared_ptr<Sprite> create(const std::string& texturePath);
+    static std::shared_ptr<Sprite> createWithTexName(const std::string& texturePath);
+    static std::shared_ptr<Sprite> createWithFrameName(const std::string& frameName);
     static std::shared_ptr<Sprite> create(std::shared_ptr<Texture> texture);
     static std::shared_ptr<Sprite> create(std::shared_ptr<TextureFrame> frame);
 
