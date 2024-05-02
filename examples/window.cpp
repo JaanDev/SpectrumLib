@@ -1,7 +1,5 @@
 #include <Spectrum.hpp>
 
-#include <format>
-
 using namespace spl;
 using std::make_shared, std::shared_ptr;
 

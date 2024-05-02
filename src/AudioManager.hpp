@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#include <map>
 #include "utils.hpp"
 
 #include "miniaudio.h"
@@ -9,23 +10,31 @@
 NS_SPECTRUM_BEGIN
 
 struct Sample {
-    const char* sampleKey;
-    uint8_t volume;
-    uint8_t balance;
+    ma_decoder decoder;
+
+    size_t size;
+    unsigned char* data;
+
+    bool paused = false;
+    float volume = 1.0f;
+    uint8_t balance = 50;
     uint32_t freq;
-    uint32_t position;
-    uint32_t length;
-    uint32_t repeats;
+    uint32_t repeats = 1;
+    uint32_t alreadyRepeaten = 0;
 };
 
 struct Channel {
+    ma_decoder decoder;
     const char* sampleKey;
-    uint8_t volume;
-    uint8_t balance;
+
+    bool locked = false;
+    bool paused = false;
+
+    float volume = 1.0f;
+    uint8_t balance = 50;
     uint32_t freq;
-    uint32_t position;
-    uint32_t length;
-    uint32_t repeats;
+    uint32_t repeats = 1;
+    uint32_t alreadyRepeaten = 0;
 };
 
 class SPL_API AudioManager {
@@ -88,13 +97,16 @@ class SPL_API AudioManager {
     void unlockChannel(uint8_t channel);
 
   private:
+    static void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, uint32_t frameCount);
+
     std::array<Channel, 48> m_channels;
-    std::vector<Sample> m_loadedSamples;
+    std::map<std::string, Sample> m_loadedSamples;
     float m_generalVolume;
     float m_generalBalance;
 
     ma_device_config m_deviceConfig;
     ma_device m_device;
+    ma_decoder_config m_decoderConfig;
 };
 
 NS_SPECTRUM_END
