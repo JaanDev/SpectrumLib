@@ -14,14 +14,17 @@ struct BlendFunc {
 
 class SPL_API Sprite : public Node {
   public:
-    Sprite(const std::string& path);
-    Sprite(std::shared_ptr<Texture> texture);
-    Sprite(std::shared_ptr<TextureFrame> frame);
+    static std::shared_ptr<Sprite> create();
+    static std::shared_ptr<Sprite> createWithTexName(const std::string& texturePath);
+    static std::shared_ptr<Sprite> createWithFrameName(const std::string& frameName);
+    static std::shared_ptr<Sprite> create(std::shared_ptr<Texture> texture);
+    static std::shared_ptr<Sprite> create(std::shared_ptr<TextureFrame> frame);
+
+    // Sprite(std::shared_ptr<TextureFrame> frame);
+    Sprite();
     ~Sprite();
 
-    void setTexture(std::shared_ptr<Texture> tex);
     void setTextureFrame(std::shared_ptr<TextureFrame> frame);
-    inline std::shared_ptr<Texture> getTexture() const { return m_texture; }
     inline std::shared_ptr<TextureFrame> getTextureFrame() const { return m_frame; };
 
     inline Col3u getColor() const { return m_color; }
@@ -30,25 +33,31 @@ class SPL_API Sprite : public Node {
     void setBlendFunc(const BlendFunc& func);
     inline const BlendFunc& getBlendFunc() const { return m_blendFunc; }
 
-    // оверрайдаем draw чтобы отрисовать текстуру
+    // override draw to render a texture
     virtual void draw() override;
 
     inline std::shared_ptr<Shader> getShader() const { return m_shader; }
     void setShader(std::shared_ptr<Shader> shader);
 
-  protected:
-    void makeVBO();
-    void init();
+    // 0 to 1
+    inline float getOpacity() const { return m_opacity; }
+    // 0 to 1
+    inline void setOpacity(float opacity) { m_opacity = opacity; };
 
-    std::shared_ptr<Texture> m_texture;
+  protected:
+    // void makeVBO();
+    void setupBuffers();
+
     std::shared_ptr<TextureFrame> m_frame;
-    Col3u m_color;
     std::shared_ptr<Shader> m_shader;
+    Col3u m_color;
+    float m_opacity;
     BlendFunc m_blendFunc;
     GLuint m_vao;
     GLuint m_vbo;
     GLuint m_ebo;
     GLuint m_colUniform;
+    GLuint m_opacityUniform;
 };
 
 NS_SPECTRUM_END

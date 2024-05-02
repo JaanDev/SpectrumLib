@@ -9,7 +9,7 @@ NS_SPECTRUM_BEGIN
 
 class SPL_API TextureFrame {
   public:
-    TextureFrame(std::shared_ptr<Texture> texture, Rectf rect, bool rotated);
+    TextureFrame(std::shared_ptr<Texture> texture, const Rectf& rect, bool rotated);
 
     // in points
     inline const Sizef& getSize() const { return m_size; }

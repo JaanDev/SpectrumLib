@@ -16,8 +16,8 @@ WindowManager* WindowManager::get() {
 }
 
 WindowManager::WindowManager()
-    : m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false),
-      m_fsWinPos({0, 0}), m_fsWinSize({0, 0}) {}
+    : m_windowHandle(nullptr), m_closeCallback(nullptr), m_filesDroppedCallback(nullptr), m_isFullscreen(false), m_isVsync(false), m_fsWinPos({0, 0}),
+      m_fsWinSize({0, 0}) {}
 
 WindowManager::~WindowManager() {
     glfwDestroyWindow(m_windowHandle);
@@ -56,6 +56,10 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
 
 #undef APPLY_WIN_HINT
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     m_windowHandle = glfwCreateWindow(sizeInPixels.w, sizeInPixels.h, title.c_str(), nullptr, nullptr);
     if (!m_windowHandle) {
         logE("Failed to create a window!");
@@ -91,8 +95,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         InputDispatcher::get()->keyCallback(key, scancode, action, mods);
     });
 
-    glfwSetCharCallback(m_windowHandle,
-                        [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::get()->charCallback(codepoint); });
+    glfwSetCharCallback(m_windowHandle, [](GLFWwindow* window, unsigned int codepoint) { InputDispatcher::get()->charCallback(codepoint); });
 
     glfwSetDropCallback(m_windowHandle, [](GLFWwindow* window, int path_count, const char** paths) {
         auto wmgr = WindowManager::get();
@@ -116,9 +119,8 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
                                                  WindowManager::get()->m_curPointsToPixels);
     });
 
-    glfwSetMouseButtonCallback(m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) {
-        InputDispatcher::get()->mouseBtnCallback(button, action, mods);
-    });
+    glfwSetMouseButtonCallback(
+        m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) { InputDispatcher::get()->mouseBtnCallback(button, action, mods); });
 
     glfwSetFramebufferSizeCallback(m_windowHandle, [](GLFWwindow* window, int w, int h) {
         glViewport(0, 0, w, h);

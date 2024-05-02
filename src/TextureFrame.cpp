@@ -3,7 +3,7 @@
 
 NS_SPECTRUM_BEGIN
 
-TextureFrame::TextureFrame(std::shared_ptr<Texture> texture, Rectf rect, bool rotated) : m_texture(texture), m_rotated(rotated) {
+TextureFrame::TextureFrame(std::shared_ptr<Texture> texture, const Rectf& rect, bool rotated) : m_texture(texture), m_rotated(rotated) {
     m_size = AppManager::get()->pixelsToSize(rotated ? Sizef {rect.h, rect.w} : Sizef {rect.w, rect.h});
 
     if (rotated)

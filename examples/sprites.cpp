@@ -8,27 +8,30 @@ class MyScene : public Scene {
     MyScene() : Scene() {
         printf("My scene created\n");
 
-        setBGColorU({255, 255, 255});
+        setBGColorU({ 181, 181, 181 });
 
-        auto spr = make_shared<Sprite>("alphaSprite.png");
+        auto tex = std::make_shared<Texture>("test.png");
+
+        auto spr = Sprite::createWithTexName("alphaSprite.png");
         spr->setPos({100, 100});
         addChild(spr);
 
-        auto spr2 = make_shared<Sprite>("test.png");
+        auto spr2 = Sprite::create(tex);
         spr2->setPos({200, 100});
         spr2->setScale({.5f, 1.5f});
         spr2->setRotation(45);
         addChild(spr2);
 
-        auto spr3 = make_shared<Sprite>("test2.png");
+        auto spr3 = Sprite::createWithTexName("test2.png");
         spr3->setAnchorPoint({0, 0});
         spr3->setRotation(30);
         spr2->addChild(spr3);
+        spr3->setOpacity(0.5f);
     }
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "Hello Spectrum! [sprites]", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();

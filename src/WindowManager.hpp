@@ -38,9 +38,7 @@ class SPL_API WindowManager {
 
     void setWindowTitle(const std::string& title);
 
-    inline void setFilesDroppedCallback(MiniFunction<void(std::vector<std::string>)> callback) {
-        m_filesDroppedCallback = callback;
-    }
+    inline void setFilesDroppedCallback(MiniFunction<void(std::vector<std::string>)> callback) { m_filesDroppedCallback = callback; }
 
   private:
     void setDefaultWindowIcon();

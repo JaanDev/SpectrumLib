@@ -7,14 +7,14 @@
 NS_SPECTRUM_BEGIN
 
 SpriteBatch::SpriteBatch(std::shared_ptr<Texture> tex)
-    : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0),
-      m_indicesSize(0) {
+    : m_quads({}), m_texture(tex), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0),
+      m_opacityUniform(0), m_opacity(1.0f) {
     init();
 }
 
 SpriteBatch::SpriteBatch()
-    : m_quads({}), m_texture(nullptr), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0),
-      m_indicesSize(0) {
+    : m_quads({}), m_texture(nullptr), m_color({255, 255, 255}), m_shouldRebuild(false), m_vao(0), m_vbo(0), m_ebo(0), m_indicesSize(0),
+      m_opacityUniform(0), m_opacity(1.0f) {
     init();
 }
 
@@ -43,10 +43,13 @@ void SpriteBatch::draw() {
     glBindTexture(GL_TEXTURE_2D, m_texture->getTextureID());
 
     glUniform3f(m_colUniform, m_color.r / 255.f, m_color.g / 255.f, m_color.b / 255.f);
+    glUniform1f(m_opacityUniform, m_opacity);
 
     glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glDisable(GL_BLEND);
 }
@@ -60,6 +63,7 @@ void SpriteBatch::setShader(std::shared_ptr<Shader> shader) {
     m_shader = shader;
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
 }
 
 void SpriteBatch::rebuild() {
@@ -71,10 +75,10 @@ void SpriteBatch::rebuild() {
 
         // clang-format off
         vertices.insert(vertices.end(), {
-            rect.x,          rect.y,          0.f, tex.x,         tex.y,
-            rect.x,          rect.y + rect.h, 0.f, tex.x,         tex.y + tex.h,
-            rect.x + rect.w, rect.y,          0.f, tex.x + tex.w, tex.y,
-            rect.x + rect.w, rect.y + rect.h, 0.f, tex.x + tex.w, tex.y + tex.h
+            rect.x,          rect.y,          tex.x,         tex.y,
+            rect.x,          rect.y + rect.h, tex.x,         tex.y + tex.h,
+            rect.x + rect.w, rect.y,          tex.x + tex.w, tex.y,
+            rect.x + rect.w, rect.y + rect.h, tex.x + tex.w, tex.y + tex.h
         });
         // clang-format on
     }
@@ -101,6 +105,7 @@ void SpriteBatch::init() {
     m_shader = ShaderManager::get()->getShader("sprite-shader");
     glUniform1i(glGetUniformLocation(m_shader->getShaderProgram(), "tex"), 0);
     m_colUniform = glGetUniformLocation(m_shader->getShaderProgram(), "col");
+    m_opacityUniform = glGetUniformLocation(m_shader->getShaderProgram(), "opacity");
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -114,10 +119,10 @@ void SpriteBatch::init() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);

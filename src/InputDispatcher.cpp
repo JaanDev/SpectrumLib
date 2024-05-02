@@ -11,8 +11,8 @@ InputDispatcher* InputDispatcher::get() {
 }
 
 InputDispatcher::InputDispatcher()
-    : m_mouseEvents({}), m_mouseScrollEvents({}), m_keyEvents({}), m_textEvents({}), m_mouseCb(nullptr), m_mouseScrollCb(nullptr),
-      m_keyCb(nullptr), m_textCb(nullptr), m_joysticks({}) {
+    : m_mouseEvents({}), m_mouseScrollEvents({}), m_keyEvents({}), m_textEvents({}), m_mouseCb(nullptr), m_mouseScrollCb(nullptr), m_keyCb(nullptr),
+      m_textCb(nullptr), m_joysticks({}) {
     for (auto i = 0u; i < GLFW_JOYSTICK_LAST + 1; i++) {
         m_joysticks[i] = Joystick(i);
     }

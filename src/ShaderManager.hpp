@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include "utils.hpp"
 #include "Shader.hpp"
-#include "DefaultShaders.hpp"
 
 NS_SPECTRUM_BEGIN
 

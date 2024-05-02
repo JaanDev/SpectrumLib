@@ -40,11 +40,6 @@ class SPL_API Node {
     inline bool isVisible() const { return m_visible; }
     inline void setVisible(bool visible) { m_visible = visible; }
 
-    // 0 to 1
-    inline float getOpacity() const { return m_opacity; }
-    // 0 to 1
-    void setOpacity(float opacity);
-
     inline int getZOrder() const { return m_zOrder; }
     void setZOrder(int zOrder);
 
@@ -103,7 +98,6 @@ class SPL_API Node {
     Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
     Vec2f m_scale;
     float m_rotation;
-    float m_opacity;
     unsigned int m_objectLimit;
     int m_zOrder;
     const char* m_tag;

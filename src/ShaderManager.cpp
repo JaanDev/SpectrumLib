@@ -1,6 +1,6 @@
 #include "ShaderManager.hpp"
 
-#include "logger.hpp"
+#include "DefaultShaders.hpp"
 
 NS_SPECTRUM_BEGIN
 

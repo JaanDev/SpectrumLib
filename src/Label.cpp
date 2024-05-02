@@ -8,8 +8,7 @@
 NS_SPECTRUM_BEGIN
 
 Label::Label(const std::string& text, const std::string& fontID, TextAlignment alignment, float maxWidth)
-    : m_text(text), m_fontID(fontID), m_font(FontManager::get()->getFont(fontID)), m_textAlignment(alignment),
-      m_maxWidth(maxWidth) {
+    : m_text(text), m_fontID(fontID), m_font(FontManager::get()->getFont(fontID)), m_textAlignment(alignment), m_maxWidth(maxWidth) {
     m_texture = m_font.fontAtlas;
     rebuild();
 }

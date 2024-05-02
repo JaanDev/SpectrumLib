@@ -21,9 +21,8 @@ AppManager* AppManager::get() {
 }
 
 AppManager::AppManager()
-    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0),
-      m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f),
-      m_curScene(nullptr) {}
+    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0), m_isRunning(false),
+      m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f), m_curScene(nullptr) {}
 
 void AppManager::run() {
     static bool hasRun = false;
@@ -48,7 +47,7 @@ void AppManager::run() {
 
     auto getTime = glfwGetTime;
 
-    double lastFrameTime = getTime();
+    float lastFrameTime = static_cast<float>(getTime());
     int fps = 0;
     float fpsTime = 0.f;
     float frameTime = 0.f; // for maintaining fps
@@ -57,9 +56,8 @@ void AppManager::run() {
     m_matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
-        auto frameStartTime = getTime();
+        auto frameStartTime = static_cast<float>(getTime());
         auto realDT = frameStartTime - lastFrameTime;
-        m_deltaTime = static_cast<float>(realDT) * m_timeScale;
 
         fpsTime += realDT;
         if (fpsTime >= 1.0f) {
@@ -77,7 +75,10 @@ void AppManager::run() {
             continue;
         }
 
-        frameTime -= m_targetFrameTime;
+        auto _dt = frameTime * m_timeScale;
+        m_deltaTime = _dt;
+
+        frameTime = fmodf(frameTime, m_targetFrameTime);
 
         glfwPollEvents();
 
@@ -96,8 +97,9 @@ void AppManager::run() {
             currentColor = m_curScene->getBGColor();
 
             MiniFunction<void(Node*)> updateNodes;
-            updateNodes = [this, &updateNodes](Node* node) {
-                node->update(this->m_deltaTime);
+            updateNodes = [_dt, &updateNodes](Node* node) {
+                node->update(_dt);
+
                 for (auto child : node->getChildren()) {
                     updateNodes(child.get());
                 }
