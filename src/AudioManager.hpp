@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <array>
-#include <map>
+#include <unordered_map>
 #include "utils.hpp"
 
 #include "miniaudio.h"
@@ -100,7 +100,7 @@ class SPL_API AudioManager {
     static void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, uint32_t frameCount);
 
     std::array<Channel, 48> m_channels;
-    std::map<std::string, Sample> m_loadedSamples;
+    std::unordered_map<std::string, Sample> m_loadedSamples;
     float m_generalVolume;
     float m_generalBalance;
 

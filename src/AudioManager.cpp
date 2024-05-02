@@ -2,6 +2,7 @@
 
 #include "AudioManager.hpp"
 #include "logger.hpp"
+#include "FileManager.hpp"
 
 #include <memory>
 #include <filesystem>
@@ -52,13 +53,13 @@ AudioManager::~AudioManager() {
 void AudioManager::data_callback(ma_device* pDevice, void* pOutput, const void* pInput, uint32_t frameCount) {
     auto self = (AudioManager*)pDevice->pUserData;
 
-    for(auto& sample : self->m_loadedSamples) {
-        if(!sample.second.paused){
+    for (auto& sample : self->m_loadedSamples) {
+        if (!sample.second.paused) {
             self->setGeneralVolume(sample.second.volume * self->getGeneralVolume());
 
             ma_uint64 frameRemain;
             ma_decoder_read_pcm_frames(&sample.second.decoder, pOutput, frameCount, &frameRemain);
-            if(frameCount < frameRemain && (sample.second.repeats == 0 || sample.second.alreadyRepeaten < sample.second.repeats)) {
+            if (frameCount < frameRemain && (sample.second.repeats == 0 || sample.second.alreadyRepeaten < sample.second.repeats)) {
                 ma_decoder_seek_to_pcm_frame(&sample.second.decoder, 0);
                 sample.second.alreadyRepeaten++;
             }
@@ -67,15 +68,16 @@ void AudioManager::data_callback(ma_device* pDevice, void* pOutput, const void* 
 }
 
 void AudioManager::playSample(const std::string& sample, uint32_t repeats) {
-    if(m_loadedSamples.find(sample) == m_loadedSamples.end()) {
+    if (m_loadedSamples.find(sample) == m_loadedSamples.end()) {
         logE("Sample {} does not exists", sample);
         return;
     }
 
     ma_result result;
-    result = ma_decoder_init_memory((void*)m_loadedSamples[sample].data, m_loadedSamples[sample].size, &m_decoderConfig, &m_loadedSamples[sample].decoder);
+    result =
+        ma_decoder_init_memory((void*)m_loadedSamples[sample].data, m_loadedSamples[sample].size, &m_decoderConfig, &m_loadedSamples[sample].decoder);
 
-    if(result != MA_SUCCESS) {
+    if (result != MA_SUCCESS) {
         logE("Failed to init sample file: {}", ma_result_description(result));
         return;
     }
@@ -87,7 +89,7 @@ void AudioManager::playSample(const std::string& sample, uint32_t repeats) {
 }
 
 void AudioManager::playSample(const std::string& sample, uint8_t channel, uint32_t repeats) {
-    if(m_loadedSamples.find(sample) == m_loadedSamples.end()) {
+    if (m_loadedSamples.find(sample) == m_loadedSamples.end()) {
         logE("Sample {} does not exists", sample);
         return;
     }
@@ -95,7 +97,7 @@ void AudioManager::playSample(const std::string& sample, uint8_t channel, uint32
     ma_result result;
     result = ma_decoder_init_memory(m_loadedSamples[sample].data, m_loadedSamples[sample].size, NULL, &m_channels[channel].decoder);
 
-    if(result != MA_SUCCESS) {
+    if (result != MA_SUCCESS) {
         logE("Failed to init sample file: {}", ma_result_description(result));
         return;
     }
@@ -112,7 +114,7 @@ void AudioManager::playSampleFile(const std::string& samplePath, uint8_t channel
     ma_result result;
     result = ma_decoder_init_file(samplePath.c_str(), NULL, &m_channels[channel].decoder);
 
-    if(result != MA_SUCCESS) {
+    if (result != MA_SUCCESS) {
         logE("Failed to init sample file: {}", ma_result_description(result));
         return;
     }
@@ -126,11 +128,12 @@ void AudioManager::playSampleFile(const std::string& samplePath, uint8_t channel
 }
 
 void AudioManager::preloadSampleFile(const std::string& samplePath) {
-    auto filename = std::filesystem::path(samplePath).filename().string();
+    auto fullPath = FileManager::get()->fullPathForFile(samplePath);
+    auto filename = fullPath.filename().string();
 
-    std::fstream infile(samplePath);
-    if(!infile.is_open()) {
-        logE("Failed to open file {}", samplePath);
+    std::fstream infile(fullPath, std::ios::in | std::ios::binary);
+    if (!infile) {
+        logE("Failed to open file {}", fullPath.string());
         return;
     }
 
@@ -139,14 +142,13 @@ void AudioManager::preloadSampleFile(const std::string& samplePath) {
     infile.seekg(0, infile.beg);
 
     if (length > 0) {
-        m_loadedSamples.insert(std::make_pair(filename, Sample {
-            .size = length,
-            .data = new unsigned char[length]
-        }));
+        m_loadedSamples.insert(std::make_pair(filename, Sample {.size = length, .data = new unsigned char[length]}));
 
         infile.read((char*)m_loadedSamples[filename].data, length);
-        infile.write((char*)m_loadedSamples[filename].data, length);
+        // infile.write((char*)m_loadedSamples[filename].data, length);
     }
+
+    infile.close();
 }
 
 void AudioManager::unloadSampleFile(const std::string& sample) {
@@ -162,7 +164,7 @@ void AudioManager::pauseChannel(uint8_t channel) {
 }
 
 void AudioManager::pauseAllChannels() {
-    for(auto& channel : m_channels) {
+    for (auto& channel : m_channels) {
         channel.paused = true;
     }
 }
@@ -176,7 +178,7 @@ void AudioManager::resumeChannel(uint8_t channel) {
 }
 
 void AudioManager::resumeAllChannels() {
-    for(auto& channel : m_channels) {
+    for (auto& channel : m_channels) {
         channel.paused = false;
     }
 }
@@ -190,7 +192,7 @@ void AudioManager::stopChannel(uint8_t channel) {
 }
 
 void AudioManager::stopAllChannels() {
-    for(auto& channel : m_channels) {
+    for (auto& channel : m_channels) {
         ma_decoder_uninit(&channel.decoder);
     }
 }
@@ -204,7 +206,7 @@ void AudioManager::setSampleVolume(const std::string& sample, float volume) {
 }
 
 void AudioManager::setChannelVolume(uint8_t channel, float volume) {
-    if(!m_channels[channel].locked){
+    if (!m_channels[channel].locked) {
         m_channels[channel].volume = std::clamp(volume, 0.0f, 1.0f);
     }
 }
@@ -246,7 +248,7 @@ void AudioManager::setSamplePosition(const std::string& sample, float seconds) {
 }
 
 void AudioManager::setChannelPosition(uint8_t channel, float seconds) {
-    if(!m_channels[channel].locked){
+    if (!m_channels[channel].locked) {
         ma_decoder_seek_to_pcm_frame(&m_channels[channel].decoder, (uint64_t)(seconds * m_channels[channel].decoder.outputSampleRate / 1000));
     }
 }
