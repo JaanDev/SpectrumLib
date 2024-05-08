@@ -1,5 +1,5 @@
 /.vscode
 /build
-/build_linux
+/builddir
 /make_spectrum_hpp.py
 /.VSCodeCounter

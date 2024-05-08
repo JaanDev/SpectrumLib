@@ -7,6 +7,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <algorithm>
 
 NS_SPECTRUM_BEGIN
 
@@ -268,13 +269,13 @@ float AudioManager::getChannelPosition(uint8_t channel) {
 }
 
 float AudioManager::getSampleLength(const std::string& sample) {
-    uint64_t length;
+    ma_uint64 length;
     ma_decoder_get_length_in_pcm_frames(&m_loadedSamples[sample].decoder, &length);
     return (float)length * 1000 / m_loadedSamples[sample].decoder.outputSampleRate;
 }
 
 float AudioManager::getChannelLength(uint8_t channel) {
-    uint64_t length;
+    ma_uint64 length;
     ma_decoder_get_length_in_pcm_frames(&m_channels[channel].decoder, &length);
     return (float)length * 1000 / m_channels[channel].decoder.outputSampleRate;
 }
