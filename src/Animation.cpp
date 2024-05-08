@@ -33,7 +33,7 @@ void Animation::update(float dt) {
         return;
 
     m_timeRun += dt;
-    
+
     if (m_timeRun >= m_timeDelay) {
         m_timeRun -= m_timeDelay;
         m_curFrame++;

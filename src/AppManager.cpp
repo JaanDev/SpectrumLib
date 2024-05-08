@@ -33,7 +33,7 @@ void AppManager::run() {
     hasRun = true;
 
     ShaderManager::get();
-    AudioManager::get();
+    // AudioManager::get();
 
     m_isRunning = true;
 

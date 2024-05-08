@@ -16,8 +16,7 @@ std::shared_ptr<Sprite> Sprite::createWithTexName(const std::string& texturePath
     if (!tex)
         return nullptr;
 
-    return Sprite::create(
-        std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false));
+    return Sprite::create(std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false));
 }
 
 std::shared_ptr<Sprite> Sprite::createWithFrameName(const std::string& frameName) {
@@ -56,7 +55,7 @@ Sprite::~Sprite() {
 void Sprite::setTextureFrame(std::shared_ptr<TextureFrame> frame) {
     if (!frame)
         return;
-    
+
     if (!m_frame)
         setupBuffers();
 
@@ -170,9 +169,7 @@ void Sprite::setShader(std::shared_ptr<Shader> shader) {
 // }
 
 void Sprite::setupBuffers() {
-    const unsigned int indices[] = {
-        0, 1, 2, 3
-    };
+    const unsigned int indices[] = {0, 1, 2, 3};
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);

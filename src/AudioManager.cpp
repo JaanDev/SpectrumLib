@@ -33,13 +33,13 @@ AudioManager::AudioManager() {
         return;
     }
 
+    m_device.pUserData = this;
+
     result = ma_device_start(&m_device);
     if (result != MA_SUCCESS) {
         logE("Failed to start audio device: {}", ma_result_description(result));
         return;
     }
-
-    m_device.pUserData = this;
 
     logD("Successfully initialized audio device {}", m_device.playback.name);
     logD("Device format: {}", ma_get_format_name(m_deviceConfig.playback.format));
@@ -54,15 +54,15 @@ AudioManager::~AudioManager() {
 void AudioManager::data_callback(ma_device* pDevice, void* pOutput, const void* pInput, uint32_t frameCount) {
     auto self = (AudioManager*)pDevice->pUserData;
 
-    for (auto& sample : self->m_loadedSamples) {
-        if (!sample.second.paused) {
-            self->setGeneralVolume(sample.second.volume * self->getGeneralVolume());
+    for (auto& [_, sample] : self->m_loadedSamples) {
+        if (!sample.paused) {
+            self->setGeneralVolume(sample.volume * self->getGeneralVolume());
 
             ma_uint64 frameRemain;
-            ma_decoder_read_pcm_frames(&sample.second.decoder, pOutput, frameCount, &frameRemain);
-            if (frameCount < frameRemain && (sample.second.repeats == 0 || sample.second.alreadyRepeaten < sample.second.repeats)) {
-                ma_decoder_seek_to_pcm_frame(&sample.second.decoder, 0);
-                sample.second.alreadyRepeaten++;
+            ma_decoder_read_pcm_frames(&sample.decoder, pOutput, frameCount, &frameRemain);
+            if (frameCount < frameRemain && (sample.repeats == 0 || sample.alreadyRepeaten < sample.repeats)) {
+                ma_decoder_seek_to_pcm_frame(&sample.decoder, 0);
+                sample.alreadyRepeaten++;
             }
         }
     }

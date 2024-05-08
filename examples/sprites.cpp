@@ -8,7 +8,7 @@ class MyScene : public Scene {
     MyScene() : Scene() {
         printf("My scene created\n");
 
-        setBGColorU({ 181, 181, 181 });
+        setBGColorU({181, 181, 181});
 
         auto tex = std::make_shared<Texture>("test.png");
 

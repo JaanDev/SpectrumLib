@@ -11,7 +11,7 @@ FileManager* FileManager::get() {
 }
 
 FileManager::FileManager() {
-    m_searchPaths.push_back(std::filesystem::current_path()); // add current path
+    m_searchPaths.push_back(std::filesystem::current_path());
 }
 
 std::filesystem::path FileManager::fullPathForFile(const std::string& name) {
@@ -33,7 +33,8 @@ std::filesystem::path FileManager::fullPathForFile(const std::string& name) {
 }
 
 void FileManager::addSearchPath(const std::filesystem::path& path) {
-    m_searchPaths.push_back(std::filesystem::canonical(path));
+    if (std::filesystem::exists(path))
+        m_searchPaths.push_back(path);
 }
 
 void FileManager::removeSearchPath(const std::filesystem::path& path) {
@@ -43,6 +44,7 @@ void FileManager::removeSearchPath(const std::filesystem::path& path) {
 
 void FileManager::removeAllSearchPaths() {
     m_searchPaths.clear();
+    m_searchPaths.push_back(std::filesystem::current_path());
 }
 
 std::filesystem::path FileManager::getRootPath() {

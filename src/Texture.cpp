@@ -28,22 +28,22 @@ Texture::Texture(const std::string& path) : m_format(0), m_size({0, 0}), m_textu
     if (data) {
         auto format = 0;
         switch (bpp) {
-            case 1:
-                format = GL_LUMINANCE;
-                break;
-            case 3:
-                format = GL_RGB;
-                break;
-            case 4:
-                format = GL_RGBA;
-                break;
-            default:
-                logE("Invalid bpp {} for texture {}", bpp, absPath.string());
-                stbi_image_free(data);
-                glBindTexture(GL_TEXTURE_2D, 0);
-                return;
+        case 1:
+            format = GL_LUMINANCE;
+            break;
+        case 3:
+            format = GL_RGB;
+            break;
+        case 4:
+            format = GL_RGBA;
+            break;
+        default:
+            logE("Invalid bpp {} for texture {}", bpp, absPath.string());
+            stbi_image_free(data);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            return;
         }
-        
+
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_size.w, m_size.h, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(data);
