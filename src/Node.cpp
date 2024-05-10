@@ -98,13 +98,7 @@ void Node::removeAllActions() {
 
 void Node::update(float dt) {
     if (m_shouldCalcMtx) {
-        m_shouldCalcMtx = false;
-        auto bb = m_boundingBox * m_scale;
-
-        m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
-        m_matrix = glm::rotate(m_matrix, glm::radians(m_rotation), glm::vec3(0.f, 0.f, 1.f));
-        m_matrix = glm::translate(m_matrix, glm::vec3(-bb.w * m_anchorPoint.x, -bb.h * m_anchorPoint.y, 0.f));
-        m_matrix = glm::scale(m_matrix, glm::vec3(m_scale.x, m_scale.y, 1.f));
+        updateMtx();
     }
 }
 
@@ -174,6 +168,23 @@ std::shared_ptr<Node> Node::getChildByIndex(int index) const {
 void Node::sortChildren() {
     // TODO: a more optimized solution?
     std::sort(m_children.begin(), m_children.end(), [](std::shared_ptr<Node> a, std::shared_ptr<Node> b) { return a->getZOrder() < b->getZOrder(); });
+}
+
+void Node::updateMtx() {
+    m_shouldCalcMtx = false;
+
+    auto bb = m_boundingBox * m_scale;
+    m_matrix = glm::translate(glm::mat4(1.f), glm::vec3(m_pos.x, m_pos.y, 0.f));
+    m_matrix = glm::rotate(m_matrix, glm::radians(m_rotation), glm::vec3(0.f, 0.f, 1.f));
+    m_matrix = glm::translate(m_matrix, glm::vec3(-bb.w * m_anchorPoint.x, -bb.h * m_anchorPoint.y, 0.f));
+    m_matrix = glm::scale(m_matrix, glm::vec3(m_scale.x, m_scale.y, 1.f));
+
+    if (m_parent)
+        m_matrix = m_parent->getMatrix() * m_matrix;
+
+    // update matrix for children too
+    for (auto c : m_children)
+        c->updateMtx();
 }
 
 NS_SPECTRUM_END

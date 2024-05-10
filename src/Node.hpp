@@ -93,9 +93,11 @@ class SPL_API Node {
     void sortChildren();
 
   protected:
-    Vec2f m_pos; // относительно родителя
+    void updateMtx();
+
+    Vec2f m_pos;
     Sizef m_boundingBox;
-    Vec2f m_anchorPoint; // {0.5, 0.5} по умолчанию
+    Vec2f m_anchorPoint; // {0.5, 0.5} by default
     Vec2f m_scale;
     float m_rotation;
     unsigned int m_objectLimit;

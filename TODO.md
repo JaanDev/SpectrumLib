@@ -1,9 +1,11 @@
 # TODO
-* [ ] change mtx calculation
+* [x] change mtx calculation
+* [ ] fix window resizing
 * [ ] improve types?
 * [ ] proper error handling (results?)
-* [ ] rewrite actions
 * [ ] camera
+* [ ] use `std::string_view` in some places instead of `const std::string&`
+* [ ] rewrite actions
 * [x] joystick support
 * [ ] render textures
 * [ ] particles

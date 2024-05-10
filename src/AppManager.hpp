@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <stack>
 #include <vector>
 #include "utils.hpp"
 #include "WindowManager.hpp"
@@ -64,7 +63,8 @@ class SPL_API AppManager {
 
     inline const Vec2f& getPointsToPixelsRatio() const { return m_pointsToPixels; }
 
-    const glm::mat4& getMatrix() const;
+    // internal
+    inline const glm::mat4& getCurMtx() const { return m_currentMatrix; }
 
   private:
     float m_targetFrameTime;
@@ -77,7 +77,7 @@ class SPL_API AppManager {
     std::vector<std::shared_ptr<Scene>> m_scenes;
     int m_currentScene;
     Scene* m_curScene; // for speed
-    std::stack<glm::mat4> m_matrixStack;
+    glm::mat4 m_currentMatrix;
     bool m_isRunning;
     bool m_isCursorVisible;
     bool m_isCursorLocked;

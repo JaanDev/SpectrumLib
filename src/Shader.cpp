@@ -4,7 +4,6 @@
 #include <fstream>
 #include "FileManager.hpp"
 #include "logger.hpp"
-#include "AppManager.hpp"
 
 NS_SPECTRUM_BEGIN
 
@@ -94,11 +93,6 @@ bool Shader::loadFromString(std::string_view vertexShaderSrc, std::string_view f
     m_mvpLocation = glGetUniformLocation(m_shaderProgram, "mvp");
 
     return true;
-}
-
-void Shader::use() {
-    glUseProgram(m_shaderProgram);
-    glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &AppManager::get()->getMatrix()[0][0]);
 }
 
 NS_SPECTRUM_END

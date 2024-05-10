@@ -42,7 +42,7 @@ void AppManager::run() {
     auto startTime = std::chrono::high_resolution_clock::now();
 
     // auto getTime = [startTime]() {
-    //     return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+    //     return std::chrono::duration<float>(std::chrono::high_resolution_clock::now() - startTime).count();
     // };
 
     auto getTime = glfwGetTime;
@@ -53,7 +53,6 @@ void AppManager::run() {
     float frameTime = 0.f; // for maintaining fps
 
     auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
-    m_matrixStack.push(projMtx);
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = static_cast<float>(getTime());
@@ -115,28 +114,37 @@ void AppManager::run() {
 
         if (m_curScene) {
             MiniFunction<void(Node*)> drawNodes;
-            drawNodes = [this, &drawNodes](Node* node) {
+            drawNodes = [this, &projMtx, &drawNodes](Node* node) {
                 if (!node->isVisible())
                     return;
 
-                m_matrixStack.push(m_matrixStack.top() * node->getMatrix());
+                // first draw all nodes with zorder < 0
+                // then draw the node
+                // then draw other children
 
-                auto& children = node->getChildren();
-                bool selfDrawn = false;
-                for (auto child : children) {
-                    if (child->getZOrder() == 0 && !selfDrawn) {
-                        selfDrawn = true;
-                        node->draw();
+                m_currentMatrix = projMtx * node->getMatrix();
+
+                const auto& children = node->getChildren();
+                if (children.size() == 0) {
+                    node->draw();
+                    return;
+                } else {
+                    const auto& children = node->getChildren();
+                    bool selfDrawn = false;
+
+                    for (auto child : children) {
+                        if (child->getZOrder() >= 0 && !selfDrawn) {
+                            selfDrawn = true;
+                            node->draw();
+                        }
+
+                        drawNodes(child.get());
                     }
 
-                    drawNodes(child.get());
+                    if (!selfDrawn) {
+                        node->draw();
+                    }
                 }
-
-                if (!selfDrawn) {
-                    node->draw();
-                }
-
-                m_matrixStack.pop();
             };
 
             drawNodes(m_curScene);
@@ -146,8 +154,6 @@ void AppManager::run() {
 
         fps++;
     }
-
-    m_matrixStack.pop();
 }
 
 void AppManager::pause() {
@@ -234,9 +240,9 @@ Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
     return pixelSize * m_pointsToPixels;
 }
 
-const glm::mat4& AppManager::getMatrix() const {
-    return m_matrixStack.top();
-}
+// const glm::mat4& AppManager::getMatrix() const {
+    
+// }
 
 Sizef AppManager::sizeToPixels(const Sizef& size) {
     return size / m_pointsToPixels;
