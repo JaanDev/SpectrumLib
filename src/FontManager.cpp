@@ -111,16 +111,16 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 
     std::unordered_map<unsigned int, Glyph> glyphs;
 
-    auto ratio = AppManager::get()->getPointsToPixelsRatio();
+    auto ratio = WindowManager::get()->getPointsToPixelsRatio();
 
     for (auto i = 0u; i < ranges.size(); i++) {
         for (auto j = 0u; j < ttRanges[i].num_chars; j++) {
             const auto& chr = ttRanges[i].chardata_for_range[j];
 
             glyphs[ttRanges[i].first_unicode_codepoint_in_range + j] = Glyph {.textureRect = Recti {chr.x0, chr.y0, chr.x1 - chr.x0, chr.y1 - chr.y0},
-                                                                              .xOffset = chr.xoff * ratio.x,
-                                                                              .yOffset = chr.yoff * ratio.y,
-                                                                              .xAdvance = chr.xadvance * ratio.x};
+                                                                              .xOffset = chr.xoff * ratio,
+                                                                              .yOffset = chr.yoff * ratio,
+                                                                              .xAdvance = chr.xadvance * ratio};
         }
     }
 
@@ -132,7 +132,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
     float descent = idescent * scale;
     float lineGap = ilineGap * scale;
 
-    m_fonts[id] = Font {.lineHeight = (ascent - descent + lineGap) * ratio.y,
+    m_fonts[id] = Font {.lineHeight = (ascent - descent + lineGap) * ratio,
                         .base = lineHeight,
                         .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
                         .glyphs = glyphs,
@@ -155,7 +155,7 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
         return;
     }
 
-    auto ratio = AppManager::get()->getPointsToPixelsRatio();
+    auto ratio = WindowManager::get()->getPointsToPixelsRatio();
 
     Font font;
     font.shaderName = "sprite-shader";
@@ -178,8 +178,8 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
                 logE("Can't parse common line in file {}", absPath.string());
                 return;
             }
-            font.lineHeight *= ratio.y;
-            font.base *= ratio.y;
+            font.lineHeight *= ratio;
+            font.base *= ratio;
             continue;
         }
 
@@ -223,9 +223,9 @@ void FontManager::loadBitmapFont(const std::string& path, const std::string& id)
                 continue;
             }
 
-            glyph.xAdvance *= ratio.x;
-            glyph.xOffset *= ratio.x;
-            glyph.yOffset *= ratio.y;
+            glyph.xAdvance *= ratio;
+            glyph.xOffset *= ratio;
+            glyph.yOffset *= ratio;
 
             font.glyphs[id] = glyph;
         }

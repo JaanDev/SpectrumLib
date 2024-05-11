@@ -105,7 +105,7 @@ Texture::~Texture() {
 }
 
 Sizef Texture::getSize() {
-    return AppManager::get()->pixelsToSize(m_size.to<float>());
+    return WindowManager::get()->pixelsToSize(m_size.to<float>());
 }
 
 void Texture::setTexParams(const TexParams& params) {

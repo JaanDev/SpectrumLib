@@ -54,15 +54,6 @@ class SPL_API AppManager {
 
     inline const Sizef& getWinSize() const { return WindowManager::get()->getWinSize(); }
 
-    Vec2f pointsToPixels(const Vec2f& pointPos) { return WindowManager::get()->pointsToPixels(pointPos); }
-    Vec2f pixelsToPoints(const Vec2f& pixelPos) { return WindowManager::get()->pixelsToPoints(pixelPos); }
-    Sizef sizeToPixels(const Sizef& size) { return WindowManager::get()->sizeToPixels(size); }
-    Sizef pixelsToSize(const Sizef& pixelSize) { return WindowManager::get()->pixelsToSize(pixelSize); }
-    Vec2f getPointsToPixelsRatio() {
-        auto x = WindowManager::get();
-        return {x->m_initialPointsToPixels, x->m_initialPointsToPixels};
-    }
-
   private:
     float m_targetFrameTime;
     float m_timeScale;

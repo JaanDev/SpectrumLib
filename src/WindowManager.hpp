@@ -48,6 +48,9 @@ class SPL_API WindowManager {
     Sizef sizeToPixels(const Sizef& size);
     Sizef pixelsToSize(const Sizef& pixelSize);
 
+    inline float getPointsToPixelsRatio() const { return m_initialPointsToPixels; }
+    inline float getPointsToPixelsRatioReal() const { return m_realPointsToPixels; }
+
     // in points
     inline const Sizef& getWinSize() const { return m_winSize; }
 

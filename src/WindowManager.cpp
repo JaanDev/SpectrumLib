@@ -135,7 +135,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
         auto oldAspectRatio = wmgr->m_initialWinSize.w / wmgr->m_initialWinSize.h;
         auto newAspectRatio = static_cast<float>(w) / static_cast<float>(h);
 
-        if (w > h) {
+        if (newAspectRatio > oldAspectRatio) {
             wmgr->m_winSize = {wmgr->m_initialWinSize.w, wmgr->m_initialWinSize.h * (oldAspectRatio / newAspectRatio)};
         } else {
             wmgr->m_winSize = {wmgr->m_initialWinSize.w * (newAspectRatio / oldAspectRatio), wmgr->m_initialWinSize.h};

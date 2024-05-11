@@ -53,7 +53,7 @@ void Label::rebuild() {
 
     auto lines = separateText();
 
-    auto ratio = AppManager::get()->getPointsToPixelsRatio();
+    auto ratio = WindowManager::get()->getPointsToPixelsRatio();
     auto size = m_font.fontAtlas->getSizeInPixels();
     Sizef box = {0, m_font.base};
     Vec2f pos = {0, m_font.base};
@@ -72,8 +72,8 @@ void Label::rebuild() {
 
             const auto& glyph = m_font.glyphs[cp];
 
-            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio.x,
-                               (float)glyph.textureRect.h * ratio.y};
+            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio,
+                               (float)glyph.textureRect.h * ratio};
 
             if (auto y2 = glyphRect.y + glyphRect.h; y2 > box.h)
                 box.h = y2;
@@ -126,8 +126,6 @@ std::vector<std::string> Label::separateText() {
     std::vector<std::string> ret;
 
     if (m_maxWidth > 0.f) {
-        auto ratio = AppManager::get()->getPointsToPixelsRatio();
-
         std::string current;
         float currentWidth = 0.f;
         auto it = m_text.begin();

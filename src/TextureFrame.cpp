@@ -4,7 +4,7 @@
 NS_SPECTRUM_BEGIN
 
 TextureFrame::TextureFrame(std::shared_ptr<Texture> texture, const Rectf& rect, bool rotated) : m_texture(texture), m_rotated(rotated) {
-    m_size = AppManager::get()->pixelsToSize(rotated ? Sizef {rect.h, rect.w} : Sizef {rect.w, rect.h});
+    m_size = WindowManager::get()->pixelsToSize(rotated ? Sizef {rect.h, rect.w} : Sizef {rect.w, rect.h});
 
     if (rotated)
         m_texCoords = {Vec2f {rect.x + rect.w, rect.y}, Vec2f {rect.x, rect.y}, Vec2f {rect.x + rect.w, rect.y + rect.h},

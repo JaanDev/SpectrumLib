@@ -28,8 +28,6 @@ class MyScene : public Scene {
         spr3->setOpacity(0.5f);
 
         m_spr = spr;
-
-        InputDispatcher::get()->registerKeyEvents(this);
     }
 
     void update(float dt) override {
@@ -37,20 +35,12 @@ class MyScene : public Scene {
         //
     }
 
-    void onKeyEvent(int key, int scancode, int action, int mods) override {
-        if (action == GLFW_PRESS) {
-            if (key == GLFW_KEY_F) {
-                WindowManager::get()->setFullscreen(!WindowManager::get()->getFullscreen());
-            }
-        }
-    };
-
   private:
     shared_ptr<Sprite> m_spr;
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", true,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", false,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();
