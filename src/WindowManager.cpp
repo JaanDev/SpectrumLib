@@ -119,7 +119,8 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        InputDispatcher::get()->mousePosCallback(WindowManager::get()->pixelsToPointsReal(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)}));
+        InputDispatcher::get()->mousePosCallback(
+            WindowManager::get()->pixelsToPointsReal(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)}));
     });
 
     glfwSetMouseButtonCallback(

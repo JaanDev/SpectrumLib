@@ -72,8 +72,7 @@ void Label::rebuild() {
 
             const auto& glyph = m_font.glyphs[cp];
 
-            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio,
-                               (float)glyph.textureRect.h * ratio};
+            Rectf glyphRect = {pos.x + glyph.xOffset, pos.y + glyph.yOffset, (float)glyph.textureRect.w * ratio, (float)glyph.textureRect.h * ratio};
 
             if (auto y2 = glyphRect.y + glyphRect.h; y2 > box.h)
                 box.h = y2;
