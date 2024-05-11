@@ -33,6 +33,17 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     }
     createdWindow = true;
 
+    if (sizeInPixels.w / sizeInPoints.w != sizeInPixels.h / sizeInPoints.h) {
+        logE("The aspect ratio between sizeInPixels and sizeInPoints must be the same!");
+        return;
+    }
+
+    // initial points to pixels ratio
+    m_initialPointsToPixels = sizeInPoints.w / sizeInPixels.w;
+    m_initialWinSize = sizeInPoints;
+    m_realPointsToPixels = m_initialPointsToPixels;
+    m_winSize = sizeInPoints;
+
     glfwSetErrorCallback([](int error, const char* desc) { logE("GLFW Error: {} (code {})", desc, error); });
 
     if (!glfwInit()) {
@@ -75,14 +86,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     logD("Renderer:       {}", (char*)glGetString(GL_RENDERER));
     logD("Vendor:         {}", (char*)glGetString(GL_VENDOR));
 
-    setFullscreen(fullscreen);
-    // glfwSetWindowAspectRatio(m_windowHandle, sizeInPixels.w, sizeInPixels.h);
-
-    glfwSwapInterval(m_isVsync);
-
-    int w, h;
-    glfwGetWindowSize(m_windowHandle, &w, &h);
-    m_curPointsToPixels = sizeInPoints.toVec() / Vec2f {(float)w, (float)h};
+    glfwSwapInterval(m_isVsync ? 1 : 0);
 
     glfwSetWindowCloseCallback(m_windowHandle, [](GLFWwindow* win) {
         auto wmgr = WindowManager::get();
@@ -115,22 +119,34 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     });
 
     glfwSetCursorPosCallback(m_windowHandle, [](GLFWwindow* window, double xpos, double ypos) {
-        InputDispatcher::get()->mousePosCallback(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)} *
-                                                 WindowManager::get()->m_curPointsToPixels);
+        InputDispatcher::get()->mousePosCallback(WindowManager::get()->pixelsToPointsReal(Vec2f {static_cast<float>(xpos), static_cast<float>(ypos)}));
     });
 
     glfwSetMouseButtonCallback(
         m_windowHandle, [](GLFWwindow* window, int button, int action, int mods) { InputDispatcher::get()->mouseBtnCallback(button, action, mods); });
 
     glfwSetFramebufferSizeCallback(m_windowHandle, [](GLFWwindow* window, int w, int h) {
+        if (w == 0 || h == 0)
+            return;
+
         glViewport(0, 0, w, h);
-        WindowManager::get()->m_curPointsToPixels = AppManager::get()->getWinSize().toVec() / Vec2f {(float)w, (float)h};
+
+        auto wmgr = WindowManager::get();
+        auto oldAspectRatio = wmgr->m_initialWinSize.w / wmgr->m_initialWinSize.h;
+        auto newAspectRatio = static_cast<float>(w) / static_cast<float>(h);
+
+        if (w > h) {
+            wmgr->m_winSize = {wmgr->m_initialWinSize.w, wmgr->m_initialWinSize.h * (oldAspectRatio / newAspectRatio)};
+        } else {
+            wmgr->m_winSize = {wmgr->m_initialWinSize.w * (newAspectRatio / oldAspectRatio), wmgr->m_initialWinSize.h};
+        }
+
+        wmgr->m_realPointsToPixels = wmgr->m_winSize.w / w;
     });
 
     setDefaultWindowIcon();
 
-    AppManager::get()->m_winSize = sizeInPoints;
-    AppManager::get()->m_pointsToPixels = (sizeInPoints / sizeInPixels.to<float>()).toVec();
+    setFullscreen(fullscreen);
 }
 
 void WindowManager::setWindowIcon(const std::string& iconPath) {
@@ -147,6 +163,10 @@ void WindowManager::setWindowIcon(const std::string& iconPath) {
     stbi_image_free(data);
 }
 
+void WindowManager::enableAspectRatio(bool enable) {
+    glfwSetWindowAspectRatio(m_windowHandle, enable ? m_initialWinSize.w : GLFW_DONT_CARE, enable ? m_initialWinSize.h : GLFW_DONT_CARE);
+}
+
 void WindowManager::setFullscreen(bool fullscreen) {
     if (m_isFullscreen == fullscreen)
         return;
@@ -160,17 +180,14 @@ void WindowManager::setFullscreen(bool fullscreen) {
         auto mon = glfwGetPrimaryMonitor();
         auto mode = glfwGetVideoMode(mon);
         glfwSetWindowMonitor(m_windowHandle, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
-        glViewport(0, 0, mode->width, mode->height);
     } else {
         glfwSetWindowMonitor(m_windowHandle, nullptr, m_fsWinPos.x, m_fsWinPos.y, m_fsWinSize.w, m_fsWinSize.h, 0);
-        glViewport(0, 0, m_fsWinSize.w, m_fsWinSize.h);
     }
 }
 
 void WindowManager::setVsync(bool vsync) {
     m_isVsync = vsync;
-
-    glfwSwapInterval(m_isVsync);
+    glfwSwapInterval(m_isVsync ? 1 : 0);
 }
 
 Sizei WindowManager::getWinSizeInPixels() {
@@ -183,8 +200,32 @@ void WindowManager::setWinSizeInPixels(const Sizei& size) {
     glfwSetWindowSize(m_windowHandle, size.w, size.h);
 }
 
+Vec2f WindowManager::pointsToPixels(const Vec2f& pointPos) {
+    return pointPos / m_initialPointsToPixels;
+}
+
+Vec2f WindowManager::pixelsToPoints(const Vec2f& pixelPos) {
+    return pixelPos * m_initialPointsToPixels;
+}
+
+Vec2f WindowManager::pointsToPixelsReal(const Vec2f& pointPos) {
+    return pointPos / m_realPointsToPixels;
+}
+
+Vec2f WindowManager::pixelsToPointsReal(const Vec2f& pixelPos) {
+    return pixelPos * m_realPointsToPixels;
+}
+
+Sizef WindowManager::pixelsToSize(const Sizef& pixelSize) {
+    return pixelSize * m_initialPointsToPixels;
+}
+
+Sizef WindowManager::sizeToPixels(const Sizef& size) {
+    return size / m_initialPointsToPixels;
+}
+
 Vec2f WindowManager::getMousePos() {
-    return getMousePosInPixels() * m_curPointsToPixels;
+    return pixelsToPointsReal(getMousePosInPixels());
 }
 
 Vec2f WindowManager::getMousePosInPixels() {

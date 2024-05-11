@@ -23,15 +23,9 @@ class SPL_API AppManager {
     double getTime();
     inline float getDeltaTime() const { return m_deltaTime; }
 
-    void setContentScale(float scale);
-    inline float getContentScale() const { return m_contentScale; }
-
     // frameTime = 1.0 / fps;
     inline void setTargetFrameTime(float frameTime) { m_targetFrameTime = frameTime; }
     inline double getTargetFrameTime() const { return m_targetFrameTime; }
-
-    // in points
-    inline const Sizef& getWinSize() const { return m_winSize; }
 
     void setCursorVisible(bool visible);
     inline bool getCursorVisible() const { return m_isCursorVisible; }
@@ -55,25 +49,25 @@ class SPL_API AppManager {
     std::string getClipboardText();
     void setClipboardText(const std::string& text);
 
-    Vec2f pointsToPixels(const Vec2f& pointPos);
-    Vec2f pixelsToPoints(const Vec2f& pixelPos);
-
-    Sizef sizeToPixels(const Sizef& size);
-    Sizef pixelsToSize(const Sizef& pixelSize);
-
-    inline const Vec2f& getPointsToPixelsRatio() const { return m_pointsToPixels; }
-
     // internal
     inline const glm::mat4& getCurMtx() const { return m_currentMatrix; }
+
+    inline const Sizef& getWinSize() const { return WindowManager::get()->getWinSize(); }
+
+    Vec2f pointsToPixels(const Vec2f& pointPos) { return WindowManager::get()->pointsToPixels(pointPos); }
+    Vec2f pixelsToPoints(const Vec2f& pixelPos) { return WindowManager::get()->pixelsToPoints(pixelPos); }
+    Sizef sizeToPixels(const Sizef& size) { return WindowManager::get()->sizeToPixels(size); }
+    Sizef pixelsToSize(const Sizef& pixelSize) { return WindowManager::get()->pixelsToSize(pixelSize); }
+    Vec2f getPointsToPixelsRatio() {
+        auto x = WindowManager::get();
+        return {x->m_initialPointsToPixels, x->m_initialPointsToPixels};
+    }
 
   private:
     float m_targetFrameTime;
     float m_timeScale;
     int m_fps;
     float m_deltaTime;
-    Sizef m_winSize;        // in points
-    Vec2f m_pointsToPixels; // points to pixels ratio
-    float m_contentScale;
     std::vector<std::shared_ptr<Scene>> m_scenes;
     int m_currentScene;
     Scene* m_curScene; // for speed

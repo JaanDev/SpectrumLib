@@ -10,12 +10,11 @@ class MyScene : public Scene {
 
         setBGColorU({181, 181, 181});
 
-        auto tex = std::make_shared<Texture>("test.png");
-
         auto spr = Sprite::createWithTexName("alphaSprite.png");
         spr->setPos({100, 100});
         addChild(spr);
 
+        auto tex = std::make_shared<Texture>("test.png");
         auto spr2 = Sprite::create(tex);
         spr2->setPos({200, 100});
         spr2->setScale({.5f, 1.5f});
@@ -27,11 +26,31 @@ class MyScene : public Scene {
         spr3->setRotation(30);
         spr2->addChild(spr3);
         spr3->setOpacity(0.5f);
+
+        m_spr = spr;
+
+        InputDispatcher::get()->registerKeyEvents(this);
     }
+
+    void update(float dt) override {
+        m_spr->setPos(WindowManager::get()->getMousePos());
+        //
+    }
+
+    void onKeyEvent(int key, int scancode, int action, int mods) override {
+        if (action == GLFW_PRESS) {
+            if (key == GLFW_KEY_F) {
+                WindowManager::get()->setFullscreen(!WindowManager::get()->getFullscreen());
+            }
+        }
+    };
+
+  private:
+    shared_ptr<Sprite> m_spr;
 };
 
 int main() {
-    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", false,
+    WindowManager::get()->createWindow({800, 600}, {400, 300}, "SpectrumLib example [sprites]", true,
                                        WindowFlags::Default | WindowFlags::Resizable | WindowFlags::ScaleToMonitor);
     FileManager::get()->addSearchPath("assets");
     auto appMgr = AppManager::get();

@@ -21,8 +21,8 @@ AppManager* AppManager::get() {
 }
 
 AppManager::AppManager()
-    : m_winSize({0, 0}), m_deltaTime(0.f), m_pointsToPixels({0.f, 0.f}), m_contentScale(1.f), m_scenes({}), m_currentScene(0), m_isRunning(false),
-      m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f), m_targetFrameTime(1.f / 60.f), m_curScene(nullptr) {}
+    : m_deltaTime(0.f), m_scenes({}), m_currentScene(0), m_isRunning(false), m_isCursorVisible(true), m_isCursorLocked(false), m_timeScale(1.f),
+      m_targetFrameTime(1.f / 60.f), m_curScene(nullptr) {}
 
 void AppManager::run() {
     static bool hasRun = false;
@@ -52,7 +52,7 @@ void AppManager::run() {
     float fpsTime = 0.f;
     float frameTime = 0.f; // for maintaining fps
 
-    auto projMtx = glm::ortho(0.f, m_winSize.w, m_winSize.h, 0.f, -100.f, 100.f);
+    glm::mat4 projMtx;
 
     while (!glfwWindowShouldClose(win)) {
         auto frameStartTime = static_cast<float>(getTime());
@@ -74,10 +74,13 @@ void AppManager::run() {
             continue;
         }
 
-        auto _dt = frameTime * m_timeScale;
+        const auto& winSize = WindowManager::get()->getWinSize();
+        projMtx = glm::ortho(0.f, winSize.w, winSize.h, 0.f, -1.f, 1.f);
+
+        auto _dt = min(frameTime, m_targetFrameTime) * m_timeScale; // to prevent dt-dependent things from running too fast some time after a fps drop
         m_deltaTime = _dt;
 
-        frameTime = fmodf(frameTime, m_targetFrameTime);
+        frameTime = fmodf(frameTime, m_targetFrameTime); // could have just `= 0` but idk
 
         glfwPollEvents();
 
@@ -173,8 +176,6 @@ double AppManager::getTime() {
     return glfwGetTime();
 }
 
-void AppManager::setContentScale(float scale) {}
-
 void AppManager::setCursorVisible(bool visible) {
     m_isCursorVisible = visible;
     glfwSetInputMode(WindowManager::get()->getGLFWWindow(), GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
@@ -224,22 +225,6 @@ std::string AppManager::getClipboardText() {
 
 void AppManager::setClipboardText(const std::string& text) {
     glfwSetClipboardString(WindowManager::get()->getGLFWWindow(), text.c_str());
-}
-
-Vec2f AppManager::pointsToPixels(const Vec2f& pointPos) {
-    return pointPos / m_pointsToPixels;
-}
-
-Vec2f AppManager::pixelsToPoints(const Vec2f& pixelPos) {
-    return pixelPos * m_pointsToPixels;
-}
-
-Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
-    return pixelSize * m_pointsToPixels;
-}
-
-Sizef AppManager::sizeToPixels(const Sizef& size) {
-    return size / m_pointsToPixels;
 }
 
 NS_SPECTRUM_END

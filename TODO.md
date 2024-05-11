@@ -1,6 +1,6 @@
 # TODO
 * [x] change mtx calculation
-* [ ] fix window resizing
+* [x] fix window resizing
 * [ ] improve types?
 * [ ] proper error handling (results?)
 * [ ] camera
