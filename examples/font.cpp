@@ -39,7 +39,7 @@ class MyScene : public Scene {
         addChild(label4);
 
         auto label5 = make_shared<Label>("Hello bitmap font!", "bitmap-font", spl::TextAlignment::Right);
-        label5->setPos(AppManager::get()->getWinSize().toVec());
+        label5->setPos(AppManager::get()->getWinSize());
         label5->setAnchorPoint({1.0f, 1.0f});
         label5->setScale(.4f);
         addChild(label5);

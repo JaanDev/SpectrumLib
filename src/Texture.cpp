@@ -80,7 +80,7 @@ Texture::Texture(uint8_t* data, unsigned int dataLen) : m_format(0), m_size({0, 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture::Texture(uint8_t* data, Sizei size, int format) : m_format(0), m_size(size), m_textureID(0) {
+Texture::Texture(uint8_t* data, Vec2i size, int format) : m_format(0), m_size(size), m_textureID(0) {
     if (!data || (m_size.w * m_size.h) == 0) {
         return;
     }
@@ -104,8 +104,8 @@ Texture::~Texture() {
     glDeleteTextures(1, &m_textureID);
 }
 
-Sizef Texture::getSize() {
-    return WindowManager::get()->pixelsToSize(m_size.to<float>());
+Vec2f Texture::getSize() {
+    return WindowManager::get()->pixelsToSize(m_size.toType<float>());
 }
 
 void Texture::setTexParams(const TexParams& params) {

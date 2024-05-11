@@ -49,12 +49,12 @@ void Node::setZOrder(int zOrder) {
         m_parent->sortChildren();
 }
 
-void Node::setBoundingBox(const Sizef& size) {
+void Node::setBoundingBox(const Vec2f& size) {
     m_boundingBox = size;
     m_shouldCalcMtx = true;
 }
 
-Sizef Node::getScaledBoundingBox() {
+Vec2f Node::getScaledBoundingBox() {
     return m_boundingBox * m_scale;
 }
 

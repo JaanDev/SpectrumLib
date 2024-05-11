@@ -24,7 +24,7 @@ WindowManager::~WindowManager() {
     glfwTerminate();
 }
 
-void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
+void WindowManager::createWindow(const Vec2i& Vec2inPixels, const Vec2f& Vec2inPoints, const std::string& title, bool fullscreen,
                                  WindowFlags windowFlags) {
     static bool createdWindow = false;
     if (createdWindow) {
@@ -33,16 +33,16 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     }
     createdWindow = true;
 
-    if (sizeInPixels.w / sizeInPoints.w != sizeInPixels.h / sizeInPoints.h) {
-        logE("The aspect ratio between sizeInPixels and sizeInPoints must be the same!");
+    if (Vec2inPixels.w / Vec2inPoints.w != Vec2inPixels.h / Vec2inPoints.h) {
+        logE("The aspect ratio between Vec2inPixels and Vec2inPoints must be the same!");
         return;
     }
 
     // initial points to pixels ratio
-    m_initialPointsToPixels = sizeInPoints.w / sizeInPixels.w;
-    m_initialWinSize = sizeInPoints;
+    m_initialPointsToPixels = Vec2inPoints.w / Vec2inPixels.w;
+    m_initialWinSize = Vec2inPoints;
     m_realPointsToPixels = m_initialPointsToPixels;
-    m_winSize = sizeInPoints;
+    m_winSize = Vec2inPoints;
 
     glfwSetErrorCallback([](int error, const char* desc) { logE("GLFW Error: {} (code {})", desc, error); });
 
@@ -71,7 +71,7 @@ void WindowManager::createWindow(const Sizei& sizeInPixels, const Sizef& sizeInP
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_windowHandle = glfwCreateWindow(sizeInPixels.w, sizeInPixels.h, title.c_str(), nullptr, nullptr);
+    m_windowHandle = glfwCreateWindow(Vec2inPixels.w, Vec2inPixels.h, title.c_str(), nullptr, nullptr);
     if (!m_windowHandle) {
         logE("Failed to create a window!");
         exit(1);
@@ -176,7 +176,7 @@ void WindowManager::setFullscreen(bool fullscreen) {
 
     if (fullscreen) {
         m_fsWinPos = getWindowPos();
-        m_fsWinSize = getWinSizeInPixels();
+        m_fsWinSize = getWinVec2inPixels();
 
         auto mon = glfwGetPrimaryMonitor();
         auto mode = glfwGetVideoMode(mon);
@@ -191,13 +191,13 @@ void WindowManager::setVsync(bool vsync) {
     glfwSwapInterval(m_isVsync ? 1 : 0);
 }
 
-Sizei WindowManager::getWinSizeInPixels() {
+Vec2i WindowManager::getWinVec2inPixels() {
     int w, h;
     glfwGetWindowSize(m_windowHandle, &w, &h);
     return {w, h};
 }
 
-void WindowManager::setWinSizeInPixels(const Sizei& size) {
+void WindowManager::setWinVec2inPixels(const Vec2i& size) {
     glfwSetWindowSize(m_windowHandle, size.w, size.h);
 }
 
@@ -217,11 +217,11 @@ Vec2f WindowManager::pixelsToPointsReal(const Vec2f& pixelPos) {
     return pixelPos * m_realPointsToPixels;
 }
 
-Sizef WindowManager::pixelsToSize(const Sizef& pixelSize) {
+Vec2f WindowManager::pixelsToSize(const Vec2f& pixelSize) {
     return pixelSize * m_initialPointsToPixels;
 }
 
-Sizef WindowManager::sizeToPixels(const Sizef& size) {
+Vec2f WindowManager::sizeToPixels(const Vec2f& size) {
     return size / m_initialPointsToPixels;
 }
 

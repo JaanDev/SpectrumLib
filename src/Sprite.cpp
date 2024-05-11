@@ -16,7 +16,7 @@ std::shared_ptr<Sprite> Sprite::createWithTexName(const std::string& texturePath
     if (!tex)
         return nullptr;
 
-    return Sprite::create(std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getSizeInPixels().w, (float)tex->getSizeInPixels().h}, false));
+    return Sprite::create(std::make_shared<TextureFrame>(tex, Rectf {0, 0, (float)tex->getVec2inPixels().w, (float)tex->getVec2inPixels().h}, false));
 }
 
 std::shared_ptr<Sprite> Sprite::createWithFrameName(const std::string& frameName) {
@@ -28,7 +28,7 @@ std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<Texture> texture) {
         return nullptr;
 
     return Sprite::create(
-        std::make_shared<TextureFrame>(texture, Rectf {0, 0, (float)texture->getSizeInPixels().w, (float)texture->getSizeInPixels().h}, false));
+        std::make_shared<TextureFrame>(texture, Rectf {0, 0, (float)texture->getVec2inPixels().w, (float)texture->getVec2inPixels().h}, false));
 }
 
 std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<TextureFrame> frame) {

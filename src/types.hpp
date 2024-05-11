@@ -4,14 +4,18 @@
 NS_SPECTRUM_BEGIN
 
 template <typename T>
-struct Size;
-
-template <typename T>
 struct Vec2 {
     static_assert(std::is_arithmetic_v<T>, "Unsupported type for Vec2");
 
-    T x;
-    T y;
+    union {
+        T x;
+        T w;
+    };
+
+    union {
+        T y;
+        T h;
+    };
 
     Vec2<T> operator+(const Vec2<T>& other) const { return {x + other.x, y + other.y}; }
     Vec2<T> operator-(const Vec2<T>& other) const { return {x - other.x, y - other.y}; }
@@ -26,40 +30,9 @@ struct Vec2 {
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 
-    float distance(const Vec2<T>& other) const { return sqrtf(powf(other.x - x, 2) + powf(other.y - y, 2)); }
-
-    // operator Size<T>() const { return {x, y}; }
-
-    // template <typename T2>
-    // inline Vec2<T2> to() const {
-    //     return {static_cast<T2>(x), static_cast<T2>(y)};
-    // }
-};
-
-template <typename T>
-struct Size {
-    static_assert(std::is_arithmetic_v<T>, "Unsupported type for Size");
-
-    T w;
-    T h;
-
-    Size<T> operator*(T other) const { return {static_cast<T>(w * other), static_cast<T>(h * other)}; }
-    Size<T> operator/(T other) const { return {static_cast<T>(w / other), static_cast<T>(h / other)}; }
-    Size<T> operator*(const Size<T>& other) const { return {static_cast<T>(w * other.w), static_cast<T>(h * other.h)}; }
-    Size<T> operator/(const Size<T>& other) const { return {static_cast<T>(w / other.w), static_cast<T>(h / other.h)}; }
-    Size<T> operator*(const Vec2<T>& other) const { return {static_cast<T>(w * other.x), static_cast<T>(h * other.y)}; }
-    Size<T> operator/(const Vec2<T>& other) const { return {static_cast<T>(w / other.x), static_cast<T>(h / other.y)}; }
-    void operator*=(T other) { *this = *this * other; }
-    void operator/=(T other) { *this = *this / other; }
-
-    T getArea() const { return w * h; }
-
-    // operator Vec2<T>() const { return {w, h}; }
-    inline Vec2<T> toVec() const { return {w, h}; }
-
-    template <typename T2>
-    inline Size<T2> to() const {
-        return {static_cast<T2>(w), static_cast<T2>(h)};
+    template <typename N>
+    inline Vec2<N> toType() const {
+        return {static_cast<N>(x), static_cast<N>(y)};
     }
 };
 
@@ -127,9 +100,6 @@ struct Col4 {
     void operator*=(T other) { *this = *this * other; }
     void operator/=(T other) { *this = *this / other; }
 };
-
-using Sizef = Size<float>;
-using Sizei = Size<int>;
 
 using Rectf = Rect<float>;
 using Recti = Rect<int>;

@@ -17,13 +17,13 @@ class SPL_API Texture {
     Texture(const std::string& path);
     // from memory, dont forget to free `data` after loading the tex
     Texture(uint8_t* data, unsigned int dataLen);
-    Texture(uint8_t* data, Sizei size, int format);
+    Texture(uint8_t* data, Vec2i size, int format);
 
     ~Texture();
 
     // in points
-    Sizef getSize();
-    inline const Sizei& getSizeInPixels() const { return m_size; }
+    Vec2f getSize();
+    inline const Vec2i& getVec2inPixels() const { return m_size; }
     inline int getFormat() const { return m_format; }
     inline GLuint getTextureID() const { return m_textureID; }
 
@@ -31,7 +31,7 @@ class SPL_API Texture {
 
   private:
     int m_format; // TODO: make use of this
-    Sizei m_size; // in pixels
+    Vec2i m_size; // in pixels
     GLuint m_textureID;
 };
 

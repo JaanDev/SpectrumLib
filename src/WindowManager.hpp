@@ -11,7 +11,7 @@ class SPL_API WindowManager {
     WindowManager();
     ~WindowManager();
 
-    void createWindow(const Sizei& sizeInPixels, const Sizef& sizeInPoints, const std::string& title, bool fullscreen,
+    void createWindow(const Vec2i& Vec2inPixels, const Vec2f& Vec2inPoints, const std::string& title, bool fullscreen,
                       WindowFlags windowFlags = WindowFlags::Default);
 
     // bool() => возвращает true если окно закрывать, false если не закрывать
@@ -37,22 +37,22 @@ class SPL_API WindowManager {
 
     void enableAspectRatio(bool enable);
 
-    Sizei getWinSizeInPixels();
-    void setWinSizeInPixels(const Sizei& size);
+    Vec2i getWinVec2inPixels();
+    void setWinVec2inPixels(const Vec2i& size);
 
     Vec2f pointsToPixelsReal(const Vec2f& pointPos);
     Vec2f pixelsToPointsReal(const Vec2f& pixelPos);
     Vec2f pointsToPixels(const Vec2f& pointPos);
     Vec2f pixelsToPoints(const Vec2f& pixelPos);
 
-    Sizef sizeToPixels(const Sizef& size);
-    Sizef pixelsToSize(const Sizef& pixelSize);
+    Vec2f sizeToPixels(const Vec2f& size);
+    Vec2f pixelsToSize(const Vec2f& pixelSize);
 
     inline float getPointsToPixelsRatio() const { return m_initialPointsToPixels; }
     inline float getPointsToPixelsRatioReal() const { return m_realPointsToPixels; }
 
     // in points
-    inline const Sizef& getWinSize() const { return m_winSize; }
+    inline const Vec2f& getWinSize() const { return m_winSize; }
 
   private:
     void setDefaultWindowIcon();
@@ -60,15 +60,15 @@ class SPL_API WindowManager {
     GLFWwindow* m_windowHandle;
     MiniFunction<bool()> m_closeCallback;
     MiniFunction<void(std::vector<std::string>)> m_filesDroppedCallback;
-    Sizei m_fsWinSize;      // for fullscreen
+    Vec2i m_fsWinSize;      // for fullscreen
     Vec2i m_fsWinPos;       // for fullscreen
-    Sizef m_initialWinSize; // in points
+    Vec2f m_initialWinSize; // in points
   public:
     float m_initialPointsToPixels; // for texture loading etc, otherwise the textures would have different size in different sized windows :P
 
   private:
     float m_realPointsToPixels;
-    Sizef m_winSize; // in points
+    Vec2f m_winSize; // in points
     bool m_isFullscreen;
     bool m_isVsync;
 };

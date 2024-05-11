@@ -46,9 +46,9 @@ class SPL_API Node {
     inline unsigned int getObjectLimit() const { return m_objectLimit; }
     inline void setObjectLimit(unsigned int objectlimit) { m_objectLimit = objectlimit; }
 
-    inline const Sizef& getBoundingBox() const { return m_boundingBox; }
-    void setBoundingBox(const Sizef& size);
-    Sizef getScaledBoundingBox();
+    inline const Vec2f& getBoundingBox() const { return m_boundingBox; }
+    void setBoundingBox(const Vec2f& size);
+    Vec2f getScaledBoundingBox();
 
     Rectf getRect();
 
@@ -96,7 +96,7 @@ class SPL_API Node {
     void updateMtx();
 
     Vec2f m_pos;
-    Sizef m_boundingBox;
+    Vec2f m_boundingBox;
     Vec2f m_anchorPoint; // {0.5, 0.5} by default
     Vec2f m_scale;
     float m_rotation;

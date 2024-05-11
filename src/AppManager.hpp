@@ -52,7 +52,7 @@ class SPL_API AppManager {
     // internal
     inline const glm::mat4& getCurMtx() const { return m_currentMatrix; }
 
-    inline const Sizef& getWinSize() const { return WindowManager::get()->getWinSize(); }
+    inline const Vec2f& getWinSize() const { return WindowManager::get()->getWinSize(); }
 
   private:
     float m_targetFrameTime;

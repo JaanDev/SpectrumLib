@@ -134,7 +134,7 @@ void FontManager::loadFont(const std::string& path, const std::string& id, float
 
     m_fonts[id] = Font {.lineHeight = (ascent - descent + lineGap) * ratio,
                         .base = lineHeight,
-                        .fontAtlas = std::make_shared<Texture>(pixels, Sizei {atlasW, atlasH}, GL_RED),
+                        .fontAtlas = std::make_shared<Texture>(pixels, Vec2i {atlasW, atlasH}, GL_RED),
                         .glyphs = glyphs,
                         .shaderName = "ttf-shader"};
 

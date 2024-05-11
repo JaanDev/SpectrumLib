@@ -54,8 +54,8 @@ void Label::rebuild() {
     auto lines = separateText();
 
     auto ratio = WindowManager::get()->getPointsToPixelsRatio();
-    auto size = m_font.fontAtlas->getSizeInPixels();
-    Sizef box = {0, m_font.base};
+    auto size = m_font.fontAtlas->getVec2inPixels();
+    Vec2f box = {0, m_font.base};
     Vec2f pos = {0, m_font.base};
 
     for (const auto& line : lines) {

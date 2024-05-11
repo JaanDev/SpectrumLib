@@ -1,7 +1,7 @@
 # TODO
 * [x] change mtx calculation
 * [x] fix window resizing
-* [ ] improve types?
+* [x] improve types
 * [ ] proper error handling (results?)
 * [ ] camera
 * [ ] use `std::string_view` in some places instead of `const std::string&`
