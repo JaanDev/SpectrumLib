@@ -42,9 +42,9 @@ class SPL_API AppManager {
     void openURL(const std::string& url);
 
     inline float getTimeScale() const { return m_timeScale; }
-    void setTimeScale(float ts);
+    inline void setTimeScale(float ts) { m_timeScale = ts; }
 
-    std::shared_ptr<Scene> getCurrentScene();
+    inline Scene* getCurrentScene() { return m_curScene; }
     void pushScene(std::shared_ptr<Scene> scene);
     void replaceScene(std::shared_ptr<Scene> scene);
     // -1 => go 1 scene back, 1 => go 1 scene forward etc

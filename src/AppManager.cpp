@@ -195,14 +195,6 @@ void AppManager::openURL(const std::string& url) {
 #endif
 }
 
-void AppManager::setTimeScale(float ts) {
-    this->m_timeScale = ts;
-}
-
-std::shared_ptr<Scene> AppManager::getCurrentScene() {
-    return std::shared_ptr<Scene>();
-}
-
 void AppManager::pushScene(std::shared_ptr<Scene> scene) {
     m_scenes.push_back(scene);
     m_currentScene = m_scenes.size() - 1;
@@ -216,7 +208,13 @@ void AppManager::replaceScene(std::shared_ptr<Scene> scene) {
 }
 
 void AppManager::goToScene(int step) {
-    logW("AppMgr::goToScene todo");
+    auto newIndex = m_currentScene + step;
+    if (newIndex < 0 || newIndex >= m_scenes.size()) {
+        logW("Wrong step value {}!", step);
+    } else {
+        m_currentScene = newIndex;
+        m_curScene = m_scenes[newIndex].get();
+    }
 }
 
 std::string AppManager::getClipboardText() {
@@ -239,10 +237,6 @@ Vec2f AppManager::pixelsToPoints(const Vec2f& pixelPos) {
 Sizef AppManager::pixelsToSize(const Sizef& pixelSize) {
     return pixelSize * m_pointsToPixels;
 }
-
-// const glm::mat4& AppManager::getMatrix() const {
-    
-// }
 
 Sizef AppManager::sizeToPixels(const Sizef& size) {
     return size / m_pointsToPixels;
